@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pangig – Contractor Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c10;--surface:#13161d;--s2:#1c2030;--border:#262c3d;
+  --accent:#f4a623;--accent2:#e8522a;--green:#22c55e;--red:#ef4444;--blue:#3b82f6;
+  --text:#f0f2f7;--muted:#7a8499;
+  --fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
+  --r:14px;--shadow:0 4px 24px rgba(0,0,0,.45);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100vh}
+a{color:inherit;text-decoration:none}
+input,select,textarea,button{font-family:var(--fb)}
+textarea{resize:vertical}
+
+/* ── NAV ── */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(19,22,29,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
+.logo{font-family:var(--fh);font-size:1.45rem;font-weight:800;color:var(--accent);letter-spacing:-.5px;cursor:pointer}
+.logo span{color:var(--text)}
+.nav-r{display:flex;gap:.75rem;align-items:center}
+.nav-user{font-size:.82rem;color:var(--muted)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-weight:600;font-size:.875rem;padding:.55rem 1.25rem;border-radius:8px;border:none;cursor:pointer;transition:all .15s}
+.btn-primary{background:var(--accent);color:#000}.btn-primary:hover{background:#ffb83d;transform:translateY(-1px)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ghost{background:transparent;color:var(--muted)}.btn-ghost:hover{color:var(--text)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-green{background:var(--green);color:#000}
+.btn-sm{padding:.35rem .85rem;font-size:.78rem}
+.btn-lg{padding:.8rem 2rem;font-size:1rem;border-radius:10px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important}
+
+/* ── PAGES ── */
+.page{display:none;flex:1;flex-direction:column;min-height:calc(100vh - 64px)}
+.page.active{display:flex}
+
+/* ── HERO ── */
+.hero{min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem;
+  background:radial-gradient(ellipse 80% 60% at 50% 20%,rgba(244,166,35,.08) 0%,transparent 70%),
+             radial-gradient(ellipse 50% 40% at 80% 80%,rgba(232,82,42,.06) 0%,transparent 60%);
+  position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.015) 40px),
+             repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.015) 40px)}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(244,166,35,.12);border:1px solid rgba(244,166,35,.3);color:var(--accent);padding:.4rem 1rem;border-radius:999px;font-size:.78rem;font-weight:700;margin-bottom:2rem;letter-spacing:.5px;animation:fadeUp .5s ease both}
+.hero h1{font-family:var(--fh);font-size:clamp(2.8rem,7vw,5.5rem);font-weight:800;line-height:1.05;letter-spacing:-2px;max-width:820px;animation:fadeUp .5s .1s ease both}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{font-size:1.1rem;color:var(--muted);max-width:520px;margin:1.5rem auto 2.5rem;line-height:1.75;animation:fadeUp .5s .2s ease both}
+.hero-cta{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .5s .3s ease both}
+
+.stats-row{display:flex;gap:3rem;justify-content:center;flex-wrap:wrap;padding:2.5rem 2rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface)}
+.stat{text-align:center}
+.stat-num{font-family:var(--fh);font-size:2rem;font-weight:800;color:var(--accent)}
+.stat-lbl{font-size:.82rem;color:var(--muted);margin-top:.25rem}
+
+/* ── INDUSTRIES ── */
+.industries-section{padding:5rem 2rem;max-width:1200px;margin:0 auto;width:100%}
+.section-title{font-family:var(--fh);font-size:2rem;font-weight:800;text-align:center;margin-bottom:.5rem}
+.section-sub{text-align:center;color:var(--muted);margin-bottom:2rem}
+.ind-search-wrap{position:relative;max-width:560px;margin:0 auto 2rem}
+.ind-search-icon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);pointer-events:none}
+.ind-search{width:100%;padding:.85rem 1rem .85rem 2.8rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:.95rem;outline:none;transition:border-color .15s}
+.ind-search:focus{border-color:var(--accent)}
+.cat-tabs{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:2rem}
+.cat-tab{padding:.4rem 1rem;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s}
+.cat-tab:hover{border-color:var(--accent);color:var(--accent)}
+.cat-tab.active{background:var(--accent);border-color:var(--accent);color:#000}
+.industries-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem}
+.ind-cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;transition:border-color .2s}
+.ind-cat-card:hover{border-color:rgba(244,166,35,.3)}
+.ind-cat-hdr{display:flex;align-items:center;gap:.85rem;margin-bottom:1.1rem}
+.ind-cat-icon{font-size:1.8rem}
+.ind-cat-title{font-family:var(--fh);font-weight:700;font-size:1rem}
+.ind-cat-count{font-size:.72rem;color:var(--muted);margin-top:.1rem}
+.ind-services{display:flex;flex-wrap:wrap;gap:.45rem}
+.svc-chip{display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .7rem;border-radius:999px;background:var(--s2);border:1px solid var(--border);font-size:.75rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s}
+.svc-chip:hover{background:rgba(244,166,35,.1);border-color:rgba(244,166,35,.3);color:var(--accent)}
+
+/* ── HOW IT WORKS ── */
+.how-section{padding:5rem 2rem;max-width:1100px;margin:0 auto;width:100%}
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem}
+.step-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.75rem;position:relative;overflow:hidden}
+.step-card::before{content:attr(data-n);position:absolute;top:-10px;right:10px;font-family:var(--fh);font-size:5rem;font-weight:800;color:rgba(244,166,35,.06);line-height:1;pointer-events:none}
+.step-icon{font-size:2rem;margin-bottom:1rem}
+.step-title{font-family:var(--fh);font-weight:700;margin-bottom:.5rem}
+.step-desc{font-size:.875rem;color:var(--muted);line-height:1.6}
+
+/* ── AUTH ── */
+.auth-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:3rem 1rem;
+  background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(244,166,35,.06) 0%,transparent 60%)}
+.auth-box{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:2.5rem;width:100%;max-width:440px;box-shadow:var(--shadow)}
+.auth-title{font-family:var(--fh);font-size:1.6rem;font-weight:800;margin-bottom:.25rem}
+.auth-sub{color:var(--muted);font-size:.9rem;margin-bottom:2rem}
+.auth-tabs{display:flex;gap:.5rem;margin-bottom:1.75rem;background:var(--bg);border-radius:10px;padding:4px}
+.auth-tab{flex:1;padding:.5rem;border-radius:8px;border:none;cursor:pointer;background:transparent;color:var(--muted);font-weight:600;font-size:.82rem;transition:all .15s}
+.auth-tab.active{background:var(--s2);color:var(--text)}
+.demo-box{font-size:.75rem;color:var(--muted);text-align:center;line-height:1.9;margin-top:.75rem}
+.demo-box strong{color:var(--text)}
+
+/* ── FORMS ── */
+.fg{margin-bottom:1.1rem}
+.fl{display:block;font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.5px}
+.fi,.fs{width:100%;padding:.7rem 1rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .15s}
+.fi:focus,.fs:focus{border-color:var(--accent)}
+.fs option,.fs optgroup{background:var(--bg)}
+.fi-full{width:100%;justify-content:center;padding:.75rem;font-size:.95rem;margin-top:1.25rem}
+.fhint{font-size:.72rem;color:var(--muted);margin-top:.3rem}
+.ferr{font-size:.78rem;color:var(--red);margin-top:.3rem;display:none}
+.ferr.show{display:block}
+hr.div{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+
+/* ── DASHBOARD LAYOUT ── */
+.dash{display:flex;flex:1}
+.sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 1rem;display:flex;flex-direction:column;gap:.2rem;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;flex-shrink:0}
+.sb-label{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;padding:.75rem .75rem .4rem}
+.sb-item{display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-radius:8px;cursor:pointer;font-size:.875rem;font-weight:500;color:var(--muted);transition:all .15s;border:none;background:transparent;width:100%;text-align:left}
+.sb-item:hover{background:var(--s2);color:var(--text)}
+.sb-item.active{background:rgba(244,166,35,.12);color:var(--accent)}
+.sb-icon{font-size:.95rem;width:20px;text-align:center}
+.main{flex:1;padding:2rem;overflow-y:auto;min-width:0}
+.dash-page{display:none}.dash-page.active{display:block}
+
+/* ── PAGE HEADER ── */
+.ph{margin-bottom:2rem}
+.pt{font-family:var(--fh);font-size:1.6rem;font-weight:800}
+.ps{color:var(--muted);font-size:.875rem;margin-top:.25rem}
+
+/* ── METRIC CARDS ── */
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:2rem}
+.mc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem}
+.mc-lbl{font-size:.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.mc-val{font-family:var(--fh);font-size:2rem;font-weight:800;margin:.25rem 0}
+.mc-sub{font-size:.72rem;color:var(--muted)}
+.mc-val.acc{color:var(--accent)}.mc-val.grn{color:var(--green)}.mc-val.blu{color:var(--blue)}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem}
+.card-title{font-family:var(--fh);font-weight:700;font-size:.95rem;margin-bottom:1rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}.sidebar{display:none}}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.875rem}
+th{text-align:left;padding:.6rem 1rem;font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+td{padding:.85rem 1rem;border-bottom:1px solid rgba(38,44,61,.5)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+
+/* ── BADGES ── */
+.badge{display:inline-block;padding:.2rem .6rem;border-radius:999px;font-size:.68rem;font-weight:700}
+.b-green{background:rgba(34,197,94,.12);color:var(--green)}
+.b-yellow{background:rgba(244,166,35,.12);color:var(--accent)}
+.b-red{background:rgba(239,68,68,.12);color:var(--red)}
+.b-blue{background:rgba(59,130,246,.12);color:var(--blue)}
+.b-gray{background:var(--s2);color:var(--muted)}
+
+/* ── JOB TAG ── */
+.jtag{display:inline-block;font-size:.72rem;font-weight:600;padding:.22rem .6rem;border-radius:999px;background:var(--s2);border:1px solid var(--border);color:var(--muted)}
+.jtag.type{background:rgba(244,166,35,.1);color:var(--accent);border-color:rgba(244,166,35,.2)}
+
+/* ── ALERTS ── */
+.alert{padding:.85rem 1rem;border-radius:10px;font-size:.875rem;margin-bottom:1rem}
+.a-success{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green)}
+.a-error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:var(--red)}
+.a-info{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);color:var(--blue)}
+.a-warn{background:rgba(244,166,35,.1);border:1px solid rgba(244,166,35,.2);color:var(--accent)}
+
+/* ── CREDIT PACKAGES ── */
+.pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem}
+.pkg-card{background:var(--s2);border:2px solid var(--border);border-radius:var(--r);padding:1.5rem;text-align:center;cursor:pointer;transition:all .15s;position:relative}
+.pkg-card:hover,.pkg-card.sel{border-color:var(--accent);background:rgba(244,166,35,.06);transform:translateY(-2px)}
+.pkg-popular{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#000;font-size:.65rem;font-weight:800;padding:.2rem .7rem;border-radius:999px;letter-spacing:.5px;text-transform:uppercase}
+.pkg-credits{font-family:var(--fh);font-size:2.2rem;font-weight:800;color:var(--accent)}
+.pkg-label{font-weight:700;margin:.25rem 0;font-size:.9rem}
+.pkg-price{color:var(--muted);font-size:.85rem}
+
+/* ── INVOICE BUILDER ── */
+.inv-grid{display:grid;grid-template-columns:1fr 70px 90px 36px;gap:.65rem;align-items:center;margin-bottom:.65rem}
+.inv-total{display:flex;justify-content:flex-end;gap:1rem;align-items:center;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)}
+.inv-total-lbl{font-size:.85rem;color:var(--muted)}
+.inv-total-val{font-family:var(--fh);font-size:1.5rem;font-weight:800;color:var(--accent)}
+.inv-builder{background:var(--s2);border-radius:var(--r);padding:1.25rem;margin-top:.75rem}
+
+/* ── PRICING ADMIN ── */
+.pricing-cat-hdr{font-family:var(--fh);font-weight:700;font-size:.9rem;color:var(--muted);display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;margin-top:1.5rem}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.85rem}
+.pc{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:.85rem 1rem;display:flex;align-items:center;justify-content:space-between}
+.pc-job{font-weight:600;font-size:.82rem}
+.pc-inp{width:56px;padding:.3rem .45rem;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-weight:700;font-size:.85rem;text-align:center;outline:none}
+
+/* ── PROFILE ── */
+.prof-hdr{display:flex;align-items:center;gap:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:2rem}
+.avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:1.5rem;font-weight:800;color:#000;flex-shrink:0}
+.prof-name{font-family:var(--fh);font-size:1.3rem;font-weight:800}
+.prof-role{color:var(--muted);font-size:.82rem}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:300;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:2rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.modal-title{font-family:var(--fh);font-size:1.3rem;font-weight:800;margin-bottom:.25rem}
+.modal-sub{color:var(--muted);font-size:.875rem;margin-bottom:1.5rem}
+.modal-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.5rem}
+
+/* ── TOAST ── */
+.toast{display:none;position:fixed;bottom:1.5rem;right:1.5rem;z-index:400;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;max-width:320px;box-shadow:var(--shadow);animation:fadeUp .3s ease}
+.toast.show{display:block}
+.toast-icon{font-size:1.2rem;margin-bottom:.3rem}
+.toast-title{font-weight:700;font-size:.875rem;margin-bottom:.15rem}
+.toast-body{font-size:.78rem;color:var(--muted)}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:4rem 2rem;color:var(--muted)}
+.empty-icon{font-size:3rem;margin-bottom:1rem}
+.empty-txt{font-size:.875rem;line-height:1.7}
+.cs-box{padding:5rem 2rem;background:var(--surface);border-radius:var(--r);border:1px solid var(--border);text-align:center}
+.cs-title{font-family:var(--fh);font-size:1.2rem;font-weight:700;margin-bottom:.5rem}
+
+/* ── ACTIVITY ROW ── */
+.act-row{display:flex;justify-content:space-between;padding:.65rem 0;border-bottom:1px solid var(--border)}
+.act-row:last-child{border-bottom:none}
+.act-name{font-size:.875rem;font-weight:600}
+.act-date{font-size:.72rem;color:var(--muted)}
+.act-amt{font-size:.875rem;font-weight:700}
+.act-cost{font-size:.72rem;color:var(--muted)}
+
+/* ── SEARCH BAR ── */
+.srch-wrap{position:relative;margin-bottom:1.25rem}
+.srch-icon{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.srch{width:100%;padding:.7rem 1rem .7rem 2.4rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:.875rem;outline:none;transition:border-color .15s}
+.srch:focus{border-color:var(--accent)}
+
+/* ── QUICK ACTION ── */
+.qa{display:flex;flex-direction:column;gap:.75rem}
+.cred-box{margin-top:1.25rem;padding:1rem;background:var(--s2);border-radius:10px}
+.cred-box-row{display:flex;align-items:center;justify-content:space-between}
+.cred-big{font-family:var(--fh);font-size:1.8rem;font-weight:800;color:var(--accent)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav class="nav">
+  <div class="logo" onclick="showPage('landing')">Pang<span>ig</span></div>
+  <div class="nav-r" id="navRight">
+    <button class="btn btn-ghost btn-sm" onclick="showPage('login')">Sign In</button>
+    <button class="btn btn-primary btn-sm" onclick="showPage('signup-client')">Get Started</button>
+  </div>
+</nav>
+
+<!-- ══════════════ TOAST ══════════════ -->
+<div class="toast" id="toast">
+  <div class="toast-icon" id="toastIcon"></div>
+  <div class="toast-title" id="toastTitle"></div>
+  <div class="toast-body" id="toastBody"></div>
+</div>
+
+<!-- ══════════════ BUY CREDITS MODAL ══════════════ -->
+<div class="modal-overlay" id="buyModal">
+  <div class="modal">
+    <div class="modal-title">Buy Credits</div>
+    <div class="modal-sub">Credits are used to unlock client leads. Choose a package:</div>
+    <div class="pkg-grid" id="modalPkgs"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('buyModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmBuyCredits()">Purchase Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ LANDING ══════════════ -->
+<div class="page" id="page-landing">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">🔨 The Contractor Marketplace</div>
+    <h1>Find <em>Trusted</em> Contractors.<br/>Grow Your Business.</h1>
+    <p>Post a job and get contacted by up to 7 verified contractors. Find the right person for the job, fast.</p>
+    <div class="hero-cta">
+      <button class="btn btn-primary btn-lg" onclick="showPage('signup-client')">I Need a Contractor</button>
+      <button class="btn btn-outline btn-lg" onclick="showPage('signup-contractor')">I'm a Contractor</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num">2,400+</div><div class="stat-lbl">Verified Contractors</div></div>
+    <div class="stat"><div class="stat-num">18,000+</div><div class="stat-lbl">Jobs Completed</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-lbl">Max Contacts Per Job</div></div>
+    <div class="stat"><div class="stat-num">4.9★</div><div class="stat-lbl">Avg. Satisfaction</div></div>
+  </div>
+
+  <!-- INDUSTRIES -->
+  <div class="industries-section">
+    <div class="section-title">Browse by Industry</div>
+    <div class="section-sub">Over 200 services across 24 industries — find exactly what you need</div>
+    <div class="ind-search-wrap">
+      <span class="ind-search-icon">🔍</span>
+      <input class="ind-search" id="indSearch" placeholder="Search services (e.g. roofing, security guard, solar...)" oninput="filterIndustries(this.value)"/>
+    </div>
+    <div class="cat-tabs" id="catTabs"></div>
+    <div class="industries-grid" id="industriesGrid"></div>
+    <div style="text-align:center;margin-top:2.5rem">
+      <button class="btn btn-primary btn-lg" onclick="showPage('signup-client')">Post Your Job →</button>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-section">
+    <div class="section-title">How Pangig Works</div>
+    <div class="section-sub">Simple for clients. Powerful for contractors.</div>
+    <div class="steps-grid">
+      <div class="step-card" data-n="1"><div class="step-icon">📋</div><div class="step-title">Post Your Job</div><div class="step-desc">Describe what you need. We match it to the right contractors automatically.</div></div>
+      <div class="step-card" data-n="2"><div class="step-icon">👷</div><div class="step-title">Get Contacted</div><div class="step-desc">Qualified contractors in your area will reach out with their availability and rates.</div></div>
+      <div class="step-card" data-n="3"><div class="step-icon">💬</div><div class="step-title">Compare & Choose</div><div class="step-desc">Up to 7 contractors can respond. Pick the best fit for your job and budget.</div></div>
+      <div class="step-card" data-n="4"><div class="step-icon">✅</div><div class="step-title">Hire & Pay</div><div class="step-desc">Review quotes, hire your favourite, and pay through the platform securely.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div class="page" id="page-login">
+  <div class="auth-wrap">
+    <div class="auth-box">
+      <div class="auth-title">Pangig</div>
+      <div class="auth-sub">Sign in to your account</div>
+      <div class="ferr" id="loginErr"></div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" id="loginEmail" type="email" placeholder="you@email.com"/></div>
+      <div class="fg"><label class="fl">Password</label><input class="fi" id="loginPass" type="password" placeholder="••••••••"/></div>
+      <button class="btn btn-primary fi-full" onclick="doLogin()">Sign In</button>
+      <hr class="div"/>
+      <div class="demo-box">
+        <strong>Demo accounts:</strong><br/>
+        Admin: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f9989d949097b99a9697979c9a8d898b96d79a9694">[email&#160;protected]</a> / admin123<br/>
+        Contractor: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bed3d7d5dbfeced2cbd3dcd7d0d990ddd1d3">[email&#160;protected]</a> / pass123<br/>
+        Client: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="573d383f3917323a363e3b7934383a">[email&#160;protected]</a> / pass123
+      </div>
+      <div style="text-align:center;margin-top:1rem">
+        <button class="btn btn-ghost" style="font-size:.78rem" onclick="showPage('signup-client')">Don't have an account? Sign up</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SIGNUP CLIENT ══════════════ -->
+<div class="page" id="page-signup-client">
+  <div class="auth-wrap">
+    <div class="auth-box">
+      <div class="auth-title">Create Account</div>
+      <div class="auth-sub">Sign up to find contractors</div>
+      <div class="auth-tabs">
+        <button class="auth-tab" onclick="showPage('signup-client')">I Need Work Done</button>
+        <button class="auth-tab active" style="pointer-events:none">✓ Client</button>
+      </div>
+      <div class="ferr" id="signupClientErr"></div>
+      <div class="fg"><label class="fl">Full Name *</label><input class="fi" id="scName" placeholder="Jane Smith"/></div>
+      <div class="fg"><label class="fl">Email *</label><input class="fi" id="scEmail" type="email" placeholder="you@email.com"/></div>
+      <div class="fg"><label class="fl">Phone</label><input class="fi" id="scPhone" placeholder="555-000-0000"/></div>
+      <div class="fg"><label class="fl">Password *</label><input class="fi" id="scPass" type="password" placeholder="••••••••"/></div>
+      <button class="btn btn-primary fi-full" onclick="doSignupClient()">Create Account</button>
+      <div style="text-align:center;margin-top:1rem">
+        <button class="btn btn-ghost" style="font-size:.78rem" onclick="showPage('login')">Already have an account? Sign in</button>
+        <br/><button class="btn btn-ghost" style="font-size:.78rem" onclick="showPage('signup-contractor')">I'm a contractor →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SIGNUP CONTRACTOR ══════════════ -->
+<div class="page" id="page-signup-contractor">
+  <div class="auth-wrap">
+    <div class="auth-box">
+      <div class="auth-title">Create Account</div>
+      <div class="auth-sub">Join as a contractor</div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" style="pointer-events:none">✓ Contractor</button>
+        <button class="auth-tab" onclick="showPage('signup-client')">I Need Work Done</button>
+      </div>
+      <div class="ferr" id="signupConErr"></div>
+      <div class="fg"><label class="fl">Business Name *</label><input class="fi" id="conName" placeholder="Mike's Plumbing Co."/></div>
+      <div class="fg"><label class="fl">Email *</label><input class="fi" id="conEmail" type="email" placeholder="you@email.com"/></div>
+      <div class="fg"><label class="fl">Phone</label><input class="fi" id="conPhone" placeholder="555-000-0000"/></div>
+      <div class="fg"><label class="fl">Primary Service</label>
+        <select class="fs" id="conService"><option value="">Select service...</option></select>
+      </div>
+      <div class="fg"><label class="fl">Location</label><input class="fi" id="conLocation" placeholder="City, State"/></div>
+      <div class="fg"><label class="fl">Password *</label><input class="fi" id="conPass" type="password" placeholder="••••••••"/></div>
+      <button class="btn btn-primary fi-full" onclick="doSignupContractor()">Create Account</button>
+      <div style="text-align:center;margin-top:1rem">
+        <button class="btn btn-ghost" style="font-size:.78rem" onclick="showPage('login')">Already have an account? Sign in</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ CONTRACTOR DASHBOARD ══════════════ -->
+<div class="page" id="page-contractor">
+  <div class="dash">
+    <div class="sidebar" id="conSidebar">
+      <div class="sb-label">Contractor</div>
+      <button class="sb-item active" data-dash="con" data-p="overview" onclick="conPage('overview',this)"><span class="sb-icon">📊</span>Overview</button>
+      <button class="sb-item" data-dash="con" data-p="leads" onclick="conPage('leads',this)"><span class="sb-icon">🎯</span>Browse Leads</button>
+      <button class="sb-item" data-dash="con" data-p="myleads" onclick="conPage('myleads',this)"><span class="sb-icon">🔓</span>My Leads</button>
+      <button class="sb-item" data-dash="con" data-p="invoices" onclick="conPage('invoices',this)"><span class="sb-icon">📄</span>Invoices</button>
+      <button class="sb-item" data-dash="con" data-p="credits" onclick="conPage('credits',this)"><span class="sb-icon">💳</span>Credits & Spending</button>
+      <button class="sb-item" data-dash="con" data-p="profile" onclick="conPage('profile',this)"><span class="sb-icon">👤</span>My Profile</button>
+    </div>
+    <div class="main">
+      <!-- OVERVIEW -->
+      <div class="dash-page active" id="con-overview">
+        <div class="ph"><div class="pt" id="conWelcome">Welcome back 👋</div><div class="ps">Here's your business snapshot</div></div>
+        <div class="metrics-grid">
+          <div class="mc"><div class="mc-lbl">Credits</div><div class="mc-val acc" id="conCredits">0</div><div class="mc-sub">Available balance</div></div>
+          <div class="mc"><div class="mc-lbl">Leads Unlocked</div><div class="mc-val blu" id="conLeadsCount">0</div><div class="mc-sub">Total leads purchased</div></div>
+          <div class="mc"><div class="mc-lbl">Invoices Sent</div><div class="mc-val" id="conInvCount">0</div><div class="mc-sub">All time</div></div>
+          <div class="mc"><div class="mc-lbl">Revenue Collected</div><div class="mc-val grn" id="conRevenue">$0</div><div class="mc-sub">From paid invoices</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card"><div class="card-title">Recent Activity</div><div id="conRecentActivity"></div></div>
+          <div class="card"><div class="card-title">Quick Actions</div>
+            <div class="qa">
+              <button class="btn btn-primary" onclick="openModal('buyModal')">💳 Buy Credits</button>
+              <button class="btn btn-outline" onclick="conPage('invoices',null)">📄 Create Invoice</button>
+              <button class="btn btn-outline" onclick="conPage('credits',null)">📊 View Spending</button>
+            </div>
+            <div class="cred-box"><div style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">Credit Balance</div>
+              <div class="cred-box-row"><div class="cred-big" id="conCredBig">0</div><button class="btn btn-primary btn-sm" onclick="openModal('buyModal')">Top Up</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BROWSE LEADS -->
+      <div class="dash-page" id="con-leads">
+        <div class="ph"><div class="pt">Browse Leads 🎯</div><div class="ps">Find and unlock client job requests in your area</div></div>
+        <div class="cs-box"><div style="font-size:3rem;margin-bottom:.75rem">🚧</div><div class="cs-title">Leads Coming Soon</div><div style="font-size:.875rem;color:var(--muted);line-height:1.7">Client job postings will appear here once the platform goes live.<br/>Buy credits now so you're ready to unlock leads the moment they drop.</div><button class="btn btn-primary" style="margin-top:1.5rem" onclick="openModal('buyModal')">💳 Buy Credits Now</button></div>
+      </div>
+
+      <!-- MY LEADS -->
+      <div class="dash-page" id="con-myleads">
+        <div class="ph"><div class="pt">My Unlocked Leads 🔓</div><div class="ps">All leads you've purchased access to</div></div>
+        <div class="cs-box"><div style="font-size:3rem;margin-bottom:.75rem">🔓</div><div class="cs-title">No Leads Yet</div><div style="font-size:.875rem;color:var(--muted)">When you unlock a lead, the client's contact info will appear here.</div></div>
+      </div>
+
+      <!-- INVOICES -->
+      <div class="dash-page" id="con-invoices">
+        <div class="ph"><div class="pt">Invoices 📄</div><div class="ps">Create and manage your invoices</div></div>
+        <div class="alert a-success" id="invSentAlert" style="display:none">✅ Invoice sent successfully!</div>
+        <div class="card" style="margin-bottom:1.5rem">
+          <div class="card-title">Create New Invoice</div>
+          <div class="two-col">
+            <div class="fg"><label class="fl">Client Name</label><input class="fi" id="invClient" placeholder="John Smith"/></div>
+            <div class="fg"><label class="fl">Client Email</label><input class="fi" id="invEmail" placeholder="client@email.com"/></div>
+          </div>
+          <div class="fg"><label class="fl">Job Description</label><input class="fi" id="invJob" placeholder="e.g. Bathroom plumbing repair"/></div>
+          <div class="inv-builder">
+            <div class="inv-grid" style="margin-bottom:.5rem">
+              <span style="font-size:.68rem;color:var(--muted);font-weight:700;text-transform:uppercase">Description</span>
+              <span style="font-size:.68rem;color:var(--muted);font-weight:700;text-transform:uppercase">Qty</span>
+              <span style="font-size:.68rem;color:var(--muted);font-weight:700;text-transform:uppercase">Price ($)</span>
+              <span></span>
+            </div>
+            <div id="invLines"></div>
+            <button class="btn btn-outline btn-sm" onclick="addInvLine()" style="margin-top:.5rem">+ Add Line</button>
+            <div class="inv-total"><span class="inv-total-lbl">Total</span><span class="inv-total-val" id="invTotal">$0.00</span></div>
+          </div>
+          <div style="text-align:right;margin-top:1rem"><button class="btn btn-primary" onclick="sendInvoice()">Send Invoice</button></div>
+        </div>
+        <div class="card"><div class="card-title">Invoice History</div><div class="tbl-wrap"><table><thead><tr><th>Invoice</th><th>Client</th><th>Job</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody id="invHistory"></tbody></table><div id="invEmpty" class="empty" style="display:none"><div class="empty-txt">No invoices yet</div></div></div></div>
+      </div>
+
+      <!-- CREDITS -->
+      <div class="dash-page" id="con-credits">
+        <div class="ph"><div class="pt">Credits & Spending 💳</div><div class="ps">Track your credit usage and purchase history</div></div>
+        <div class="metrics-grid">
+          <div class="mc"><div class="mc-lbl">Current Balance</div><div class="mc-val acc" id="credBal">0 credits</div></div>
+          <div class="mc"><div class="mc-lbl">Total Spent on Credits</div><div class="mc-val" id="credSpent">$0.00</div></div>
+          <div class="mc"><div class="mc-lbl">Leads Unlocked</div><div class="mc-val blu" id="credLeads">0</div></div>
+        </div>
+        <div class="card" style="margin-bottom:1.5rem">
+          <div class="card-title">Buy More Credits</div>
+          <div class="pkg-grid" id="credPkgs"></div>
+          <div style="text-align:center;margin-top:1.25rem"><button class="btn btn-primary" onclick="buyFromCreditsPage()">Purchase Credits</button></div>
+        </div>
+        <div class="card"><div class="card-title">Credit History</div><div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Action</th><th>Credits</th><th>Cost</th></tr></thead><tbody id="credHistory"></tbody></table><div id="credEmpty" class="empty" style="display:none"><div class="empty-txt">No transactions yet</div></div></div></div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="dash-page" id="con-profile">
+        <div class="ph"><div class="pt">My Profile 👤</div><div class="ps">Your business information</div></div>
+        <div class="prof-hdr">
+          <div class="avatar" id="conAvatarLetter">M</div>
+          <div><div class="prof-name" id="conProfName">—</div><div class="prof-role" id="conProfRole">Contractor</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card"><div class="card-title">Contact Information</div><div id="conContactInfo"></div></div>
+          <div class="card"><div class="card-title">Account Stats</div><div id="conStats"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ CLIENT DASHBOARD ══════════════ -->
+<div class="page" id="page-client">
+  <div class="dash">
+    <div class="sidebar">
+      <div class="sb-label">Client</div>
+      <button class="sb-item active" onclick="cliPage('overview',this)"><span class="sb-icon">📊</span>Overview</button>
+      <button class="sb-item" onclick="cliPage('postjob',this)"><span class="sb-icon">➕</span>Post a Job</button>
+      <button class="sb-item" onclick="cliPage('myjobs',this)"><span class="sb-icon">📋</span>My Jobs</button>
+      <button class="sb-item" onclick="cliPage('invoices',this)"><span class="sb-icon">📄</span>Invoices</button>
+      <button class="sb-item" onclick="cliPage('spending',this)"><span class="sb-icon">💰</span>Spending</button>
+      <button class="sb-item" onclick="cliPage('profile',this)"><span class="sb-icon">👤</span>My Profile</button>
+    </div>
+    <div class="main">
+      <!-- OVERVIEW -->
+      <div class="dash-page active" id="cli-overview">
+        <div class="ph"><div class="pt" id="cliWelcome">Welcome 👋</div><div class="ps">Manage your jobs and contractors</div></div>
+        <div class="metrics-grid">
+          <div class="mc"><div class="mc-lbl">Jobs Posted</div><div class="mc-val acc" id="cliJobsCount">0</div></div>
+          <div class="mc"><div class="mc-lbl">Active Jobs</div><div class="mc-val blu" id="cliActiveJobs">0</div></div>
+          <div class="mc"><div class="mc-lbl">Total Paid</div><div class="mc-val grn" id="cliTotalPaid">$0</div></div>
+          <div class="mc"><div class="mc-lbl">Invoices Received</div><div class="mc-val" id="cliInvCount">0</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card"><div class="card-title">My Recent Jobs</div><div id="cliRecentJobs"></div></div>
+          <div class="card"><div class="card-title">Quick Actions</div>
+            <div class="qa">
+              <button class="btn btn-primary" onclick="cliPage('postjob',null)">➕ Post a New Job</button>
+              <button class="btn btn-outline" onclick="cliPage('invoices',null)">📄 View Invoices</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POST JOB -->
+      <div class="dash-page" id="cli-postjob">
+        <div class="ph"><div class="pt">Post a Job ➕</div><div class="ps">Describe what you need and contractors will find you</div></div>
+        <div class="alert a-success" id="jobPostedAlert" style="display:none">🎉 Job posted! Contractors will reach out to you soon.</div>
+        <div class="card">
+          <div class="ferr" id="postJobErr"></div>
+          <div class="fg"><label class="fl">Job Type *</label><select class="fs" id="pjType"><option value="">Select job type...</option></select></div>
+          <div class="fg"><label class="fl">Job Title *</label><input class="fi" id="pjTitle" placeholder="e.g. Leaking pipe under kitchen sink"/></div>
+          <div class="fg"><label class="fl">Description *</label><textarea class="fi" id="pjDesc" rows="4" placeholder="Describe the job in detail..."></textarea></div>
+          <div class="two-col">
+            <div class="fg"><label class="fl">Location</label><input class="fi" id="pjLocation" placeholder="City, State"/></div>
+            <div class="fg"><label class="fl">Budget Range</label><input class="fi" id="pjBudget" placeholder="e.g. $500–$1,000"/></div>
+          </div>
+          <div style="text-align:right"><button class="btn btn-primary" onclick="postJob()">Post Job →</button></div>
+        </div>
+      </div>
+
+      <!-- MY JOBS -->
+      <div class="dash-page" id="cli-myjobs">
+        <div class="ph"><div class="pt">My Jobs 📋</div><div class="ps">Track your posted jobs</div></div>
+        <div id="cliJobsList"></div>
+      </div>
+
+      <!-- INVOICES -->
+      <div class="dash-page" id="cli-invoices">
+        <div class="ph"><div class="pt">Invoices 📄</div><div class="ps">Invoices received from contractors</div></div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+          <div class="tbl-wrap"><table><thead><tr><th>Invoice</th><th>From</th><th>Job</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody id="cliInvList"></tbody></table>
+          <div id="cliInvEmpty" class="empty" style="display:none"><div class="empty-txt">No invoices received yet</div></div></div>
+        </div>
+      </div>
+
+      <!-- SPENDING -->
+      <div class="dash-page" id="cli-spending">
+        <div class="ph"><div class="pt">Spending 💰</div><div class="ps">Track what you've paid to contractors</div></div>
+        <div class="metrics-grid">
+          <div class="mc"><div class="mc-lbl">Total Paid</div><div class="mc-val grn" id="cliSpendTotal">$0</div></div>
+          <div class="mc"><div class="mc-lbl">Invoices Paid</div><div class="mc-val acc" id="cliInvPaid">0</div></div>
+          <div class="mc"><div class="mc-lbl">Pending Invoices</div><div class="mc-val blu" id="cliInvPending">0</div></div>
+        </div>
+        <div class="card"><div class="card-title">Payment History</div><div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Description</th><th>Amount</th></tr></thead><tbody id="cliPayList"></tbody></table><div id="cliPayEmpty" class="empty" style="display:none"><div class="empty-txt">No payments yet</div></div></div></div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="dash-page" id="cli-profile">
+        <div class="ph"><div class="pt">My Profile 👤</div></div>
+        <div class="prof-hdr">
+          <div class="avatar" id="cliAvatarLetter">J</div>
+          <div><div class="prof-name" id="cliProfName">—</div><div class="prof-role">Client Account</div></div>
+        </div>
+        <div class="card"><div class="card-title">Contact Information</div><div id="cliContactInfo"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ADMIN DASHBOARD ══════════════ -->
+<div class="page" id="page-admin">
+  <div class="dash">
+    <div class="sidebar">
+      <div class="sb-label">Admin Panel</div>
+      <button class="sb-item active" onclick="adminPage('overview',this)"><span class="sb-icon">📊</span>Overview</button>
+      <button class="sb-item" onclick="adminPage('contractors',this)"><span class="sb-icon">👷</span>Contractors</button>
+      <button class="sb-item" onclick="adminPage('clients',this)"><span class="sb-icon">🙋</span>Clients</button>
+      <button class="sb-item" onclick="adminPage('jobs',this)"><span class="sb-icon">📋</span>All Jobs</button>
+      <button class="sb-item" onclick="adminPage('pricing',this)"><span class="sb-icon">💲</span>Lead Pricing</button>
+      <button class="sb-item" onclick="adminPage('transactions',this)"><span class="sb-icon">💳</span>Transactions</button>
+    </div>
+    <div class="main">
+      <!-- OVERVIEW -->
+      <div class="dash-page active" id="admin-overview">
+        <div class="ph"><div class="pt">Admin Overview 📊</div><div class="ps">Platform health at a glance</div></div>
+        <div class="metrics-grid">
+          <div class="mc"><div class="mc-lbl">Total Contractors</div><div class="mc-val acc" id="adConCount">0</div></div>
+          <div class="mc"><div class="mc-lbl">Total Clients</div><div class="mc-val blu" id="adCliCount">0</div></div>
+          <div class="mc"><div class="mc-lbl">Total Jobs</div><div class="mc-val" id="adJobCount">0</div></div>
+          <div class="mc"><div class="mc-lbl">Platform Revenue</div><div class="mc-val grn" id="adRevenue">$0.00</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card"><div class="card-title">Recent Jobs</div><div id="adRecentJobs"></div></div>
+          <div class="card"><div class="card-title">Platform Stats</div><div id="adStats"></div></div>
+        </div>
+      </div>
+
+      <!-- CONTRACTORS -->
+      <div class="dash-page" id="admin-contractors">
+        <div class="ph"><div class="pt">Contractors 👷</div><div class="ps" id="adConSub">0 registered</div></div>
+        <div class="srch-wrap"><span class="srch-icon">🔍</span><input class="srch" id="adConSearch" placeholder="Search contractors..." oninput="renderAdminContractors()"/></div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+          <div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Services</th><th>Credits</th><th>Leads</th><th>Revenue</th></tr></thead><tbody id="adConTable"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- CLIENTS -->
+      <div class="dash-page" id="admin-clients">
+        <div class="ph"><div class="pt">Clients 🙋</div><div class="ps" id="adCliSub">0 registered</div></div>
+        <div class="srch-wrap"><span class="srch-icon">🔍</span><input class="srch" id="adCliSearch" placeholder="Search clients..." oninput="renderAdminClients()"/></div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+          <div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Jobs Posted</th><th>Total Paid</th></tr></thead><tbody id="adCliTable"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- JOBS -->
+      <div class="dash-page" id="admin-jobs">
+        <div class="ph"><div class="pt">All Jobs 📋</div><div class="ps" id="adJobSub">0 total listings</div></div>
+        <div id="adJobsContent"></div>
+      </div>
+
+      <!-- PRICING -->
+      <div class="dash-page" id="admin-pricing">
+        <div class="ph"><div class="pt">Lead Pricing 💲</div><div class="ps">Set credit costs per job type</div></div>
+        <div class="alert a-info">Credits are purchased by contractors to unlock leads. Set pricing based on the typical value of the job.</div>
+        <div id="pricingContent"></div>
+        <div style="margin-top:1.5rem;text-align:right"><button class="btn btn-primary" onclick="savePricing()">Save Pricing</button></div>
+      </div>
+
+      <!-- TRANSACTIONS -->
+      <div class="dash-page" id="admin-transactions">
+        <div class="ph"><div class="pt">Transactions 💳</div><div class="ps">All credit purchases on the platform</div></div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+          <div class="tbl-wrap"><table><thead><tr><th>Contractor</th><th>Action</th><th>Credits</th><th>Revenue</th><th>Date</th></tr></thead><tbody id="adTxTable"></tbody></table>
+          <div id="adTxEmpty" class="empty" style="display:none"><div class="empty-txt">No transactions yet</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ══════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════
+const INDUSTRY_CATEGORIES = [
+  { id:"home-improvement", label:"Home Improvement", icon:"🏠", services:[
+    {id:"renovation",label:"Renovation & Remodeling",credits:12,icon:"🏗️"},
+    {id:"carpentry",label:"Carpentry & Woodwork",credits:6,icon:"🪚"},
+    {id:"roofing",label:"Roofing",credits:10,icon:"🏠"},
+    {id:"painting",label:"Painting & Decorating",credits:4,icon:"🎨"},
+    {id:"flooring",label:"Flooring",credits:6,icon:"🟫"},
+    {id:"masonry",label:"Masonry & Brickwork",credits:8,icon:"🧱"},
+    {id:"drywall",label:"Drywall & Plastering",credits:5,icon:"🪣"},
+    {id:"windows-doors",label:"Windows & Doors",credits:5,icon:"🚪"},
+    {id:"insulation",label:"Insulation",credits:5,icon:"🏚️"},
+    {id:"siding",label:"Siding & Cladding",credits:7,icon:"🧰"},
+    {id:"staircase",label:"Staircase Installation",credits:7,icon:"🪜"},
+    {id:"garage-doors",label:"Garage Doors",credits:5,icon:"🚗"},
+    {id:"attic-conversion",label:"Attic Conversion",credits:10,icon:"🏡"},
+    {id:"basement-finishing",label:"Basement Finishing",credits:11,icon:"🏚️"},
+  ]},
+  { id:"plumbing-hvac", label:"Plumbing & HVAC", icon:"🔧", services:[
+    {id:"plumbing",label:"Plumbing",credits:5,icon:"🔧"},
+    {id:"hvac",label:"HVAC & Air Conditioning",credits:8,icon:"❄️"},
+    {id:"heating",label:"Heating Systems",credits:7,icon:"🔥"},
+    {id:"gas-fitting",label:"Gas Fitting",credits:8,icon:"🔩"},
+    {id:"water-heater",label:"Water Heater Installation",credits:6,icon:"♨️"},
+    {id:"drain-cleaning",label:"Drain Cleaning",credits:4,icon:"🚿"},
+    {id:"leak-repair",label:"Leak Detection & Repair",credits:5,icon:"💧"},
+    {id:"septic",label:"Septic Systems",credits:9,icon:"🪣"},
+    {id:"boiler",label:"Boiler Installation & Repair",credits:8,icon:"🔥"},
+    {id:"water-softener",label:"Water Softener & Filtration",credits:6,icon:"💧"},
+    {id:"sewer",label:"Sewer Line Repair",credits:10,icon:"🔧"},
+  ]},
+  { id:"electrical-tech", label:"Electrical & Technology", icon:"⚡", services:[
+    {id:"electrical",label:"Electrical",credits:6,icon:"⚡"},
+    {id:"solar",label:"Solar Panel Installation",credits:14,icon:"☀️"},
+    {id:"ev-charger",label:"EV Charger Installation",credits:8,icon:"🔌"},
+    {id:"smart-home",label:"Smart Home Setup",credits:7,icon:"📱"},
+    {id:"security-systems",label:"Security Systems",credits:7,icon:"🔐"},
+    {id:"home-theater",label:"Home Theater & AV",credits:6,icon:"📺"},
+    {id:"networking",label:"Networking & IT",credits:5,icon:"🌐"},
+    {id:"generator",label:"Generator Installation",credits:9,icon:"⚡"},
+    {id:"lighting-install",label:"Lighting Installation",credits:5,icon:"💡"},
+    {id:"cctv",label:"CCTV & Surveillance",credits:7,icon:"📷"},
+    {id:"intercom",label:"Intercom & Access Control",credits:6,icon:"🔔"},
+    {id:"panel-upgrade",label:"Panel Upgrades",credits:8,icon:"🔌"},
+  ]},
+  { id:"outdoor-garden", label:"Outdoor & Garden", icon:"🌿", services:[
+    {id:"landscaping",label:"Landscaping",credits:4,icon:"🌿"},
+    {id:"lawn-care",label:"Lawn Care & Mowing",credits:2,icon:"🌱"},
+    {id:"tree-service",label:"Tree Service & Removal",credits:7,icon:"🌳"},
+    {id:"irrigation",label:"Irrigation & Sprinklers",credits:5,icon:"💦"},
+    {id:"fencing",label:"Fencing & Gates",credits:6,icon:"🏡"},
+    {id:"decking",label:"Decking & Patios",credits:8,icon:"🌄"},
+    {id:"pool-spa",label:"Pool & Spa",credits:10,icon:"🏊"},
+    {id:"outdoor-lighting",label:"Outdoor Lighting",credits:5,icon:"💡"},
+    {id:"garden-design",label:"Garden Design",credits:5,icon:"🌸"},
+    {id:"hardscaping",label:"Hardscaping & Stonework",credits:8,icon:"🪨"},
+    {id:"snow-removal",label:"Snow Removal",credits:3,icon:"❄️"},
+    {id:"leaf-removal",label:"Leaf & Debris Removal",credits:2,icon:"🍂"},
+    {id:"artificial-grass",label:"Artificial Grass",credits:7,icon:"🌿"},
+    {id:"outdoor-kitchen",label:"Outdoor Kitchen & BBQ",credits:10,icon:"🍖"},
+  ]},
+  { id:"cleaning-maintenance", label:"Cleaning & Maintenance", icon:"✨", services:[
+    {id:"cleaning",label:"House Cleaning",credits:2,icon:"✨"},
+    {id:"deep-cleaning",label:"Deep Cleaning",credits:3,icon:"🧹"},
+    {id:"pressure-washing",label:"Pressure Washing",credits:3,icon:"🚿"},
+    {id:"gutter-cleaning",label:"Gutter Cleaning",credits:3,icon:"🌧️"},
+    {id:"carpet-cleaning",label:"Carpet Cleaning",credits:3,icon:"🪣"},
+    {id:"window-cleaning",label:"Window Cleaning",credits:2,icon:"🪟"},
+    {id:"junk-removal",label:"Junk Removal",credits:3,icon:"🗑️"},
+    {id:"pest-control",label:"Pest Control",credits:4,icon:"🐛"},
+    {id:"commercial-cleaning",label:"Commercial Cleaning",credits:4,icon:"🏢"},
+    {id:"air-duct-cleaning",label:"Air Duct Cleaning",credits:4,icon:"💨"},
+    {id:"mold-remediation",label:"Mold Remediation",credits:8,icon:"🦠"},
+    {id:"chimney-sweep",label:"Chimney Sweep & Repair",credits:5,icon:"🏚️"},
+  ]},
+  { id:"security-guard", label:"Security & Guard Services", icon:"🛡️", services:[
+    {id:"security-guard",label:"Security Guard Services",credits:6,icon:"💂"},
+    {id:"event-security",label:"Event Security",credits:7,icon:"🎪"},
+    {id:"bodyguard",label:"Bodyguard & Personal Protection",credits:12,icon:"🛡️"},
+    {id:"armed-security",label:"Armed Security Officers",credits:10,icon:"🔐"},
+    {id:"parking-security",label:"Parking & Lot Security",credits:5,icon:"🅿️"},
+    {id:"fire-watch",label:"Fire Watch Services",credits:6,icon:"🔥"},
+    {id:"mobile-patrol",label:"Mobile Patrol",credits:7,icon:"🚔"},
+    {id:"loss-prevention",label:"Loss Prevention",credits:6,icon:"🔒"},
+    {id:"residential-security",label:"Residential Security",credits:7,icon:"🏠"},
+    {id:"corporate-security",label:"Corporate Security",credits:9,icon:"🏢"},
+    {id:"school-security",label:"School & Campus Security",credits:7,icon:"🏫"},
+    {id:"construction-security",label:"Construction Site Security",credits:7,icon:"🏗️"},
+  ]},
+  { id:"moving-storage", label:"Moving & Storage", icon:"📦", services:[
+    {id:"moving",label:"Moving & Relocation",credits:3,icon:"📦"},
+    {id:"packing",label:"Packing Services",credits:2,icon:"🗃️"},
+    {id:"furniture-assembly",label:"Furniture Assembly",credits:2,icon:"🛋️"},
+    {id:"storage",label:"Storage Solutions",credits:2,icon:"🏪"},
+    {id:"piano-moving",label:"Piano & Specialty Moving",credits:5,icon:"🎹"},
+    {id:"long-distance-moving",label:"Long Distance Moving",credits:8,icon:"🗺️"},
+    {id:"office-moving",label:"Office & Commercial Moving",credits:7,icon:"🏢"},
+    {id:"appliance-moving",label:"Appliance Delivery & Install",credits:4,icon:"🧺"},
+  ]},
+  { id:"construction", label:"Construction", icon:"🏗️", services:[
+    {id:"general-contractor",label:"General Contractor",credits:15,icon:"👷"},
+    {id:"foundation",label:"Foundation & Structural",credits:14,icon:"🏛️"},
+    {id:"concrete",label:"Concrete & Asphalt",credits:8,icon:"🪨"},
+    {id:"framing",label:"Framing & Structural",credits:10,icon:"🔨"},
+    {id:"demolition",label:"Demolition",credits:8,icon:"💥"},
+    {id:"waterproofing",label:"Waterproofing",credits:7,icon:"🛡️"},
+    {id:"excavation",label:"Excavation & Grading",credits:10,icon:"🚜"},
+    {id:"surveying",label:"Land Surveying",credits:9,icon:"📐"},
+    {id:"welding",label:"Welding",credits:8,icon:"🔥"},
+    {id:"scaffolding",label:"Scaffolding",credits:7,icon:"🧱"},
+    {id:"commercial-build",label:"Commercial Build-Out",credits:15,icon:"🏢"},
+  ]},
+  { id:"automotive", label:"Automotive", icon:"🚗", services:[
+    {id:"auto-repair",label:"Auto Repair & Mechanic",credits:5,icon:"🔧"},
+    {id:"auto-detailing",label:"Auto Detailing",credits:3,icon:"✨"},
+    {id:"towing",label:"Towing & Roadside",credits:4,icon:"🚗"},
+    {id:"auto-body",label:"Auto Body & Paint",credits:7,icon:"🎨"},
+    {id:"windshield",label:"Windshield Repair",credits:4,icon:"🪟"},
+    {id:"mobile-mechanic",label:"Mobile Mechanic",credits:5,icon:"🛠️"},
+    {id:"tire-service",label:"Tire Service & Alignment",credits:3,icon:"🔄"},
+    {id:"car-audio",label:"Car Audio & Electronics",credits:4,icon:"🎵"},
+    {id:"rv-repair",label:"RV & Trailer Repair",credits:7,icon:"🚐"},
+    {id:"motorcycle-repair",label:"Motorcycle & ATV Repair",credits:5,icon:"🏍️"},
+  ]},
+  { id:"events-hospitality", label:"Events & Hospitality", icon:"🎉", services:[
+    {id:"catering",label:"Catering",credits:6,icon:"🍽️"},
+    {id:"photography",label:"Photography & Video",credits:7,icon:"📸"},
+    {id:"dj-entertainment",label:"DJ & Entertainment",credits:5,icon:"🎵"},
+    {id:"event-planning",label:"Event Planning",credits:8,icon:"🎉"},
+    {id:"tent-rental",label:"Tent & Equipment Rental",credits:5,icon:"⛺"},
+    {id:"wedding-planning",label:"Wedding Planning",credits:10,icon:"💍"},
+    {id:"bartending",label:"Bartending & Mixology",credits:4,icon:"🍹"},
+    {id:"floral",label:"Floral Design",credits:5,icon:"💐"},
+    {id:"limo-transport",label:"Limo & Party Transport",credits:6,icon:"🚘"},
+    {id:"bounce-house",label:"Bounce House & Inflatables",credits:4,icon:"🏰"},
+    {id:"live-music",label:"Live Music & Bands",credits:8,icon:"🎸"},
+  ]},
+  { id:"health-wellness", label:"Health & Wellness", icon:"💪", services:[
+    {id:"personal-training",label:"Personal Training",credits:4,icon:"💪"},
+    {id:"massage",label:"Massage Therapy",credits:3,icon:"🧘"},
+    {id:"home-nursing",label:"Home Nursing & Care",credits:6,icon:"🏥"},
+    {id:"senior-care",label:"Senior Care",credits:5,icon:"👴"},
+    {id:"childcare",label:"Childcare & Babysitting",credits:3,icon:"👶"},
+    {id:"pet-care",label:"Pet Care & Dog Walking",credits:2,icon:"🐾"},
+    {id:"nutrition",label:"Nutrition & Dietitian",credits:5,icon:"🥗"},
+    {id:"yoga-pilates",label:"Yoga & Pilates Instructor",credits:4,icon:"🧘"},
+    {id:"physical-therapy",label:"Physical Therapy",credits:7,icon:"🦽"},
+    {id:"mental-health",label:"Life Coaching & Counseling",credits:6,icon:"🧠"},
+    {id:"home-health-aide",label:"Home Health Aide",credits:5,icon:"❤️"},
+  ]},
+  { id:"business-professional", label:"Business & Professional", icon:"💼", services:[
+    {id:"accounting",label:"Accounting & Bookkeeping",credits:6,icon:"📊"},
+    {id:"legal",label:"Legal Services",credits:10,icon:"⚖️"},
+    {id:"marketing",label:"Marketing & Design",credits:6,icon:"📣"},
+    {id:"web-dev",label:"Web Development",credits:7,icon:"💻"},
+    {id:"consulting",label:"Business Consulting",credits:8,icon:"💼"},
+    {id:"tutoring",label:"Tutoring & Education",credits:3,icon:"📚"},
+    {id:"hr-services",label:"HR & Staffing Services",credits:7,icon:"👥"},
+    {id:"tax-prep",label:"Tax Preparation",credits:6,icon:"🧾"},
+    {id:"real-estate",label:"Real Estate Services",credits:10,icon:"🏡"},
+    {id:"notary",label:"Notary & Document Services",credits:3,icon:"📝"},
+    {id:"translation",label:"Translation & Interpretation",credits:5,icon:"🌐"},
+  ]},
+  { id:"transportation", label:"Transportation & Logistics", icon:"🚛", services:[
+    {id:"freight",label:"Freight & Cargo Transport",credits:9,icon:"🚛"},
+    {id:"courier",label:"Courier & Delivery",credits:3,icon:"📬"},
+    {id:"chauffeur",label:"Chauffeur & Driver Services",credits:5,icon:"🚘"},
+    {id:"medical-transport",label:"Medical Transportation",credits:6,icon:"🚑"},
+    {id:"airport-transfer",label:"Airport Transfer",credits:4,icon:"✈️"},
+    {id:"forklift-ops",label:"Forklift & Warehouse Ops",credits:7,icon:"🏭"},
+    {id:"hazmat-transport",label:"Hazmat Transportation",credits:10,icon:"☢️"},
+  ]},
+  { id:"food-beverage", label:"Food & Beverage", icon:"🍔", services:[
+    {id:"personal-chef",label:"Personal Chef",credits:7,icon:"👨‍🍳"},
+    {id:"meal-prep",label:"Meal Prep Services",credits:4,icon:"🥘"},
+    {id:"food-truck",label:"Food Truck & Pop-Up",credits:8,icon:"🚚"},
+    {id:"baking",label:"Custom Baking & Cakes",credits:4,icon:"🎂"},
+    {id:"restaurant-consult",label:"Restaurant Consulting",credits:9,icon:"🍽️"},
+    {id:"coffee-service",label:"Coffee & Beverage Service",credits:4,icon:"☕"},
+  ]},
+  { id:"education", label:"Education & Tutoring", icon:"📚", services:[
+    {id:"math-tutoring",label:"Math Tutoring",credits:3,icon:"➗"},
+    {id:"language-tutoring",label:"Language Tutoring",credits:3,icon:"🗣️"},
+    {id:"music-lessons",label:"Music Lessons",credits:3,icon:"🎹"},
+    {id:"art-lessons",label:"Art & Drawing Lessons",credits:3,icon:"🎨"},
+    {id:"test-prep",label:"Test Prep (SAT/ACT/GRE)",credits:4,icon:"📝"},
+    {id:"coding-bootcamp",label:"Coding & Tech Tutoring",credits:5,icon:"💻"},
+    {id:"college-counseling",label:"College Counseling",credits:6,icon:"🎓"},
+    {id:"special-needs",label:"Special Needs Education",credits:5,icon:"🌟"},
+  ]},
+  { id:"pet-services", label:"Pet Services", icon:"🐾", services:[
+    {id:"dog-walking",label:"Dog Walking",credits:2,icon:"🦮"},
+    {id:"pet-sitting",label:"Pet Sitting & Boarding",credits:3,icon:"🐶"},
+    {id:"pet-grooming",label:"Pet Grooming",credits:3,icon:"✂️"},
+    {id:"vet-services",label:"Veterinary Services",credits:6,icon:"🏥"},
+    {id:"pet-training",label:"Pet Training & Obedience",credits:4,icon:"🐕"},
+    {id:"horse-care",label:"Horse & Equine Care",credits:7,icon:"🐴"},
+  ]},
+  { id:"creative-media", label:"Creative & Media", icon:"🎬", services:[
+    {id:"graphic-design",label:"Graphic Design",credits:5,icon:"🖼️"},
+    {id:"video-production",label:"Video Production",credits:8,icon:"🎬"},
+    {id:"podcast-editing",label:"Podcast & Audio Editing",credits:5,icon:"🎙️"},
+    {id:"copywriting",label:"Copywriting & Content",credits:4,icon:"✍️"},
+    {id:"social-media",label:"Social Media Management",credits:5,icon:"📱"},
+    {id:"brand-identity",label:"Brand Identity & Logo",credits:6,icon:"💡"},
+    {id:"voiceover",label:"Voiceover & Narration",credits:4,icon:"🎤"},
+    {id:"animation",label:"Animation & Motion Graphics",credits:8,icon:"🎞️"},
+    {id:"drone-photography",label:"Drone Photography & Video",credits:7,icon:"🚁"},
+  ]},
+  { id:"real-estate-services", label:"Real Estate Services", icon:"🏘️", services:[
+    {id:"property-management",label:"Property Management",credits:9,icon:"🏘️"},
+    {id:"home-inspection",label:"Home Inspection",credits:7,icon:"🔍"},
+    {id:"appraisal",label:"Property Appraisal",credits:8,icon:"📋"},
+    {id:"staging",label:"Home Staging",credits:6,icon:"🛋️"},
+    {id:"real-estate-photography",label:"Real Estate Photography",credits:5,icon:"📸"},
+    {id:"vacation-rental",label:"Vacation Rental Management",credits:8,icon:"🏖️"},
+  ]},
+  { id:"environmental", label:"Environmental & Energy", icon:"♻️", services:[
+    {id:"energy-audit",label:"Energy Auditing",credits:7,icon:"📊"},
+    {id:"asbestos-removal",label:"Asbestos & Lead Removal",credits:12,icon:"⚠️"},
+    {id:"environmental-consult",label:"Environmental Consulting",credits:10,icon:"🌍"},
+    {id:"green-building",label:"Green Building & LEED",credits:12,icon:"🌱"},
+    {id:"waste-management",label:"Waste Management",credits:6,icon:"♻️"},
+    {id:"radon-testing",label:"Radon Testing & Mitigation",credits:7,icon:"🔬"},
+  ]},
+  { id:"staffing-labor", label:"Staffing & Labor", icon:"👥", services:[
+    {id:"temp-staffing",label:"Temporary Staffing",credits:7,icon:"👥"},
+    {id:"general-labor",label:"General Labor",credits:4,icon:"🦺"},
+    {id:"warehouse-staffing",label:"Warehouse & Fulfillment Staff",credits:5,icon:"🏭"},
+    {id:"event-staff",label:"Event Staff & Servers",credits:4,icon:"🍽️"},
+    {id:"janitorial-staff",label:"Janitorial Staff",credits:3,icon:"🧹"},
+    {id:"security-staffing",label:"Security Staffing",credits:6,icon:"💂"},
+    {id:"construction-labor",label:"Construction Labor",credits:5,icon:"🔨"},
+    {id:"landscaping-crew",label:"Landscaping Crews",credits:4,icon:"🌿"},
+  ]},
+  { id:"legal-financial", label:"Legal & Financial", icon:"⚖️", services:[
+    {id:"attorney",label:"Attorney & Legal Counsel",credits:12,icon:"⚖️"},
+    {id:"private-investigator",label:"Private Investigator",credits:10,icon:"🕵️"},
+    {id:"process-server",label:"Process Server",credits:5,icon:"📬"},
+    {id:"financial-advisor",label:"Financial Advisor",credits:9,icon:"📈"},
+    {id:"insurance-agent",label:"Insurance Agent",credits:6,icon:"🛡️"},
+    {id:"mortgage-broker",label:"Mortgage Broker",credits:10,icon:"🏦"},
+  ]},
+  { id:"healthcare-medical", label:"Healthcare & Medical", icon:"🏥", services:[
+    {id:"home-nursing2",label:"Home Nursing & Care",credits:6,icon:"🏥"},
+    {id:"occupational-therapy",label:"Occupational Therapy",credits:7,icon:"🙌"},
+    {id:"speech-therapy",label:"Speech Therapy",credits:6,icon:"🗣️"},
+    {id:"chiropractor",label:"Chiropractic Services",credits:6,icon:"🦴"},
+    {id:"lab-testing",label:"Lab Testing & Diagnostics",credits:8,icon:"🔬"},
+  ]},
+  { id:"beauty-personal", label:"Beauty & Personal Care", icon:"💅", services:[
+    {id:"hair-salon",label:"Hair Styling & Salon",credits:3,icon:"💇"},
+    {id:"nail-tech",label:"Nail Technician",credits:2,icon:"💅"},
+    {id:"makeup-artist",label:"Makeup Artist",credits:4,icon:"💄"},
+    {id:"barber",label:"Barbering",credits:2,icon:"✂️"},
+    {id:"esthetics",label:"Esthetics & Skincare",credits:4,icon:"🧖"},
+    {id:"tattoo-artist",label:"Tattoo & Body Art",credits:5,icon:"🎨"},
+    {id:"personal-stylist",label:"Personal Styling",credits:5,icon:"👗"},
+  ]},
+  { id:"marine-watercraft", label:"Marine & Watercraft", icon:"⛵", services:[
+    {id:"boat-repair",label:"Boat Repair & Maintenance",credits:8,icon:"⛵"},
+    {id:"boat-detailing",label:"Boat Detailing",credits:5,icon:"✨"},
+    {id:"dock-install",label:"Dock & Pier Installation",credits:10,icon:"🛥️"},
+    {id:"marine-electrical",label:"Marine Electrical",credits:8,icon:"⚡"},
+    {id:"boat-storage",label:"Boat Storage & Winterization",credits:6,icon:"❄️"},
+    {id:"fishing-charter",label:"Fishing Charter & Guide",credits:7,icon:"🎣"},
+  ]},
+];
+const JOB_TYPES = INDUSTRY_CATEGORIES.flatMap(c=>c.services);
+const CREDIT_PACKAGES = [
+  {id:"starter",credits:10,price:15,label:"Starter"},
+  {id:"pro",credits:50,price:60,label:"Pro",popular:true},
+  {id:"elite",credits:100,price:100,label:"Elite"},
+];
+
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let users = {
+  admin:{id:"admin",role:"admin",name:"Admin",email:"admin@pangig.com",password:"admin123"},
+  con1:{id:"con1",role:"contractor",name:"Mike's Plumbing Co.",email:"mike@plumbing.com",password:"pass123",phone:"512-555-0101",services:["plumbing"],location:"Austin, TX",bio:"15 years experience, licensed & insured.",credits:20,creditHistory:[],invoices:[],unlockedLeads:[],payments:[]},
+  c1:{id:"c1",role:"client",name:"John Davis",email:"john@email.com",password:"pass123",phone:"512-555-0201",jobs:[],invoicesReceived:[],payments:[]},
+};
+let jobs = [];
+let currentUser = null;
+let activeCat = null;
+let selectedPkg = "pro";
+let invLines = [{desc:"",qty:1,price:""}];
+let selectedPkgCredits = "pro";
+
+// ══════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const p = document.getElementById("page-"+id);
+  if(p) p.classList.add("active");
+  window.scrollTo(0,0);
+  // refresh data if dashboard
+  if(id==="contractor") refreshContractorDash();
+  if(id==="client") refreshClientDash();
+  if(id==="admin") refreshAdminDash();
+}
+
+// ══════════════════════════════════════════════════
+// SIDEBAR NAV
+// ══════════════════════════════════════════════════
+function conPage(p, btn) {
+  document.querySelectorAll("[data-dash='con']").forEach(b=>b.classList.remove("active"));
+  if(btn){ btn.classList.add("active"); } else {
+    document.querySelector(`[data-p="${p}"]`)?.classList.add("active");
+  }
+  document.querySelectorAll("#page-contractor .dash-page").forEach(d=>d.classList.remove("active"));
+  document.getElementById("con-"+p)?.classList.add("active");
+  if(p==="overview") refreshContractorDash();
+  if(p==="credits") renderCreditsPage();
+  if(p==="invoices") renderInvoicesPage();
+  if(p==="profile") renderConProfile();
+}
+function cliPage(p, btn) {
+  document.querySelectorAll("#page-client .sb-item").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  document.querySelectorAll("#page-client .dash-page").forEach(d=>d.classList.remove("active"));
+  document.getElementById("cli-"+p)?.classList.add("active");
+  if(p==="overview") refreshClientDash();
+  if(p==="myjobs") renderClientJobs();
+  if(p==="invoices") renderClientInvoices();
+  if(p==="spending") renderClientSpending();
+  if(p==="profile") renderClientProfile();
+}
+function adminPage(p, btn) {
+  document.querySelectorAll("#page-admin .sb-item").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  document.querySelectorAll("#page-admin .dash-page").forEach(d=>d.classList.remove("active"));
+  document.getElementById("admin-"+p)?.classList.add("active");
+  if(p==="overview") refreshAdminOverview();
+  if(p==="contractors") renderAdminContractors();
+  if(p==="clients") renderAdminClients();
+  if(p==="jobs") renderAdminJobs();
+  if(p==="pricing") renderPricing();
+  if(p==="transactions") renderAdminTx();
+}
+
+// ══════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════
+function doLogin() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const pass = document.getElementById("loginPass").value;
+  const err = document.getElementById("loginErr");
+  const user = Object.values(users).find(u=>u.email===email && u.password===pass);
+  if(!user){err.textContent="Invalid email or password.";err.classList.add("show");return;}
+  err.classList.remove("show");
+  loginUser(user);
+}
+function doSignupClient() {
+  const name=document.getElementById("scName").value.trim();
+  const email=document.getElementById("scEmail").value.trim();
+  const phone=document.getElementById("scPhone").value.trim();
+  const pass=document.getElementById("scPass").value;
+  const err=document.getElementById("signupClientErr");
+  if(!name||!email||!pass){err.textContent="Please fill all required fields.";err.classList.add("show");return;}
+  if(Object.values(users).find(u=>u.email===email)){err.textContent="Email already registered.";err.classList.add("show");return;}
+  err.classList.remove("show");
+  const id="u"+Date.now();
+  users[id]={id,role:"client",name,email,password:pass,phone,jobs:[],invoicesReceived:[],payments:[]};
+  loginUser(users[id]);
+}
+function doSignupContractor() {
+  const name=document.getElementById("conName").value.trim();
+  const email=document.getElementById("conEmail").value.trim();
+  const phone=document.getElementById("conPhone").value.trim();
+  const service=document.getElementById("conService").value;
+  const location=document.getElementById("conLocation").value.trim();
+  const pass=document.getElementById("conPass").value;
+  const err=document.getElementById("signupConErr");
+  if(!name||!email||!pass){err.textContent="Please fill all required fields.";err.classList.add("show");return;}
+  if(Object.values(users).find(u=>u.email===email)){err.textContent="Email already registered.";err.classList.add("show");return;}
+  err.classList.remove("show");
+  const id="u"+Date.now();
+  users[id]={id,role:"contractor",name,email,password:pass,phone,services:service?[service]:[],location,bio:"",credits:0,creditHistory:[],invoices:[],unlockedLeads:[],payments:[]};
+  loginUser(users[id]);
+}
+function loginUser(user) {
+  currentUser=user;
+  updateNav();
+  if(user.role==="admin") showPage("admin");
+  else if(user.role==="contractor") showPage("contractor");
+  else showPage("client");
+}
+function doLogout() {
+  currentUser=null; updateNav(); showPage("landing");
+}
+function updateNav() {
+  const nr=document.getElementById("navRight");
+  if(currentUser){
+    nr.innerHTML=`<span class="nav-user">👤 ${currentUser.name}</span><button class="btn btn-outline btn-sm" onclick="doLogout()">Sign Out</button>`;
+  } else {
+    nr.innerHTML=`<button class="btn btn-ghost btn-sm" onclick="showPage('login')">Sign In</button><button class="btn btn-primary btn-sm" onclick="showPage('signup-client')">Get Started</button>`;
+  }
+}
+
+// ══════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════
+let toastTimer;
+function toast(icon,title,body) {
+  document.getElementById("toastIcon").textContent=icon||"✅";
+  document.getElementById("toastTitle").textContent=title;
+  document.getElementById("toastBody").textContent=body;
+  const t=document.getElementById("toast");
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove("show"),3500);
+}
+
+// ══════════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════════
+function openModal(id) {
+  if(id==="buyModal") renderBuyModal();
+  document.getElementById(id).classList.add("open");
+}
+function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+// ══════════════════════════════════════════════════
+// INDUSTRIES (LANDING)
+// ══════════════════════════════════════════════════
+function initIndustries() {
+  // category tabs
+  const tabs=document.getElementById("catTabs");
+  tabs.innerHTML=`<button class="cat-tab active" onclick="setCat(null,this)">All Industries</button>`+
+    INDUSTRY_CATEGORIES.map(c=>`<button class="cat-tab" onclick="setCat('${c.id}',this)">${c.icon} ${c.label}</button>`).join("");
+  renderIndustriesGrid(INDUSTRY_CATEGORIES);
+  // contractor service dropdown
+  const sel=document.getElementById("conService");
+  INDUSTRY_CATEGORIES.forEach(cat=>{
+    const og=document.createElement("optgroup");
+    og.label=`${cat.icon} ${cat.label}`;
+    cat.services.forEach(s=>{const o=document.createElement("option");o.value=s.id;o.textContent=s.label;og.appendChild(o);});
+    sel.appendChild(og);
+  });
+  // post job dropdown
+  const pj=document.getElementById("pjType");
+  INDUSTRY_CATEGORIES.forEach(cat=>{
+    const og=document.createElement("optgroup");
+    og.label=`${cat.icon} ${cat.label}`;
+    cat.services.forEach(s=>{const o=document.createElement("option");o.value=s.id;o.textContent=s.label;og.appendChild(o);});
+    pj.appendChild(og);
+  });
+}
+function setCat(id, btn) {
+  document.querySelectorAll(".cat-tab").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  activeCat=id;
+  const cats=id?INDUSTRY_CATEGORIES.filter(c=>c.id===id):INDUSTRY_CATEGORIES;
+  renderIndustriesGrid(cats);
+}
+function filterIndustries(q) {
+  if(!q){renderIndustriesGrid(activeCat?INDUSTRY_CATEGORIES.filter(c=>c.id===activeCat):INDUSTRY_CATEGORIES);return;}
+  const filtered=INDUSTRY_CATEGORIES.map(cat=>({...cat,services:cat.services.filter(s=>s.label.toLowerCase().includes(q.toLowerCase()))})).filter(cat=>cat.services.length>0);
+  renderIndustriesGrid(filtered,q);
+}
+function renderIndustriesGrid(cats,q="") {
+  const g=document.getElementById("industriesGrid");
+  if(!cats.length){g.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🔍</div><div class="empty-txt">No services found for "${q}"</div></div>`;return;}
+  g.innerHTML=cats.map(cat=>`
+    <div class="ind-cat-card">
+      <div class="ind-cat-hdr"><span class="ind-cat-icon">${cat.icon}</span><div><div class="ind-cat-title">${cat.label}</div><div class="ind-cat-count">${cat.services.length} services</div></div></div>
+      <div class="ind-services">${cat.services.map(s=>`<span class="svc-chip" onclick="showPage('signup-client')">${s.icon} ${s.label}</span>`).join("")}</div>
+    </div>`).join("");
+}
+
+// ══════════════════════════════════════════════════
+// CONTRACTOR DASHBOARD
+// ══════════════════════════════════════════════════
+function refreshContractorDash() {
+  if(!currentUser||currentUser.role!=="contractor") return;
+  const u=currentUser;
+  document.getElementById("conWelcome").textContent=`Welcome back, ${u.name.split(" ")[0]} 👋`;
+  document.getElementById("conCredits").textContent=u.credits;
+  document.getElementById("conLeadsCount").textContent=u.unlockedLeads.length;
+  document.getElementById("conInvCount").textContent=u.invoices.length;
+  const rev=u.payments.reduce((a,b)=>a+b.amount,0);
+  document.getElementById("conRevenue").textContent="$"+rev.toLocaleString();
+  document.getElementById("conCredBig").textContent=u.credits;
+  // recent activity
+  const ra=document.getElementById("conRecentActivity");
+  if(!u.creditHistory.length){ra.innerHTML='<div class="empty"><div class="empty-txt">No activity yet</div></div>';return;}
+  ra.innerHTML=u.creditHistory.slice(0,5).map(h=>`
+    <div class="act-row">
+      <div><div class="act-name">${h.action}</div><div class="act-date">${h.date}</div></div>
+      <div style="text-align:right"><div class="act-amt" style="color:${h.amount.startsWith('+')?'var(--green)':'var(--red)'}">${h.amount}</div>${h.cost?`<div class="act-cost">${h.cost}</div>`:""}</div>
+    </div>`).join("");
+}
+
+// ── BUY CREDITS ──
+function renderBuyModal() {
+  const g=document.getElementById("modalPkgs");
+  g.innerHTML=CREDIT_PACKAGES.map(p=>`
+    <div class="pkg-card ${selectedPkg===p.id?'sel':''}" onclick="selectPkg('${p.id}',this)">
+      ${p.popular?'<div class="pkg-popular">Popular</div>':""}
+      <div class="pkg-credits">${p.credits}</div>
+      <div class="pkg-label">${p.label}</div>
+      <div class="pkg-price">$${p.price}</div>
+    </div>`).join("");
+}
+function selectPkg(id,el) {
+  selectedPkg=id;
+  document.querySelectorAll("#modalPkgs .pkg-card").forEach(c=>c.classList.remove("sel"));
+  el.classList.add("sel");
+}
+function confirmBuyCredits() {
+  if(!currentUser) return;
+  const pkg=CREDIT_PACKAGES.find(p=>p.id===selectedPkg);
+  currentUser.credits+=pkg.credits;
+  currentUser.creditHistory.unshift({date:"Today",action:`Purchased ${pkg.label} Pack`,amount:`+${pkg.credits} credits`,cost:`$${pkg.price}`});
+  users[currentUser.id]=currentUser;
+  closeModal("buyModal");
+  refreshContractorDash();
+  renderCreditsPage();
+  toast("💳","Credits Purchased!",`${pkg.credits} credits added to your account.`);
+}
+function buyFromCreditsPage() {
+  const sel=document.querySelector("#credPkgs .sel");
+  if(!sel){openModal("buyModal");return;}
+  confirmBuyCredits();
+}
+
+// ── INVOICES ──
+function renderInvoicesPage() {
+  renderInvLines();
+  renderInvHistory();
+}
+function renderInvLines() {
+  const c=document.getElementById("invLines");
+  c.innerHTML=invLines.map((l,i)=>`
+    <div class="inv-grid">
+      <input class="fi" placeholder="Labor, materials..." value="${l.desc}" oninput="invLines[${i}].desc=this.value"/>
+      <input class="fi" type="number" min="1" value="${l.qty}" oninput="invLines[${i}].qty=parseInt(this.value)||1;calcTotal()"/>
+      <input class="fi" type="number" min="0" placeholder="0.00" value="${l.price||''}" oninput="invLines[${i}].price=this.value;calcTotal()"/>
+      <button class="btn btn-ghost btn-sm" onclick="removeInvLine(${i})">✕</button>
+    </div>`).join("");
+  calcTotal();
+}
+function addInvLine(){invLines.push({desc:"",qty:1,price:""});renderInvLines();}
+function removeInvLine(i){if(invLines.length>1){invLines.splice(i,1);renderInvLines();}}
+function calcTotal(){
+  const t=invLines.reduce((a,b)=>a+(parseFloat(b.price)||0)*(parseInt(b.qty)||1),0);
+  document.getElementById("invTotal").textContent="$"+t.toFixed(2);
+}
+function sendInvoice() {
+  if(!currentUser) return;
+  const client=document.getElementById("invClient").value.trim();
+  const job=document.getElementById("invJob").value.trim();
+  const total=invLines.reduce((a,b)=>a+(parseFloat(b.price)||0)*(parseInt(b.qty)||1),0);
+  if(!client||total===0){toast("⚠️","Missing Info","Please fill in client name and at least one item price.");return;}
+  const inv={id:`INV-${Date.now()}`,client,job,amount:total,status:"pending",date:"Today"};
+  currentUser.invoices.unshift(inv);
+  users[currentUser.id]=currentUser;
+  invLines=[{desc:"",qty:1,price:""}];
+  document.getElementById("invClient").value="";
+  document.getElementById("invEmail").value="";
+  document.getElementById("invJob").value="";
+  const alert=document.getElementById("invSentAlert");
+  alert.style.display="block";
+  setTimeout(()=>alert.style.display="none",3000);
+  renderInvoicesPage();
+  refreshContractorDash();
+  toast("📄","Invoice Sent!",`Invoice for $${total.toFixed(2)} created.`);
+}
+function renderInvHistory() {
+  if(!currentUser) return;
+  const tb=document.getElementById("invHistory");
+  const em=document.getElementById("invEmpty");
+  if(!currentUser.invoices.length){tb.innerHTML="";em.style.display="block";return;}
+  em.style.display="none";
+  tb.innerHTML=currentUser.invoices.map(inv=>`
+    <tr>
+      <td style="font-weight:700">${inv.id}</td>
+      <td>${inv.client}</td>
+      <td style="color:var(--muted)">${inv.job}</td>
+      <td style="font-weight:700;color:var(--green)">$${inv.amount.toFixed(2)}</td>
+      <td><span class="badge ${inv.status==='paid'?'b-green':inv.status==='overdue'?'b-red':'b-yellow'}">${inv.status}</span></td>
+      <td style="color:var(--muted)">${inv.date}</td>
+    </tr>`).join("");
+}
+
+// ── CREDITS PAGE ──
+function renderCreditsPage() {
+  if(!currentUser) return;
+  const u=currentUser;
+  const spent=u.creditHistory.filter(h=>h.cost).reduce((a,b)=>a+(parseFloat(b.cost.replace("$",""))||0),0);
+  document.getElementById("credBal").textContent=u.credits+" credits";
+  document.getElementById("credSpent").textContent="$"+spent.toFixed(2);
+  document.getElementById("credLeads").textContent=u.unlockedLeads.length;
+  // packages
+  document.getElementById("credPkgs").innerHTML=CREDIT_PACKAGES.map(p=>`
+    <div class="pkg-card ${selectedPkgCredits===p.id?'sel':''}" onclick="selectPkgCredits('${p.id}',this)">
+      ${p.popular?'<div class="pkg-popular">Popular</div>':""}
+      <div class="pkg-credits">${p.credits}</div>
+      <div class="pkg-label">${p.label}</div>
+      <div class="pkg-price">$${p.price}</div>
+    </div>`).join("");
+  // history
+  const tb=document.getElementById("credHistory");
+  const em=document.getElementById("credEmpty");
+  if(!u.creditHistory.length){tb.innerHTML="";em.style.display="block";return;}
+  em.style.display="none";
+  tb.innerHTML=u.creditHistory.map(h=>`
+    <tr>
+      <td style="color:var(--muted)">${h.date}</td>
+      <td>${h.action}</td>
+      <td style="font-weight:700;color:${h.amount.startsWith('+')?'var(--green)':'var(--red)'}">${h.amount}</td>
+      <td style="color:var(--muted)">${h.cost||"—"}</td>
+    </tr>`).join("");
+}
+function selectPkgCredits(id,el){
+  selectedPkgCredits=id;selectedPkg=id;
+  document.querySelectorAll("#credPkgs .pkg-card").forEach(c=>c.classList.remove("sel"));
+  el.classList.add("sel");
+}
+
+// ── CONTRACTOR PROFILE ──
+function renderConProfile() {
+  if(!currentUser) return;
+  const u=currentUser;
+  document.getElementById("conAvatarLetter").textContent=u.name[0];
+  document.getElementById("conProfName").textContent=u.name;
+  const svcs=(u.services||[]).map(s=>{const jt=JOB_TYPES.find(j=>j.id===s);return jt?`<span class="jtag type">${jt.icon} ${jt.label}</span>`:""}).join(" ");
+  document.getElementById("conProfRole").innerHTML=`Contractor · ${u.location||"Location not set"} ${svcs}`;
+  document.getElementById("conContactInfo").innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:.75rem;font-size:.9rem">
+      <div><span style="color:var(--muted);margin-right:.5rem">📧</span>${u.email}</div>
+      <div><span style="color:var(--muted);margin-right:.5rem">📱</span>${u.phone||"Not provided"}</div>
+      <div><span style="color:var(--muted);margin-right:.5rem">📍</span>${u.location||"Not set"}</div>
+    </div>`;
+  const rev=u.payments.reduce((a,b)=>a+b.amount,0);
+  document.getElementById("conStats").innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:.75rem;font-size:.9rem">
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Credits</span><strong>${u.credits}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Leads Unlocked</span><strong>${u.unlockedLeads.length}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Invoices Sent</span><strong>${u.invoices.length}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Revenue</span><strong style="color:var(--green)">$${rev.toLocaleString()}</strong></div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════
+// CLIENT DASHBOARD
+// ══════════════════════════════════════════════════
+function refreshClientDash() {
+  if(!currentUser||currentUser.role!=="client") return;
+  const u=currentUser;
+  const myJobs=jobs.filter(j=>j.clientId===u.id);
+  document.getElementById("cliWelcome").textContent=`Welcome, ${u.name.split(" ")[0]} 👋`;
+  document.getElementById("cliJobsCount").textContent=myJobs.length;
+  document.getElementById("cliActiveJobs").textContent=myJobs.filter(j=>j.status==="open").length;
+  document.getElementById("cliTotalPaid").textContent="$"+(u.payments||[]).reduce((a,b)=>a+b.amount,0).toLocaleString();
+  document.getElementById("cliInvCount").textContent=(u.invoicesReceived||[]).length;
+  // recent jobs
+  const rj=document.getElementById("cliRecentJobs");
+  if(!myJobs.length){rj.innerHTML='<div class="empty"><div class="empty-txt">No jobs posted yet</div></div>';return;}
+  rj.innerHTML=myJobs.slice(0,3).map(job=>{
+    const jt=JOB_TYPES.find(t=>t.id===job.type)||{icon:"🔧",label:job.type};
+    return `<div style="padding:.75rem 0;border-bottom:1px solid var(--border)">
+      <div style="font-weight:700;font-size:.9rem">${job.title}</div>
+      <div style="display:flex;gap:.75rem;margin-top:.3rem;align-items:center">
+        <span class="jtag type">${jt.icon} ${jt.label}</span>
+        <span style="font-size:.72rem;color:var(--muted)">${job.posted}</span>
+      </div>
+    </div>`;}).join("");
+}
+function postJob() {
+  if(!currentUser) return;
+  const type=document.getElementById("pjType").value;
+  const title=document.getElementById("pjTitle").value.trim();
+  const desc=document.getElementById("pjDesc").value.trim();
+  const location=document.getElementById("pjLocation").value.trim();
+  const budget=document.getElementById("pjBudget").value.trim();
+  const err=document.getElementById("postJobErr");
+  if(!type||!title||!desc){err.textContent="Please fill all required fields.";err.classList.add("show");return;}
+  err.classList.remove("show");
+  const job={id:Date.now(),type,title,description:desc,location,budget,posted:"Just now",clientId:currentUser.id,unlockedBy:[],status:"open"};
+  jobs.unshift(job);
+  currentUser.jobs=(currentUser.jobs||[]).concat(job.id);
+  users[currentUser.id]=currentUser;
+  document.getElementById("pjType").value="";
+  document.getElementById("pjTitle").value="";
+  document.getElementById("pjDesc").value="";
+  document.getElementById("pjLocation").value="";
+  document.getElementById("pjBudget").value="";
+  const al=document.getElementById("jobPostedAlert");
+  al.style.display="block";
+  setTimeout(()=>al.style.display="none",3000);
+  toast("🎉","Job Posted!","Contractors will reach out to you soon.");
+  refreshClientDash();
+}
+function renderClientJobs() {
+  if(!currentUser) return;
+  const myJobs=jobs.filter(j=>j.clientId===currentUser.id);
+  const c=document.getElementById("cliJobsList");
+  if(!myJobs.length){
+    c.innerHTML=`<div class="cs-box"><div style="font-size:3rem;margin-bottom:.75rem">📋</div><div class="cs-title">No Jobs Posted Yet</div><div style="font-size:.875rem;color:var(--muted)">Post your first job and contractors will reach out.</div><button class="btn btn-primary" style="margin-top:1.5rem" onclick="cliPage('postjob',null)">➕ Post a Job</button></div>`;
+    return;
+  }
+  c.innerHTML=myJobs.map(job=>{
+    const jt=JOB_TYPES.find(t=>t.id===job.type)||{icon:"🔧",label:job.type};
+    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1rem">
+      <div style="display:flex;justify-content:space-between;margin-bottom:.5rem">
+        <div style="font-family:var(--fh);font-weight:700;font-size:1.05rem">${job.title}</div>
+        <span style="font-size:.78rem;color:var(--muted)">${job.posted}</span>
+      </div>
+      <div style="display:flex;gap:.5rem;margin-bottom:.75rem">
+        <span class="jtag type">${jt.icon} ${jt.label}</span>
+        <span class="badge b-green">Open</span>
+      </div>
+      <div style="font-size:.875rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">${job.description}</div>
+      <div style="display:flex;gap:1.25rem;font-size:.78rem;color:var(--muted)">
+        ${job.location?`<span>📍 ${job.location}</span>`:""}
+        ${job.budget?`<span>💰 ${job.budget}</span>`:""}
+      </div>
+    </div>`;}).join("");
+}
+function renderClientInvoices() {
+  if(!currentUser) return;
+  const list=currentUser.invoicesReceived||[];
+  const tb=document.getElementById("cliInvList");
+  const em=document.getElementById("cliInvEmpty");
+  if(!list.length){tb.innerHTML="";em.style.display="block";return;}
+  em.style.display="none";
+  tb.innerHTML=list.map(inv=>`
+    <tr>
+      <td style="font-weight:700">${inv.id}</td><td>${inv.from}</td>
+      <td style="color:var(--muted)">${inv.job}</td>
+      <td style="font-weight:700">$${inv.amount.toFixed(2)}</td>
+      <td><span class="badge ${inv.status==='paid'?'b-green':'b-yellow'}">${inv.status}</span></td>
+      <td style="color:var(--muted)">${inv.date}</td>
+    </tr>`).join("");
+}
+function renderClientSpending() {
+  if(!currentUser) return;
+  const u=currentUser;
+  const inv=u.invoicesReceived||[];
+  const pay=u.payments||[];
+  document.getElementById("cliSpendTotal").textContent="$"+pay.reduce((a,b)=>a+b.amount,0).toLocaleString();
+  document.getElementById("cliInvPaid").textContent=inv.filter(i=>i.status==="paid").length;
+  document.getElementById("cliInvPending").textContent=inv.filter(i=>i.status==="pending").length;
+  const tb=document.getElementById("cliPayList");
+  const em=document.getElementById("cliPayEmpty");
+  if(!pay.length){tb.innerHTML="";em.style.display="block";return;}
+  em.style.display="none";
+  tb.innerHTML=pay.map(p=>`
+    <tr>
+      <td style="color:var(--muted)">${p.date}</td>
+      <td>${p.desc}</td>
+      <td style="font-weight:700;color:var(--red)">-$${p.amount.toFixed(2)}</td>
+    </tr>`).join("");
+}
+function renderClientProfile() {
+  if(!currentUser) return;
+  const u=currentUser;
+  document.getElementById("cliAvatarLetter").textContent=u.name[0];
+  document.getElementById("cliProfName").textContent=u.name;
+  document.getElementById("cliContactInfo").innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:.75rem;font-size:.9rem">
+      <div><span style="color:var(--muted);margin-right:.5rem">👤</span>${u.name}</div>
+      <div><span style="color:var(--muted);margin-right:.5rem">📧</span>${u.email}</div>
+      <div><span style="color:var(--muted);margin-right:.5rem">📱</span>${u.phone||"Not provided"}</div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════
+// ADMIN DASHBOARD
+// ══════════════════════════════════════════════════
+function refreshAdminDash() { refreshAdminOverview(); }
+function refreshAdminOverview() {
+  const contractors=Object.values(users).filter(u=>u.role==="contractor");
+  const clients=Object.values(users).filter(u=>u.role==="client");
+  const revenue=contractors.reduce((a,c)=>a+c.creditHistory.filter(h=>h.cost).reduce((x,y)=>x+(parseFloat(y.cost.replace("$",""))||0),0),0);
+  document.getElementById("adConCount").textContent=contractors.length;
+  document.getElementById("adCliCount").textContent=clients.length;
+  document.getElementById("adJobCount").textContent=jobs.length;
+  document.getElementById("adRevenue").textContent="$"+revenue.toFixed(2);
+  // recent jobs
+  const rj=document.getElementById("adRecentJobs");
+  if(!jobs.length){rj.innerHTML='<div class="empty"><div class="empty-txt">No jobs yet</div></div>';}
+  else rj.innerHTML=jobs.slice(0,4).map(job=>{
+    const jt=JOB_TYPES.find(t=>t.id===job.type)||{icon:"🔧",label:job.type};
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)">
+      <div><div style="font-weight:600;font-size:.875rem">${job.title}</div><div style="font-size:.72rem;color:var(--muted)">${jt.icon} ${jt.label} · ${job.posted}</div></div>
+      <span class="badge b-yellow">${job.unlockedBy.length}/7</span>
+    </div>`;}).join("");
+  // stats
+  const unlocks=jobs.reduce((a,j)=>a+j.unlockedBy.length,0);
+  document.getElementById("adStats").innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:.85rem;font-size:.875rem">
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Total lead unlocks</span><strong>${unlocks}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Full leads (7/7)</span><strong>${jobs.filter(j=>j.unlockedBy.length>=7).length}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Open jobs</span><strong>${jobs.filter(j=>j.status==="open").length}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Avg unlocks/job</span><strong>${jobs.length?(unlocks/jobs.length).toFixed(1):"0"}</strong></div>
+    </div>`;
+}
+function renderAdminContractors() {
+  const q=(document.getElementById("adConSearch")?.value||"").toLowerCase();
+  const list=Object.values(users).filter(u=>u.role==="contractor").filter(c=>c.name.toLowerCase().includes(q)||c.email.toLowerCase().includes(q));
+  document.getElementById("adConSub").textContent=list.length+" registered";
+  document.getElementById("adConTable").innerHTML=list.map(c=>{
+    const svcs=(c.services||[]).map(s=>{const jt=JOB_TYPES.find(j=>j.id===s);return jt?`<span class="jtag type" style="font-size:.68rem;margin-right:3px">${jt.label}</span>`:""}).join("");
+    const rev=(c.payments||[]).reduce((a,b)=>a+b.amount,0);
+    return `<tr><td style="font-weight:600">${c.name}</td><td style="color:var(--muted)">${c.email}</td><td>${svcs||"—"}</td><td style="color:var(--accent);font-weight:700">${c.credits}</td><td>${(c.unlockedLeads||[]).length}</td><td style="color:var(--green);font-weight:600">$${rev.toLocaleString()}</td></tr>`;}).join("");
+}
+function renderAdminClients() {
+  const q=(document.getElementById("adCliSearch")?.value||"").toLowerCase();
+  const list=Object.values(users).filter(u=>u.role==="client").filter(c=>c.name.toLowerCase().includes(q)||c.email.toLowerCase().includes(q));
+  document.getElementById("adCliSub").textContent=list.length+" registered";
+  document.getElementById("adCliTable").innerHTML=list.map(c=>{
+    const paid=(c.payments||[]).reduce((a,b)=>a+b.amount,0);
+    return `<tr><td style="font-weight:600">${c.name}</td><td style="color:var(--muted)">${c.email}</td><td style="color:var(--muted)">${c.phone||"—"}</td><td>${(c.jobs||[]).length}</td><td style="color:var(--green);font-weight:600">$${paid.toLocaleString()}</td></tr>`;}).join("");
+}
+function renderAdminJobs() {
+  const c=document.getElementById("adJobsContent");
+  document.getElementById("adJobSub").textContent=jobs.length+" total listings";
+  if(!jobs.length){c.innerHTML=`<div class="cs-box"><div style="font-size:3rem;margin-bottom:.75rem">📋</div><div class="cs-title">No Jobs Yet</div><div style="font-size:.875rem;color:var(--muted)">Job postings from clients will appear here.</div></div>`;return;}
+  c.innerHTML=`<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden"><div class="tbl-wrap"><table><thead><tr><th>Title</th><th>Type</th><th>Location</th><th>Budget</th><th>Unlocks</th><th>Posted</th></tr></thead><tbody>`+
+  jobs.map(job=>{
+    const jt=JOB_TYPES.find(t=>t.id===job.type)||{icon:"🔧",label:job.type};
+    return `<tr><td style="font-weight:600">${job.title}</td><td><span class="jtag type" style="font-size:.68rem">${jt.icon} ${jt.label}</span></td><td style="color:var(--muted)">${job.location||"—"}</td><td style="color:var(--muted)">${job.budget||"—"}</td><td style="font-weight:700;color:${job.unlockedBy.length>=7?'var(--red)':'var(--accent)'}">${job.unlockedBy.length}/7</td><td style="color:var(--muted)">${job.posted}</td></tr>`;}).join("")+
+  `</tbody></table></div></div>`;
+}
+function renderPricing() {
+  const c=document.getElementById("pricingContent");
+  c.innerHTML=INDUSTRY_CATEGORIES.map(cat=>`
+    <div class="pricing-cat-hdr"><span>${cat.icon}</span> ${cat.label}</div>
+    <div class="pricing-grid">
+      ${cat.services.map(s=>`
+        <div class="pc">
+          <div><div style="font-size:1.1rem">${s.icon}</div><div class="pc-job">${s.label}</div></div>
+          <div style="display:flex;align-items:center;gap:.35rem">
+            <input class="pc-inp" type="number" min="1" max="50" value="${s.credits}" id="price-${s.id}" oninput="updatePrice('${s.id}',this.value)"/>
+            <span style="font-size:.68rem;color:var(--muted)">cr</span>
+          </div>
+        </div>`).join("")}
+    </div>`).join("");
+}
+function updatePrice(id,val){
+  const svc=JOB_TYPES.find(s=>s.id===id);
+  if(svc) svc.credits=parseInt(val)||1;
+}
+function savePricing(){ toast("✅","Pricing Saved","Lead pricing has been updated."); }
+function renderAdminTx() {
+  const contractors=Object.values(users).filter(u=>u.role==="contractor");
+  const all=contractors.flatMap(c=>c.creditHistory.map(h=>({...h,contractor:c.name})));
+  const tb=document.getElementById("adTxTable");
+  const em=document.getElementById("adTxEmpty");
+  if(!all.length){tb.innerHTML="";em.style.display="block";return;}
+  em.style.display="none";
+  tb.innerHTML=all.map(h=>`
+    <tr>
+      <td style="font-weight:600">${h.contractor}</td><td>${h.action}</td>
+      <td style="font-weight:700;color:${h.amount.startsWith('+')?'var(--green)':'var(--red)'}">${h.amount}</td>
+      <td style="color:var(--accent);font-weight:700">${h.cost||"—"}</td>
+      <td style="color:var(--muted)">${h.date}</td>
+    </tr>`).join("");
+}
+
+// ════
