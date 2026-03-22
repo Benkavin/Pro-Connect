@@ -125,7 +125,35 @@ hr.div{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
 .sb-item{display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-radius:8px;cursor:pointer;font-size:.875rem;font-weight:500;color:var(--muted);transition:all .15s;border:none;background:transparent;width:100%;text-align:left}
 .sb-item:hover{background:var(--s2);color:var(--text)}
 .sb-item.active{background:rgba(244,166,35,.12);color:var(--accent)}
-.sb-icon{font-size:.95rem;width:20px;text-align:center}
+.sb-icon{font-size:.5rem;width:20px;text-align:center;color:var(--accent);opacity:.6}
+.sb-item.active .sb-icon{opacity:1}
+
+/* ── SEARCH PANEL ── */
+.search-panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.75rem;margin-bottom:2rem;box-shadow:var(--shadow)}
+.search-panel-row{display:grid;grid-template-columns:1fr 200px 200px auto;gap:1rem;align-items:end;margin-bottom:1.25rem}
+@media(max-width:900px){.search-panel-row{grid-template-columns:1fr 1fr;}.sp-btn{grid-column:1/-1}}
+@media(max-width:600px){.search-panel-row{grid-template-columns:1fr}}
+.sp-field{display:flex;flex-direction:column;gap:.4rem}
+.sp-field-grow{flex:1}
+.sp-label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.sp-input{width:100%;padding:.75rem 1rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .15s}
+.sp-input:focus{border-color:var(--accent)}
+.sp-select{width:100%;padding:.75rem 1rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .15s}
+.sp-select:focus{border-color:var(--accent)}
+.sp-select option,.sp-select optgroup{background:var(--bg)}
+.sp-btn{padding:.75rem 1.75rem;white-space:nowrap;align-self:end}
+.sp-popular{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.sp-pop-label{font-size:.75rem;color:var(--muted);font-weight:600;white-space:nowrap}
+.sp-pop-tag{font-size:.75rem;padding:.3rem .75rem;border-radius:999px;background:var(--s2);border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
+.sp-pop-tag:hover{background:rgba(244,166,35,.1);border-color:rgba(244,166,35,.3);color:var(--accent)}
+
+/* ── SEARCH RESULTS ── */
+.search-results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem}
+.search-result-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:.75rem}
+.search-result-item:hover{border-color:var(--accent);background:rgba(244,166,35,.04);transform:translateY(-1px)}
+.sri-icon{font-size:1.3rem;flex-shrink:0}
+.sri-name{font-size:.875rem;font-weight:600;color:var(--text)}
+.sri-cat{font-size:.72rem;color:var(--muted);margin-top:.1rem}
 .main{flex:1;padding:2rem;overflow-y:auto;min-width:0}
 .dash-page{display:none}.dash-page.active{display:block}
 
@@ -284,12 +312,12 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <div class="page" id="page-landing">
   <!-- HERO -->
   <div class="hero">
-    <div class="hero-badge">🔨 The Contractor Marketplace</div>
+    <div class="hero-badge">The Professional Contractor Marketplace</div>
     <h1>Find <em>Trusted</em> Contractors.<br/>Grow Your Business.</h1>
-    <p>Post a job and get contacted by up to 7 verified contractors. Find the right person for the job, fast.</p>
+    <p>Post a job and connect with up to 7 verified contractors in your area. Compare quotes, hire with confidence, and pay securely — all in one place.</p>
     <div class="hero-cta">
-      <button class="btn btn-primary btn-lg" onclick="showPage('signup-client')">I Need a Contractor</button>
-      <button class="btn btn-outline btn-lg" onclick="showPage('signup-contractor')">I'm a Contractor</button>
+      <button class="btn btn-primary btn-lg" onclick="showPage('signup-client')">Find a Contractor</button>
+      <button class="btn btn-outline btn-lg" onclick="showPage('signup-contractor')">Join as a Contractor</button>
     </div>
   </div>
 
@@ -297,34 +325,79 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="stats-row">
     <div class="stat"><div class="stat-num">2,400+</div><div class="stat-lbl">Verified Contractors</div></div>
     <div class="stat"><div class="stat-num">18,000+</div><div class="stat-lbl">Jobs Completed</div></div>
-    <div class="stat"><div class="stat-num">7</div><div class="stat-lbl">Max Contacts Per Job</div></div>
-    <div class="stat"><div class="stat-num">4.9★</div><div class="stat-lbl">Avg. Satisfaction</div></div>
+    <div class="stat"><div class="stat-num">24</div><div class="stat-lbl">Industries Covered</div></div>
+    <div class="stat"><div class="stat-num">200+</div><div class="stat-lbl">Services Available</div></div>
+    <div class="stat"><div class="stat-num">4.9 / 5</div><div class="stat-lbl">Average Rating</div></div>
   </div>
 
   <!-- INDUSTRIES -->
   <div class="industries-section">
-    <div class="section-title">Browse by Industry</div>
-    <div class="section-sub">Over 200 services across 24 industries — find exactly what you need</div>
-    <div class="ind-search-wrap">
-      <span class="ind-search-icon">🔍</span>
-      <input class="ind-search" id="indSearch" placeholder="Search services (e.g. roofing, security guard, solar...)" oninput="filterIndustries(this.value)"/>
+    <div class="section-title">Find the Right Professional</div>
+    <div class="section-sub">Search across 200+ services in 24 industries. Filter by category or type any service to find exactly who you need.</div>
+
+    <div class="search-panel">
+      <div class="search-panel-row">
+        <div class="sp-field sp-field-grow">
+          <label class="sp-label">What service do you need?</label>
+          <input class="sp-input" id="indSearch" placeholder="e.g. Roofing, Security Guard, Plumber, Solar Installation..." oninput="filterIndustries(this.value)"/>
+        </div>
+        <div class="sp-field">
+          <label class="sp-label">Industry</label>
+          <select class="sp-select" id="catSelect" onchange="setCatFromSelect(this.value)">
+            <option value="">All Industries</option>
+          </select>
+        </div>
+        <div class="sp-field">
+          <label class="sp-label">Location</label>
+          <input class="sp-input" id="locationSearch" placeholder="City or ZIP code"/>
+        </div>
+        <button class="btn btn-primary sp-btn" onclick="doSearch()">Search</button>
+      </div>
+      <div class="sp-popular">
+        <span class="sp-pop-label">Popular:</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Plumbing')">Plumbing</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Security Guard Services')">Security Guards</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Electrical')">Electrical</span>
+        <span class="sp-pop-tag" onclick="quickSearch('House Cleaning')">Cleaning</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Roofing')">Roofing</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Landscaping')">Landscaping</span>
+        <span class="sp-pop-tag" onclick="quickSearch('General Contractor')">General Contractor</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Moving')">Moving</span>
+      </div>
     </div>
-    <div class="cat-tabs" id="catTabs"></div>
-    <div class="industries-grid" id="industriesGrid"></div>
-    <div style="text-align:center;margin-top:2.5rem">
-      <button class="btn btn-primary btn-lg" onclick="showPage('signup-client')">Post Your Job →</button>
+
+    <div id="searchResults" style="display:none;margin-bottom:1.5rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div id="searchResultsLabel" style="font-size:.875rem;color:var(--muted)"></div>
+        <button class="btn btn-ghost btn-sm" onclick="clearSearch()">Clear Search</button>
+      </div>
+      <div class="search-results-grid" id="searchResultsGrid"></div>
+    </div>
+
+    <div id="industriesBrowse">
+      <div class="cat-tabs" id="catTabs"></div>
+      <div class="industries-grid" id="industriesGrid"></div>
+    </div>
+
+    <div style="text-align:center;margin-top:3rem;padding:3rem 2rem;background:var(--surface);border-radius:var(--r);border:1px solid var(--border)">
+      <div style="font-family:var(--fh);font-size:1.5rem;font-weight:800;margin-bottom:.75rem">Ready to get started?</div>
+      <div style="color:var(--muted);font-size:.95rem;margin-bottom:1.5rem">Post your job for free. Qualified contractors will reach out within hours.</div>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary btn-lg" onclick="showPage('signup-client')">Post a Job — It's Free</button>
+        <button class="btn btn-outline btn-lg" onclick="showPage('signup-contractor')">Join as a Contractor</button>
+      </div>
     </div>
   </div>
 
   <!-- HOW IT WORKS -->
   <div class="how-section">
     <div class="section-title">How Pangig Works</div>
-    <div class="section-sub">Simple for clients. Powerful for contractors.</div>
+    <div class="section-sub">A straightforward process from posting to payment.</div>
     <div class="steps-grid">
-      <div class="step-card" data-n="1"><div class="step-icon">📋</div><div class="step-title">Post Your Job</div><div class="step-desc">Describe what you need. We match it to the right contractors automatically.</div></div>
-      <div class="step-card" data-n="2"><div class="step-icon">👷</div><div class="step-title">Get Contacted</div><div class="step-desc">Qualified contractors in your area will reach out with their availability and rates.</div></div>
-      <div class="step-card" data-n="3"><div class="step-icon">💬</div><div class="step-title">Compare & Choose</div><div class="step-desc">Up to 7 contractors can respond. Pick the best fit for your job and budget.</div></div>
-      <div class="step-card" data-n="4"><div class="step-icon">✅</div><div class="step-title">Hire & Pay</div><div class="step-desc">Review quotes, hire your favourite, and pay through the platform securely.</div></div>
+      <div class="step-card" data-n="1"><div class="step-title">Post Your Job</div><div class="step-desc">Describe what you need, set your location and budget. It takes less than 2 minutes and is completely free.</div></div>
+      <div class="step-card" data-n="2"><div class="step-title">Receive Quotes</div><div class="step-desc">Up to 7 qualified contractors in your area will review your job and reach out with their rates and availability.</div></div>
+      <div class="step-card" data-n="3"><div class="step-title">Compare & Choose</div><div class="step-desc">Review contractor profiles, compare quotes, and select the professional that best fits your needs and budget.</div></div>
+      <div class="step-card" data-n="4"><div class="step-title">Hire & Pay Securely</div><div class="step-desc">Confirm the job, communicate directly, and pay through Pangig's secure platform when the work is complete.</div></div>
     </div>
   </div>
 </div>
@@ -339,13 +412,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="fg"><label class="fl">Email</label><input class="fi" id="loginEmail" type="email" placeholder="you@email.com"/></div>
       <div class="fg"><label class="fl">Password</label><input class="fi" id="loginPass" type="password" placeholder="••••••••"/></div>
       <button class="btn btn-primary fi-full" onclick="doLogin()">Sign In</button>
-      <hr class="div"/>
-      <div class="demo-box">
-        <strong>Demo accounts:</strong><br/>
-        Admin: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f9989d949097b99a9697979c9a8d898b96d79a9694">[email&#160;protected]</a> / admin123<br/>
-        Contractor: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bed3d7d5dbfeced2cbd3dcd7d0d990ddd1d3">[email&#160;protected]</a> / pass123<br/>
-        Client: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="573d383f3917323a363e3b7934383a">[email&#160;protected]</a> / pass123
-      </div>
       <div style="text-align:center;margin-top:1rem">
         <button class="btn btn-ghost" style="font-size:.78rem" onclick="showPage('signup-client')">Don't have an account? Sign up</button>
       </div>
@@ -409,17 +475,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="dash">
     <div class="sidebar" id="conSidebar">
       <div class="sb-label">Contractor</div>
-      <button class="sb-item active" data-dash="con" data-p="overview" onclick="conPage('overview',this)"><span class="sb-icon">📊</span>Overview</button>
-      <button class="sb-item" data-dash="con" data-p="leads" onclick="conPage('leads',this)"><span class="sb-icon">🎯</span>Browse Leads</button>
-      <button class="sb-item" data-dash="con" data-p="myleads" onclick="conPage('myleads',this)"><span class="sb-icon">🔓</span>My Leads</button>
-      <button class="sb-item" data-dash="con" data-p="invoices" onclick="conPage('invoices',this)"><span class="sb-icon">📄</span>Invoices</button>
-      <button class="sb-item" data-dash="con" data-p="credits" onclick="conPage('credits',this)"><span class="sb-icon">💳</span>Credits & Spending</button>
-      <button class="sb-item" data-dash="con" data-p="profile" onclick="conPage('profile',this)"><span class="sb-icon">👤</span>My Profile</button>
+      <button class="sb-item active" data-dash="con" data-p="overview" onclick="conPage('overview',this)"><span class="sb-icon">▪</span>Overview</button>
+      <button class="sb-item" data-dash="con" data-p="leads" onclick="conPage('leads',this)"><span class="sb-icon">▪</span>Browse Leads</button>
+      <button class="sb-item" data-dash="con" data-p="myleads" onclick="conPage('myleads',this)"><span class="sb-icon">▪</span>My Leads</button>
+      <button class="sb-item" data-dash="con" data-p="invoices" onclick="conPage('invoices',this)"><span class="sb-icon">▪</span>Invoices</button>
+      <button class="sb-item" data-dash="con" data-p="credits" onclick="conPage('credits',this)"><span class="sb-icon">▪</span>Credits & Spending</button>
+      <button class="sb-item" data-dash="con" data-p="profile" onclick="conPage('profile',this)"><span class="sb-icon">▪</span>My Profile</button>
     </div>
     <div class="main">
       <!-- OVERVIEW -->
       <div class="dash-page active" id="con-overview">
-        <div class="ph"><div class="pt" id="conWelcome">Welcome back 👋</div><div class="ps">Here's your business snapshot</div></div>
+        <div class="ph"><div class="pt" id="conWelcome">Welcome back</div><div class="ps">Here's your business snapshot</div></div>
         <div class="metrics-grid">
           <div class="mc"><div class="mc-lbl">Credits</div><div class="mc-val acc" id="conCredits">0</div><div class="mc-sub">Available balance</div></div>
           <div class="mc"><div class="mc-lbl">Leads Unlocked</div><div class="mc-val blu" id="conLeadsCount">0</div><div class="mc-sub">Total leads purchased</div></div>
@@ -430,9 +496,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="card"><div class="card-title">Recent Activity</div><div id="conRecentActivity"></div></div>
           <div class="card"><div class="card-title">Quick Actions</div>
             <div class="qa">
-              <button class="btn btn-primary" onclick="openModal('buyModal')">💳 Buy Credits</button>
-              <button class="btn btn-outline" onclick="conPage('invoices',null)">📄 Create Invoice</button>
-              <button class="btn btn-outline" onclick="conPage('credits',null)">📊 View Spending</button>
+              <button class="btn btn-primary" onclick="openModal('buyModal')">Buy Credits</button>
+              <button class="btn btn-outline" onclick="conPage('invoices',null)">Create Invoice</button>
+              <button class="btn btn-outline" onclick="conPage('credits',null)">View Spending</button>
             </div>
             <div class="cred-box"><div style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">Credit Balance</div>
               <div class="cred-box-row"><div class="cred-big" id="conCredBig">0</div><button class="btn btn-primary btn-sm" onclick="openModal('buyModal')">Top Up</button></div>
@@ -443,20 +509,20 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <!-- BROWSE LEADS -->
       <div class="dash-page" id="con-leads">
-        <div class="ph"><div class="pt">Browse Leads 🎯</div><div class="ps">Find and unlock client job requests in your area</div></div>
-        <div class="cs-box"><div style="font-size:3rem;margin-bottom:.75rem">🚧</div><div class="cs-title">Leads Coming Soon</div><div style="font-size:.875rem;color:var(--muted);line-height:1.7">Client job postings will appear here once the platform goes live.<br/>Buy credits now so you're ready to unlock leads the moment they drop.</div><button class="btn btn-primary" style="margin-top:1.5rem" onclick="openModal('buyModal')">💳 Buy Credits Now</button></div>
+        <div class="ph"><div class="pt">Browse Leads</div><div class="ps">Find and unlock client job requests in your area</div></div>
+        <div class="cs-box"><div class="cs-title">Leads Coming Soon</div><div style="font-size:.875rem;color:var(--muted);line-height:1.7">Client job postings will appear here once the platform goes live. Purchase credits now so you're ready to unlock leads immediately.</div><button class="btn btn-primary" style="margin-top:1.5rem" onclick="openModal('buyModal')">Buy Credits</button></div>
       </div>
 
       <!-- MY LEADS -->
       <div class="dash-page" id="con-myleads">
-        <div class="ph"><div class="pt">My Unlocked Leads 🔓</div><div class="ps">All leads you've purchased access to</div></div>
-        <div class="cs-box"><div style="font-size:3rem;margin-bottom:.75rem">🔓</div><div class="cs-title">No Leads Yet</div><div style="font-size:.875rem;color:var(--muted)">When you unlock a lead, the client's contact info will appear here.</div></div>
+        <div class="ph"><div class="pt">My Unlocked Leads</div><div class="ps">All leads you've purchased access to</div></div>
+        <div class="cs-box"><div class="cs-title">No Leads Yet</div><div style="font-size:.875rem;color:var(--muted)">When you unlock a lead, the client's contact information will appear here.</div></div>
       </div>
 
       <!-- INVOICES -->
       <div class="dash-page" id="con-invoices">
-        <div class="ph"><div class="pt">Invoices 📄</div><div class="ps">Create and manage your invoices</div></div>
-        <div class="alert a-success" id="invSentAlert" style="display:none">✅ Invoice sent successfully!</div>
+        <div class="ph"><div class="pt">Invoices</div><div class="ps">Create and manage your invoices</div></div>
+        <div class="alert a-success" id="invSentAlert" style="display:none">Invoice sent successfully.</div>
         <div class="card" style="margin-bottom:1.5rem">
           <div class="card-title">Create New Invoice</div>
           <div class="two-col">
@@ -482,7 +548,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <!-- CREDITS -->
       <div class="dash-page" id="con-credits">
-        <div class="ph"><div class="pt">Credits & Spending 💳</div><div class="ps">Track your credit usage and purchase history</div></div>
+        <div class="ph"><div class="pt">Credits & Spending</div><div class="ps">Track your credit usage and purchase history</div></div>
         <div class="metrics-grid">
           <div class="mc"><div class="mc-lbl">Current Balance</div><div class="mc-val acc" id="credBal">0 credits</div></div>
           <div class="mc"><div class="mc-lbl">Total Spent on Credits</div><div class="mc-val" id="credSpent">$0.00</div></div>
@@ -498,7 +564,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <!-- PROFILE -->
       <div class="dash-page" id="con-profile">
-        <div class="ph"><div class="pt">My Profile 👤</div><div class="ps">Your business information</div></div>
+        <div class="ph"><div class="pt">My Profile</div><div class="ps">Your business information</div></div>
         <div class="prof-hdr">
           <div class="avatar" id="conAvatarLetter">M</div>
           <div><div class="prof-name" id="conProfName">—</div><div class="prof-role" id="conProfRole">Contractor</div></div>
@@ -517,17 +583,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="dash">
     <div class="sidebar">
       <div class="sb-label">Client</div>
-      <button class="sb-item active" onclick="cliPage('overview',this)"><span class="sb-icon">📊</span>Overview</button>
-      <button class="sb-item" onclick="cliPage('postjob',this)"><span class="sb-icon">➕</span>Post a Job</button>
-      <button class="sb-item" onclick="cliPage('myjobs',this)"><span class="sb-icon">📋</span>My Jobs</button>
-      <button class="sb-item" onclick="cliPage('invoices',this)"><span class="sb-icon">📄</span>Invoices</button>
-      <button class="sb-item" onclick="cliPage('spending',this)"><span class="sb-icon">💰</span>Spending</button>
-      <button class="sb-item" onclick="cliPage('profile',this)"><span class="sb-icon">👤</span>My Profile</button>
+      <button class="sb-item active" onclick="cliPage('overview',this)"><span class="sb-icon">▪</span>Overview</button>
+      <button class="sb-item" onclick="cliPage('postjob',this)"><span class="sb-icon">▪</span>Post a Job</button>
+      <button class="sb-item" onclick="cliPage('myjobs',this)"><span class="sb-icon">▪</span>My Jobs</button>
+      <button class="sb-item" onclick="cliPage('invoices',this)"><span class="sb-icon">▪</span>Invoices</button>
+      <button class="sb-item" onclick="cliPage('spending',this)"><span class="sb-icon">▪</span>Spending</button>
+      <button class="sb-item" onclick="cliPage('profile',this)"><span class="sb-icon">▪</span>My Profile</button>
     </div>
     <div class="main">
       <!-- OVERVIEW -->
       <div class="dash-page active" id="cli-overview">
-        <div class="ph"><div class="pt" id="cliWelcome">Welcome 👋</div><div class="ps">Manage your jobs and contractors</div></div>
+        <div class="ph"><div class="pt" id="cliWelcome">Welcome</div><div class="ps">Manage your jobs and contractors</div></div>
         <div class="metrics-grid">
           <div class="mc"><div class="mc-lbl">Jobs Posted</div><div class="mc-val acc" id="cliJobsCount">0</div></div>
           <div class="mc"><div class="mc-lbl">Active Jobs</div><div class="mc-val blu" id="cliActiveJobs">0</div></div>
@@ -538,8 +604,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="card"><div class="card-title">My Recent Jobs</div><div id="cliRecentJobs"></div></div>
           <div class="card"><div class="card-title">Quick Actions</div>
             <div class="qa">
-              <button class="btn btn-primary" onclick="cliPage('postjob',null)">➕ Post a New Job</button>
-              <button class="btn btn-outline" onclick="cliPage('invoices',null)">📄 View Invoices</button>
+              <button class="btn btn-primary" onclick="cliPage('postjob',null)">Post a New Job</button>
+              <button class="btn btn-outline" onclick="cliPage('invoices',null)">View Invoices</button>
             </div>
           </div>
         </div>
@@ -547,8 +613,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <!-- POST JOB -->
       <div class="dash-page" id="cli-postjob">
-        <div class="ph"><div class="pt">Post a Job ➕</div><div class="ps">Describe what you need and contractors will find you</div></div>
-        <div class="alert a-success" id="jobPostedAlert" style="display:none">🎉 Job posted! Contractors will reach out to you soon.</div>
+        <div class="ph"><div class="pt">Post a Job</div><div class="ps">Describe what you need and contractors will contact you</div></div>
+        <div class="alert a-success" id="jobPostedAlert" style="display:none">Your job has been posted. Contractors will reach out to you soon.</div>
         <div class="card">
           <div class="ferr" id="postJobErr"></div>
           <div class="fg"><label class="fl">Job Type *</label><select class="fs" id="pjType"><option value="">Select job type...</option></select></div>
@@ -564,13 +630,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <!-- MY JOBS -->
       <div class="dash-page" id="cli-myjobs">
-        <div class="ph"><div class="pt">My Jobs 📋</div><div class="ps">Track your posted jobs</div></div>
+        <div class="ph"><div class="pt">My Jobs</div><div class="ps">Track your posted jobs</div></div>
         <div id="cliJobsList"></div>
       </div>
 
       <!-- INVOICES -->
       <div class="dash-page" id="cli-invoices">
-        <div class="ph"><div class="pt">Invoices 📄</div><div class="ps">Invoices received from contractors</div></div>
+        <div class="ph"><div class="pt">Invoices</div><div class="ps">Invoices received from contractors</div></div>
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
           <div class="tbl-wrap"><table><thead><tr><th>Invoice</th><th>From</th><th>Job</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody id="cliInvList"></tbody></table>
           <div id="cliInvEmpty" class="empty" style="display:none"><div class="empty-txt">No invoices received yet</div></div></div>
@@ -579,7 +645,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <!-- SPENDING -->
       <div class="dash-page" id="cli-spending">
-        <div class="ph"><div class="pt">Spending 💰</div><div class="ps">Track what you've paid to contractors</div></div>
+        <div class="ph"><div class="pt">Spending</div><div class="ps">Track what you've paid to contractors</div></div>
         <div class="metrics-grid">
           <div class="mc"><div class="mc-lbl">Total Paid</div><div class="mc-val grn" id="cliSpendTotal">$0</div></div>
           <div class="mc"><div class="mc-lbl">Invoices Paid</div><div class="mc-val acc" id="cliInvPaid">0</div></div>
@@ -606,17 +672,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="dash">
     <div class="sidebar">
       <div class="sb-label">Admin Panel</div>
-      <button class="sb-item active" onclick="adminPage('overview',this)"><span class="sb-icon">📊</span>Overview</button>
-      <button class="sb-item" onclick="adminPage('contractors',this)"><span class="sb-icon">👷</span>Contractors</button>
-      <button class="sb-item" onclick="adminPage('clients',this)"><span class="sb-icon">🙋</span>Clients</button>
-      <button class="sb-item" onclick="adminPage('jobs',this)"><span class="sb-icon">📋</span>All Jobs</button>
-      <button class="sb-item" onclick="adminPage('pricing',this)"><span class="sb-icon">💲</span>Lead Pricing</button>
-      <button class="sb-item" onclick="adminPage('transactions',this)"><span class="sb-icon">💳</span>Transactions</button>
+      <button class="sb-item active" onclick="adminPage('overview',this)"><span class="sb-icon">▪</span>Overview</button>
+      <button class="sb-item" onclick="adminPage('contractors',this)"><span class="sb-icon">▪</span>Contractors</button>
+      <button class="sb-item" onclick="adminPage('clients',this)"><span class="sb-icon">▪</span>Clients</button>
+      <button class="sb-item" onclick="adminPage('jobs',this)"><span class="sb-icon">▪</span>All Jobs</button>
+      <button class="sb-item" onclick="adminPage('pricing',this)"><span class="sb-icon">▪</span>Lead Pricing</button>
+      <button class="sb-item" onclick="adminPage('transactions',this)"><span class="sb-icon">▪</span>Transactions</button>
     </div>
     <div class="main">
       <!-- OVERVIEW -->
       <div class="dash-page active" id="admin-overview">
-        <div class="ph"><div class="pt">Admin Overview 📊</div><div class="ps">Platform health at a glance</div></div>
+        <div class="ph"><div class="pt">Admin Overview</div><div class="ps">Platform health at a glance</div></div>
         <div class="metrics-grid">
           <div class="mc"><div class="mc-lbl">Total Contractors</div><div class="mc-val acc" id="adConCount">0</div></div>
           <div class="mc"><div class="mc-lbl">Total Clients</div><div class="mc-val blu" id="adCliCount">0</div></div>
@@ -1105,39 +1171,106 @@ function closeModal(id) { document.getElementById(id).classList.remove("open"); 
 // INDUSTRIES (LANDING)
 // ══════════════════════════════════════════════════
 function initIndustries() {
+  // populate category select in search panel
+  const catSel = document.getElementById("catSelect");
+  INDUSTRY_CATEGORIES.forEach(c => {
+    const o = document.createElement("option");
+    o.value = c.id; o.textContent = `${c.icon} ${c.label}`;
+    catSel.appendChild(o);
+  });
   // category tabs
-  const tabs=document.getElementById("catTabs");
-  tabs.innerHTML=`<button class="cat-tab active" onclick="setCat(null,this)">All Industries</button>`+
-    INDUSTRY_CATEGORIES.map(c=>`<button class="cat-tab" onclick="setCat('${c.id}',this)">${c.icon} ${c.label}</button>`).join("");
+  const tabs = document.getElementById("catTabs");
+  tabs.innerHTML = `<button class="cat-tab active" onclick="setCat(null,this)">All Industries</button>` +
+    INDUSTRY_CATEGORIES.map(c => `<button class="cat-tab" onclick="setCat('${c.id}',this)">${c.icon} ${c.label}</button>`).join("");
   renderIndustriesGrid(INDUSTRY_CATEGORIES);
   // contractor service dropdown
-  const sel=document.getElementById("conService");
-  INDUSTRY_CATEGORIES.forEach(cat=>{
-    const og=document.createElement("optgroup");
-    og.label=`${cat.icon} ${cat.label}`;
-    cat.services.forEach(s=>{const o=document.createElement("option");o.value=s.id;o.textContent=s.label;og.appendChild(o);});
+  const sel = document.getElementById("conService");
+  INDUSTRY_CATEGORIES.forEach(cat => {
+    const og = document.createElement("optgroup");
+    og.label = `${cat.icon} ${cat.label}`;
+    cat.services.forEach(s => { const o = document.createElement("option"); o.value = s.id; o.textContent = s.label; og.appendChild(o); });
     sel.appendChild(og);
   });
   // post job dropdown
-  const pj=document.getElementById("pjType");
-  INDUSTRY_CATEGORIES.forEach(cat=>{
-    const og=document.createElement("optgroup");
-    og.label=`${cat.icon} ${cat.label}`;
-    cat.services.forEach(s=>{const o=document.createElement("option");o.value=s.id;o.textContent=s.label;og.appendChild(o);});
+  const pj = document.getElementById("pjType");
+  INDUSTRY_CATEGORIES.forEach(cat => {
+    const og = document.createElement("optgroup");
+    og.label = `${cat.icon} ${cat.label}`;
+    cat.services.forEach(s => { const o = document.createElement("option"); o.value = s.id; o.textContent = s.label; og.appendChild(o); });
     pj.appendChild(og);
   });
 }
 function setCat(id, btn) {
-  document.querySelectorAll(".cat-tab").forEach(b=>b.classList.remove("active"));
-  if(btn) btn.classList.add("active");
-  activeCat=id;
-  const cats=id?INDUSTRY_CATEGORIES.filter(c=>c.id===id):INDUSTRY_CATEGORIES;
+  document.querySelectorAll(".cat-tab").forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  activeCat = id;
+  document.getElementById("catSelect").value = id || "";
+  const cats = id ? INDUSTRY_CATEGORIES.filter(c => c.id === id) : INDUSTRY_CATEGORIES;
   renderIndustriesGrid(cats);
+  document.getElementById("searchResults").style.display = "none";
+  document.getElementById("industriesBrowse").style.display = "block";
 }
-function filterIndustries(q) {
-  if(!q){renderIndustriesGrid(activeCat?INDUSTRY_CATEGORIES.filter(c=>c.id===activeCat):INDUSTRY_CATEGORIES);return;}
-  const filtered=INDUSTRY_CATEGORIES.map(cat=>({...cat,services:cat.services.filter(s=>s.label.toLowerCase().includes(q.toLowerCase()))})).filter(cat=>cat.services.length>0);
-  renderIndustriesGrid(filtered,q);
+function setCatFromSelect(val) {
+  activeCat = val || null;
+  const cats = val ? INDUSTRY_CATEGORIES.filter(c => c.id === val) : INDUSTRY_CATEGORIES;
+  renderIndustriesGrid(cats);
+  // sync tabs
+  document.querySelectorAll(".cat-tab").forEach(b => {
+    b.classList.toggle("active", (!val && b.textContent === "All Industries") || b.dataset?.cat === val);
+  });
+  document.getElementById("searchResults").style.display = "none";
+  document.getElementById("industriesBrowse").style.display = "block";
+}
+function doSearch() {
+  const q = document.getElementById("indSearch").value.trim();
+  const cat = document.getElementById("catSelect").value;
+  if (q) { filterIndustries(q, cat); }
+  else if (cat) { setCatFromSelect(cat); }
+}
+function quickSearch(q) {
+  document.getElementById("indSearch").value = q;
+  filterIndustries(q);
+}
+function clearSearch() {
+  document.getElementById("indSearch").value = "";
+  document.getElementById("locationSearch").value = "";
+  document.getElementById("catSelect").value = "";
+  document.getElementById("searchResults").style.display = "none";
+  document.getElementById("industriesBrowse").style.display = "block";
+  renderIndustriesGrid(INDUSTRY_CATEGORIES);
+}
+function filterIndustries(q, catFilter) {
+  if (!q && !catFilter) {
+    document.getElementById("searchResults").style.display = "none";
+    document.getElementById("industriesBrowse").style.display = "block";
+    renderIndustriesGrid(INDUSTRY_CATEGORIES);
+    return;
+  }
+  let results = [];
+  INDUSTRY_CATEGORIES.forEach(cat => {
+    if (catFilter && cat.id !== catFilter) return;
+    cat.services.forEach(s => {
+      if (!q || s.label.toLowerCase().includes(q.toLowerCase()) || cat.label.toLowerCase().includes(q.toLowerCase())) {
+        results.push({ ...s, catLabel: cat.label, catIcon: cat.icon });
+      }
+    });
+  });
+  const sr = document.getElementById("searchResults");
+  const grid = document.getElementById("searchResultsGrid");
+  const lbl = document.getElementById("searchResultsLabel");
+  if (!results.length) {
+    lbl.textContent = `No results found for "${q}"`;
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-txt">Try a different search term or browse by category below.</div></div>`;
+  } else {
+    lbl.textContent = `${results.length} service${results.length > 1 ? "s" : ""} found${q ? ` for "${q}"` : ""}`;
+    grid.innerHTML = results.map(s => `
+      <div class="search-result-item" onclick="showPage('signup-client')">
+        <div class="sri-icon">${s.icon}</div>
+        <div><div class="sri-name">${s.label}</div><div class="sri-cat">${s.catIcon} ${s.catLabel}</div></div>
+      </div>`).join("");
+  }
+  sr.style.display = "block";
+  document.getElementById("industriesBrowse").style.display = results.length ? "none" : "block";
 }
 function renderIndustriesGrid(cats,q="") {
   const g=document.getElementById("industriesGrid");
