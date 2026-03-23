@@ -3,16 +3,23 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Pangig — The global contractor marketplace. Find trusted professionals for any job, anywhere in the world."/>
+<meta name="theme-color" content="#0a0c10"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<link rel="dns-prefetch" href="https://fonts.googleapis.com"/>
+<link rel="dns-prefetch" href="https://fonts.gstatic.com"/>
 <title>Pangig – Contractor Marketplace</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap"/></noscript>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#0a0c10;--surface:#13161d;--s2:#1c2030;--border:#262c3d;
   --accent:#f4a623;--accent2:#e8522a;--green:#22c55e;--red:#ef4444;--blue:#3b82f6;
   --text:#f0f2f7;--muted:#7a8499;
-  --fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
+  --fh:'Syne',system-ui,sans-serif;--fb:'DM Sans',system-ui,sans-serif;
   --r:14px;--shadow:0 4px 24px rgba(0,0,0,.45);
 }
 html{scroll-behavior:smooth}
@@ -2097,6 +2104,8 @@ function filterSvcPage(q) { renderServicesPage(q || null); }
 // INIT
 // ══════════════════════════════════════════════════
 document.addEventListener("DOMContentLoaded", async () => {
+  // Ping backend immediately to wake it up (prevents cold start delay)
+  fetch(API + "/health").catch(()=>{});
   initIndustries();
   renderInvLines();
   await restoreSession();
@@ -2107,6 +2116,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else {
     showPage("landing");
   }
+  // Keep backend alive — ping every 5 minutes
+  setInterval(() => fetch(API + "/health").catch(()=>{}), 5 * 60 * 1000);
 });
 </script>
 </body>
