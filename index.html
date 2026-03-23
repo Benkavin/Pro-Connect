@@ -298,6 +298,25 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .cred-box-row{display:flex;align-items:center;justify-content:space-between}
 .cred-big{font-family:var(--fh);font-size:1.8rem;font-weight:800;color:var(--accent)}
 
+/* ── REVIEWS ── */
+.reviews-section{padding:5rem 2rem;max-width:1200px;margin:0 auto;width:100%}
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem;margin-top:2.5rem}
+.review-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2rem;display:flex;flex-direction:column;gap:1.25rem;transition:border-color .2s,transform .2s}
+.review-card:hover{border-color:rgba(244,166,35,.3);transform:translateY(-2px)}
+.review-stars{color:var(--accent);font-size:1rem;letter-spacing:2px}
+.review-text{font-size:.9rem;color:var(--text);line-height:1.75;flex:1;font-style:italic}
+.review-author{display:flex;align-items:center;gap:.85rem;margin-top:.25rem}
+.review-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:1rem;font-weight:800;color:#000;flex-shrink:0}
+.review-name{font-weight:700;font-size:.875rem}
+.review-role{font-size:.75rem;color:var(--muted);margin-top:.1rem}
+
+/* ── CTA BANNER ── */
+.cta-banner{background:linear-gradient(135deg,rgba(244,166,35,.1) 0%,rgba(232,82,42,.07) 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:4rem 2rem}
+.cta-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.cta-title{font-family:var(--fh);font-size:1.75rem;font-weight:800;margin-bottom:.4rem}
+.cta-sub{color:var(--muted);font-size:.95rem}
+.cta-btns{display:flex;gap:1rem;flex-wrap:wrap;flex-shrink:0}
+
 /*  SERVICES PAGE  */
 .svc-page-hero{padding:4rem 2rem 3rem;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(244,166,35,.07) 0%,transparent 70%);border-bottom:1px solid var(--border)}
 .svc-page-title{font-family:var(--fh);font-size:clamp(2rem,5vw,3rem);font-weight:800;margin-bottom:.75rem;letter-spacing:-1px}
@@ -426,59 +445,77 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="stat"><div class="stat-num">4.9 / 5</div><div class="stat-lbl">Average Rating</div></div>
   </div>
 
-  <!-- INDUSTRIES -->
-  <div class="industries-section">
-    <div class="section-title">Find the Right Professional</div>
-    <div class="section-sub">Search across 200+ services in 24 industries. Filter by category or type any service to find exactly who you need.</div>
+  <!-- REVIEWS -->
+  <div class="reviews-section">
+    <div class="section-title">What People Are Saying</div>
+    <div class="section-sub">Trusted by thousands of homeowners, businesses, and contractors across the country.</div>
+    <div class="reviews-grid">
 
-    <div class="search-panel">
-      <div class="search-panel-row">
-        <div class="sp-field sp-field-grow">
-          <label class="sp-label">What service do you need?</label>
-          <input class="sp-input" id="indSearch" placeholder="e.g. Roofing, Security Guard, Plumber, Solar Installation..." oninput="filterIndustries(this.value)"/>
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-text">"I posted a roofing job and had 6 contractors reach out within the same day. Got a great quote and the work was done by the end of the week. Pangig made the whole process effortless."</div>
+        <div class="review-author">
+          <div class="review-avatar">M</div>
+          <div><div class="review-name">Marcus T.</div><div class="review-role">Homeowner — Dallas, TX</div></div>
         </div>
-        <div class="sp-field">
-          <label class="sp-label">Industry</label>
-          <select class="sp-select" id="catSelect" onchange="setCatFromSelect(this.value)">
-            <option value="">All Industries</option>
-          </select>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-text">"As a licensed electrician, Pangig has been a game changer for my business. The leads are real, the clients are serious, and the credit system makes it easy to control my spending."</div>
+        <div class="review-author">
+          <div class="review-avatar">D</div>
+          <div><div class="review-name">David R.</div><div class="review-role">Electrical Contractor — Houston, TX</div></div>
         </div>
-        <div class="sp-field">
-          <label class="sp-label">Location</label>
-          <input class="sp-input" id="locationSearch" placeholder="City or ZIP code"/>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-text">"I needed a security team for a corporate event on short notice. Found a fully licensed company through Pangig within hours. Professional, reliable, and exactly what we needed."</div>
+        <div class="review-author">
+          <div class="review-avatar">S</div>
+          <div><div class="review-name">Sandra L.</div><div class="review-role">Event Coordinator — Atlanta, GA</div></div>
         </div>
-        <button class="btn btn-primary sp-btn" onclick="doSearch()">Search</button>
       </div>
-      <div class="sp-popular">
-        <span class="sp-pop-label">Popular:</span>
-        <span class="sp-pop-tag" onclick="quickSearch('Plumbing')">Plumbing</span>
-        <span class="sp-pop-tag" onclick="quickSearch('Security Guard Services')">Security Guards</span>
-        <span class="sp-pop-tag" onclick="quickSearch('Electrical')">Electrical</span>
-        <span class="sp-pop-tag" onclick="quickSearch('House Cleaning')">Cleaning</span>
-        <span class="sp-pop-tag" onclick="quickSearch('Roofing')">Roofing</span>
-        <span class="sp-pop-tag" onclick="quickSearch('Landscaping')">Landscaping</span>
-        <span class="sp-pop-tag" onclick="quickSearch('General Contractor')">General Contractor</span>
-        <span class="sp-pop-tag" onclick="quickSearch('Moving')">Moving</span>
+
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-text">"We used Pangig to find a general contractor for a full office renovation. The invoicing tool built right into the platform saved us a lot of back and forth. Highly recommend."</div>
+        <div class="review-author">
+          <div class="review-avatar">A</div>
+          <div><div class="review-name">Angela W.</div><div class="review-role">Business Owner — Chicago, IL</div></div>
+        </div>
       </div>
-    </div>
 
-    <div id="searchResults" style="display:none;margin-bottom:1.5rem">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-        <div id="searchResultsLabel" style="font-size:.875rem;color:var(--muted)"></div>
-        <button class="btn btn-ghost btn-sm" onclick="clearSearch()">Clear Search</button>
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-text">"I've tried other platforms but Pangig stands out because you're only competing with 6 other contractors per job. The quality of leads is much better and I close more deals."</div>
+        <div class="review-author">
+          <div class="review-avatar">J</div>
+          <div><div class="review-name">James P.</div><div class="review-role">Plumbing Contractor — Austin, TX</div></div>
+        </div>
       </div>
-      <div class="search-results-grid" id="searchResultsGrid"></div>
-    </div>
 
-    <div id="industriesBrowse">
-      <div class="cat-tabs" id="catTabs"></div>
-      <div class="industries-grid" id="industriesGrid"></div>
-    </div>
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-text">"Simple, clean, and it just works. I posted my landscaping job, received quotes, picked the best one, and paid securely all in the same place. No phone tag, no stress."</div>
+        <div class="review-author">
+          <div class="review-avatar">R</div>
+          <div><div class="review-name">Rachel M.</div><div class="review-role">Homeowner — Phoenix, AZ</div></div>
+        </div>
+      </div>
 
-    <div style="text-align:center;margin-top:3rem;padding:3rem 2rem;background:var(--surface);border-radius:var(--r);border:1px solid var(--border)">
-      <div style="font-family:var(--fh);font-size:1.5rem;font-weight:800;margin-bottom:.75rem">Ready to get started?</div>
-      <div style="color:var(--muted);font-size:.95rem;margin-bottom:1.5rem">Post your job for free. Qualified contractors will reach out within hours.</div>
-      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+    </div>
+  </div>
+
+  <!-- CTA BANNER -->
+  <div class="cta-banner">
+    <div class="cta-inner">
+      <div class="cta-text">
+        <div class="cta-title">Ready to get started?</div>
+        <div class="cta-sub">Post your job for free. Qualified contractors will reach out within hours.</div>
+      </div>
+      <div class="cta-btns">
         <button class="btn btn-primary btn-lg" onclick="showPage('signup-client')">Post a Job — It's Free</button>
         <button class="btn btn-outline btn-lg" onclick="showPage('signup-contractor')">Join as a Contractor</button>
       </div>
