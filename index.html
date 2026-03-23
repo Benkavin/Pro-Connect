@@ -298,6 +298,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .cred-box-row{display:flex;align-items:center;justify-content:space-between}
 .cred-big{font-family:var(--fh);font-size:1.8rem;font-weight:800;color:var(--accent)}
 
+/* ── SEARCH SECTION ── */
+.search-section{padding:4rem 2rem;max-width:1200px;margin:0 auto;width:100%}
+
 /* ── REVIEWS ── */
 .reviews-section{padding:5rem 2rem;max-width:1200px;margin:0 auto;width:100%}
 .reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem;margin-top:2.5rem}
@@ -429,7 +432,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="hero">
     <div class="hero-badge">The Professional Contractor Marketplace</div>
     <h1>Find <em>Trusted</em> Contractors.<br/>Grow Your Business.</h1>
-    <p>Post a job and connect with up to 7 verified contractors in your area. Compare quotes, hire with confidence, and pay securely — all in one place.</p>
+    <p>Post a job and connect with up to 7 verified contractors in your area. Compare quotes, hire with confidence, and pay securely — all in one place. Available worldwide.</p>
     <div class="hero-cta">
       <button class="btn btn-primary btn-lg" onclick="showPage('signup-client')">Find a Contractor</button>
       <button class="btn btn-outline btn-lg" onclick="showPage('signup-contractor')">Join as a Contractor</button>
@@ -440,15 +443,64 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="stats-row">
     <div class="stat"><div class="stat-num">2,400+</div><div class="stat-lbl">Verified Contractors</div></div>
     <div class="stat"><div class="stat-num">18,000+</div><div class="stat-lbl">Jobs Completed</div></div>
-    <div class="stat"><div class="stat-num">24</div><div class="stat-lbl">Industries Covered</div></div>
+    <div class="stat"><div class="stat-num">50+</div><div class="stat-lbl">Countries</div></div>
     <div class="stat"><div class="stat-num">200+</div><div class="stat-lbl">Services Available</div></div>
     <div class="stat"><div class="stat-num">4.9 / 5</div><div class="stat-lbl">Average Rating</div></div>
   </div>
 
+  <!-- SEARCH -->
+  <div class="search-section">
+    <div class="section-title">Find the Right Professional</div>
+    <div class="section-sub">Search across 200+ services in 24 industries worldwide. Type any service or select a category to get started.</div>
+    <div class="search-panel">
+      <div class="search-panel-row">
+        <div class="sp-field sp-field-grow">
+          <label class="sp-label">What service do you need?</label>
+          <input class="sp-input" id="indSearch" placeholder="e.g. Roofing, Security Guard, Plumber, Solar Installation..." oninput="filterIndustries(this.value)"/>
+        </div>
+        <div class="sp-field">
+          <label class="sp-label">Industry</label>
+          <select class="sp-select" id="catSelect" onchange="setCatFromSelect(this.value)">
+            <option value="">All Industries</option>
+          </select>
+        </div>
+        <div class="sp-field">
+          <label class="sp-label">Location</label>
+          <input class="sp-input" id="locationSearch" placeholder="City, country or region..."/>
+        </div>
+        <button class="btn btn-primary sp-btn" onclick="doSearch()">Search</button>
+      </div>
+      <div class="sp-popular">
+        <span class="sp-pop-label">Popular:</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Plumbing')">Plumbing</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Security Guard Services')">Security Guards</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Electrical')">Electrical</span>
+        <span class="sp-pop-tag" onclick="quickSearch('House Cleaning')">Cleaning</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Roofing')">Roofing</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Landscaping')">Landscaping</span>
+        <span class="sp-pop-tag" onclick="quickSearch('General Contractor')">General Contractor</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Moving')">Moving</span>
+        <span class="sp-pop-tag" onclick="quickSearch('Solar')">Solar</span>
+        <span class="sp-pop-tag" onclick="quickSearch('HVAC')">HVAC</span>
+      </div>
+    </div>
+    <div id="searchResults" style="display:none;margin-bottom:1.5rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div id="searchResultsLabel" style="font-size:.875rem;color:var(--muted)"></div>
+        <button class="btn btn-ghost btn-sm" onclick="clearSearch()">Clear Search</button>
+      </div>
+      <div class="search-results-grid" id="searchResultsGrid"></div>
+    </div>
+    <div id="industriesBrowse">
+      <div class="cat-tabs" id="catTabs"></div>
+      <div class="industries-grid" id="industriesGrid"></div>
+    </div>
+  </div>
+
   <!-- REVIEWS -->
   <div class="reviews-section">
-    <div class="section-title">What People Are Saying</div>
-    <div class="section-sub">Trusted by thousands of homeowners, businesses, and contractors across the country.</div>
+    <div class="section-title">Trusted Around the World</div>
+    <div class="section-sub">Homeowners, businesses, and contractors from over 50 countries rely on Pangig to get work done right.</div>
     <div class="reviews-grid">
 
       <div class="review-card">
@@ -456,7 +508,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="review-text">"I posted a roofing job and had 6 contractors reach out within the same day. Got a great quote and the work was done by the end of the week. Pangig made the whole process effortless."</div>
         <div class="review-author">
           <div class="review-avatar">M</div>
-          <div><div class="review-name">Marcus T.</div><div class="review-role">Homeowner — Dallas, TX</div></div>
+          <div><div class="review-name">Marcus T.</div><div class="review-role">Homeowner — Dallas, TX, USA</div></div>
         </div>
       </div>
 
@@ -465,7 +517,34 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="review-text">"As a licensed electrician, Pangig has been a game changer for my business. The leads are real, the clients are serious, and the credit system makes it easy to control my spending."</div>
         <div class="review-author">
           <div class="review-avatar">D</div>
-          <div><div class="review-name">David R.</div><div class="review-role">Electrical Contractor — Houston, TX</div></div>
+          <div><div class="review-name">David R.</div><div class="review-role">Electrical Contractor — Houston, TX, USA</div></div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-text">"We found an excellent renovation contractor in Toronto through Pangig. The platform is straightforward and the quality of professionals listed here is far above what we expected."</div>
+        <div class="review-author">
+          <div class="review-avatar">L</div>
+          <div><div class="review-name">Lisa K.</div><div class="review-role">Homeowner — Toronto, Ontario, Canada</div></div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-text">"I run a plumbing business in Lagos and Pangig has opened up so many new client opportunities. The platform is easy to use and the lead system works perfectly for my team."</div>
+        <div class="review-author">
+          <div class="review-avatar">E</div>
+          <div><div class="review-name">Emeka O.</div><div class="review-role">Plumbing Contractor — Lagos, Nigeria</div></div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-text">"Brilliant platform. I needed a reliable electrician in Manchester and found one within a few hours. The whole process from posting to payment was seamless. Will definitely use again."</div>
+        <div class="review-author">
+          <div class="review-avatar">T</div>
+          <div><div class="review-name">Thomas B.</div><div class="review-role">Property Owner — Manchester, United Kingdom</div></div>
         </div>
       </div>
 
@@ -474,25 +553,34 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="review-text">"I needed a security team for a corporate event on short notice. Found a fully licensed company through Pangig within hours. Professional, reliable, and exactly what we needed."</div>
         <div class="review-author">
           <div class="review-avatar">S</div>
-          <div><div class="review-name">Sandra L.</div><div class="review-role">Event Coordinator — Atlanta, GA</div></div>
+          <div><div class="review-name">Sandra L.</div><div class="review-role">Event Coordinator — Atlanta, GA, USA</div></div>
         </div>
       </div>
 
       <div class="review-card">
         <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="review-text">"We used Pangig to find a general contractor for a full office renovation. The invoicing tool built right into the platform saved us a lot of back and forth. Highly recommend."</div>
+        <div class="review-text">"As a general contractor in Abuja, I was skeptical at first but Pangig delivered. The jobs are consistent, clients are genuine, and I've grown my business significantly since joining."</div>
         <div class="review-author">
-          <div class="review-avatar">A</div>
-          <div><div class="review-name">Angela W.</div><div class="review-role">Business Owner — Chicago, IL</div></div>
+          <div class="review-avatar">C</div>
+          <div><div class="review-name">Chidi A.</div><div class="review-role">General Contractor — Abuja, Nigeria</div></div>
         </div>
       </div>
 
       <div class="review-card">
         <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="review-text">"I've tried other platforms but Pangig stands out because you're only competing with 6 other contractors per job. The quality of leads is much better and I close more deals."</div>
+        <div class="review-text">"We used Pangig to source a landscaping crew for our commercial property in Vancouver. The platform made it easy to compare quotes and the work was completed on time and on budget."</div>
         <div class="review-author">
-          <div class="review-avatar">J</div>
-          <div><div class="review-name">James P.</div><div class="review-role">Plumbing Contractor — Austin, TX</div></div>
+          <div class="review-avatar">N</div>
+          <div><div class="review-name">Nathan S.</div><div class="review-role">Property Manager — Vancouver, BC, Canada</div></div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-text">"I'm a painter based in London and Pangig has completely replaced cold calling for me. I get quality leads every week and the invoicing tool saves me hours of admin work each month."</div>
+        <div class="review-author">
+          <div class="review-avatar">P</div>
+          <div><div class="review-name">Peter H.</div><div class="review-role">Painting Contractor — London, United Kingdom</div></div>
         </div>
       </div>
 
@@ -501,7 +589,25 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="review-text">"Simple, clean, and it just works. I posted my landscaping job, received quotes, picked the best one, and paid securely all in the same place. No phone tag, no stress."</div>
         <div class="review-author">
           <div class="review-avatar">R</div>
-          <div><div class="review-name">Rachel M.</div><div class="review-role">Homeowner — Phoenix, AZ</div></div>
+          <div><div class="review-name">Rachel M.</div><div class="review-role">Homeowner — Phoenix, AZ, USA</div></div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-text">"I used Pangig to find a trusted HVAC technician in Accra. It was my first time using a platform like this and I was impressed by how easy it was. The contractor was professional and fairly priced."</div>
+        <div class="review-author">
+          <div class="review-avatar">A</div>
+          <div><div class="review-name">Ama D.</div><div class="review-role">Homeowner — Accra, Ghana</div></div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="review-text">"I've tried other platforms but Pangig stands out because you're only competing with 6 other contractors per job. The quality of leads is much better and I close more deals every month."</div>
+        <div class="review-author">
+          <div class="review-avatar">J</div>
+          <div><div class="review-name">James P.</div><div class="review-role">Plumbing Contractor — Austin, TX, USA</div></div>
         </div>
       </div>
 
