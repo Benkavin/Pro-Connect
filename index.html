@@ -31,17 +31,10 @@ textarea{resize:vertical}
 /*  NAV  */
 .nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(19,22,29,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
 /* ── LOGO ── */
-.logo{display:flex;align-items:center;gap:.55rem;cursor:pointer;white-space:nowrap;text-decoration:none;user-select:none}
-.logo-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 12px rgba(244,166,35,.35)}
-.logo-mark svg{width:18px;height:18px;fill:none;stroke:#000;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.logo-word{font-family:var(--fh);font-size:1.35rem;font-weight:800;letter-spacing:-.5px;line-height:1}
-.logo-word .lw-pan{color:var(--text)}
-.logo-word .lw-gig{color:var(--accent)}
-.logo-sub{font-size:.55rem;font-weight:600;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;line-height:1;margin-top:1px}
-/* Drawer logo */
-.drawer-logo{display:flex;align-items:center;gap:.5rem;white-space:nowrap}
-.drawer-logo .logo-mark{width:30px;height:30px;border-radius:8px}
-.drawer-logo .logo-word{font-size:1.15rem}
+.logo{font-family:var(--fh);font-size:1.45rem;font-weight:800;color:var(--text);letter-spacing:-.5px;cursor:pointer;white-space:nowrap}
+.logo span{color:var(--accent)}
+.drawer-logo{font-family:var(--fh);font-size:1.2rem;font-weight:800;color:var(--text);white-space:nowrap}
+.drawer-logo span{color:var(--accent)}
 .nav-r{display:flex;gap:.75rem;align-items:center}
 .nav-user{font-size:.82rem;color:var(--muted)}
 /* Hamburger */
@@ -374,19 +367,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 <!--  NAV  -->
 <nav class="nav">
-  <div class="logo" onclick="showPage('landing')">
-    <div class="logo-mark">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-        <path d="M2 17l10 5 10-5"/>
-        <path d="M2 12l10 5 10-5"/>
-      </svg>
-    </div>
-    <div>
-      <div class="logo-word"><span class="lw-pan">Pan</span><span class="lw-gig">gig</span></div>
-      <div class="logo-sub">Global Marketplace</div>
-    </div>
-  </div>
+  <div class="logo" onclick="showPage('landing')">Pan<span>gig</span></div>
   <div class="nav-r" id="navRight">
     <button class="btn btn-ghost btn-sm" onclick="showPage('login')">Sign In</button>
     <button class="btn btn-primary btn-sm" onclick="showPage('signup-client')">Get Started</button>
@@ -402,19 +383,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-header">
-    <div class="drawer-logo">
-      <div class="logo-mark">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          <path d="M2 17l10 5 10-5"/>
-          <path d="M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-      <div>
-        <div class="logo-word"><span class="lw-pan">Pan</span><span class="lw-gig">gig</span></div>
-        <div class="logo-sub">Global Marketplace</div>
-      </div>
-    </div>
+    <div class="drawer-logo">Pan<span>gig</span></div>
     <button class="drawer-close" onclick="closeDrawer()">&#x2715;</button>
   </div>
   <div class="drawer-nav" id="drawerNav">
@@ -1350,6 +1319,10 @@ async function restoreSession() {
     currentUser = data.user;
     updateNav();
     updateDrawer();
+    // immediately show the right dashboard — this is the fix for blank page
+    if(currentUser.role==="admin") showPage("admin");
+    else if(currentUser.role==="contractor") showPage("contractor");
+    else showPage("client");
   } catch (e) {
     token = null;
     localStorage.removeItem("pangig_token");
@@ -2178,18 +2151,14 @@ function filterSvcPage(q) { renderServicesPage(q || null); }
 // INIT
 // ══════════════════════════════════════════════════
 document.addEventListener("DOMContentLoaded", async () => {
-  // Ping backend immediately to wake it up (prevents cold start delay)
-  fetch(API + "/health").catch(()=>{});
+  // Show landing immediately — don't wait for API
+  showPage("landing");
   initIndustries();
   renderInvLines();
+  // Ping backend to wake it up
+  fetch(API + "/health").catch(()=>{});
+  // Restore session — will redirect to dashboard if logged in
   await restoreSession();
-  if (currentUser) {
-    if(currentUser.role==="admin") showPage("admin");
-    else if(currentUser.role==="contractor") showPage("contractor");
-    else showPage("client");
-  } else {
-    showPage("landing");
-  }
   // Keep backend alive — ping every 5 minutes
   setInterval(() => fetch(API + "/health").catch(()=>{}), 5 * 60 * 1000);
 });
