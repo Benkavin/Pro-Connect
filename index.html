@@ -30,8 +30,18 @@ textarea{resize:vertical}
 
 /*  NAV  */
 .nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(19,22,29,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
-.logo{font-family:var(--fh);font-size:1.45rem;font-weight:800;color:var(--accent);letter-spacing:-.5px;cursor:pointer}
-.logo span{color:var(--text)}
+/* ── LOGO ── */
+.logo{display:flex;align-items:center;gap:.55rem;cursor:pointer;white-space:nowrap;text-decoration:none;user-select:none}
+.logo-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 12px rgba(244,166,35,.35)}
+.logo-mark svg{width:18px;height:18px;fill:none;stroke:#000;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.logo-word{font-family:var(--fh);font-size:1.35rem;font-weight:800;letter-spacing:-.5px;line-height:1}
+.logo-word .lw-pan{color:var(--text)}
+.logo-word .lw-gig{color:var(--accent)}
+.logo-sub{font-size:.55rem;font-weight:600;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;line-height:1;margin-top:1px}
+/* Drawer logo */
+.drawer-logo{display:flex;align-items:center;gap:.5rem;white-space:nowrap}
+.drawer-logo .logo-mark{width:30px;height:30px;border-radius:8px}
+.drawer-logo .logo-word{font-size:1.15rem}
 .nav-r{display:flex;gap:.75rem;align-items:center}
 .nav-user{font-size:.82rem;color:var(--muted)}
 /* Hamburger */
@@ -48,7 +58,7 @@ textarea{resize:vertical}
 .drawer.open{right:0}
 .drawer-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)}
 .drawer-logo{font-family:var(--fh);font-size:1.2rem;font-weight:800;color:var(--accent)}
-.drawer-logo span{color:var(--text)}
+
 .drawer-close{background:transparent;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;line-height:1;padding:.25rem}
 .drawer-close:hover{color:var(--text)}
 .drawer-nav{display:flex;flex-direction:column;padding:1rem .75rem;gap:.25rem;flex:1}
@@ -364,7 +374,19 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 <!--  NAV  -->
 <nav class="nav">
-  <div class="logo" onclick="showPage('landing')">Pang<span>ig</span></div>
+  <div class="logo" onclick="showPage('landing')">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-word"><span class="lw-pan">Pan</span><span class="lw-gig">gig</span></div>
+      <div class="logo-sub">Global Marketplace</div>
+    </div>
+  </div>
   <div class="nav-r" id="navRight">
     <button class="btn btn-ghost btn-sm" onclick="showPage('login')">Sign In</button>
     <button class="btn btn-primary btn-sm" onclick="showPage('signup-client')">Get Started</button>
@@ -380,7 +402,19 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-header">
-    <div class="drawer-logo">Pang<span>ig</span></div>
+    <div class="drawer-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-word"><span class="lw-pan">Pan</span><span class="lw-gig">gig</span></div>
+        <div class="logo-sub">Global Marketplace</div>
+      </div>
+    </div>
     <button class="drawer-close" onclick="closeDrawer()">&#x2715;</button>
   </div>
   <div class="drawer-nav" id="drawerNav">
@@ -666,8 +700,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="auth-title">Pangig</div>
       <div class="auth-sub">Sign in to your account</div>
       <div class="ferr" id="loginErr"></div>
-      <div class="fg"><label class="fl">Email</label><input class="fi" id="loginEmail" type="email" placeholder="you@email.com"/></div>
-      <div class="fg"><label class="fl">Password</label><input class="fi" id="loginPass" type="password" placeholder="••••••••"/></div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" id="loginEmail" type="email" placeholder="you@email.com" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <div class="fg"><label class="fl">Password</label><input class="fi" id="loginPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
       <button class="btn btn-primary fi-full" onclick="doLogin()">Sign In</button>
       <div style="text-align:center;margin-top:1rem">
         <button class="btn btn-ghost" style="font-size:.78rem" onclick="showPage('signup-client')">Don't have an account? Sign up</button>
@@ -717,7 +751,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="fg"><label class="fl">Primary Service</label>
         <select class="fs" id="conService"><option value="">Select service...</option></select>
       </div>
-      <div class="fg"><label class="fl">Location</label><input class="fi" id="conLocation" placeholder="City, State"/></div>
+      <div class="fg"><label class="fl">Location</label><input class="fi" id="conLocation" placeholder="City, State or Country"/></div>
       <div class="fg"><label class="fl">Password *</label><input class="fi" id="conPass" type="password" placeholder="••••••••"/></div>
       <button class="btn btn-primary fi-full" onclick="doSignupContractor()">Create Account</button>
       <div style="text-align:center;margin-top:1rem">
@@ -874,14 +908,19 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="alert a-success" id="jobPostedAlert" style="display:none">Your job has been posted. Contractors will reach out to you soon.</div>
         <div class="card">
           <div class="ferr" id="postJobErr"></div>
-          <div class="fg"><label class="fl">Job Type *</label><select class="fs" id="pjType"><option value="">Select job type...</option></select></div>
+          <div class="fg"><label class="fl">Job Type *</label>
+            <select class="fs" id="pjType">
+              <option value="">Select job type...</option>
+            </select>
+            <div class="fhint">Can't find your job type? Type a custom description in the title field below.</div>
+          </div>
           <div class="fg"><label class="fl">Job Title *</label><input class="fi" id="pjTitle" placeholder="e.g. Leaking pipe under kitchen sink"/></div>
           <div class="fg"><label class="fl">Description *</label><textarea class="fi" id="pjDesc" rows="4" placeholder="Describe the job in detail..."></textarea></div>
           <div class="two-col">
-            <div class="fg"><label class="fl">Location</label><input class="fi" id="pjLocation" placeholder="City, State"/></div>
+            <div class="fg"><label class="fl">Location</label><input class="fi" id="pjLocation" placeholder="City, State or Country"/></div>
             <div class="fg"><label class="fl">Budget Range</label><input class="fi" id="pjBudget" placeholder="e.g. $500–$1,000"/></div>
           </div>
-          <div style="text-align:right"><button class="btn btn-primary" onclick="postJob()">Post Job →</button></div>
+          <div style="text-align:right"><button class="btn btn-primary" onclick="postJob()">Post Job</button></div>
         </div>
       </div>
 
@@ -1336,7 +1375,8 @@ function showPage(id) {
 function conPage(p, btn) {
   document.querySelectorAll("[data-dash='con']").forEach(b=>b.classList.remove("active"));
   if(btn){ btn.classList.add("active"); } else {
-    document.querySelector(`[data-p="${p}"]`)?.classList.add("active");
+    const target = document.querySelector(`[data-dash='con'][data-p='${p}']`);
+    if(target) target.classList.add("active");
   }
   document.querySelectorAll("#page-contractor .dash-page").forEach(d=>d.classList.remove("active"));
   document.getElementById("con-"+p)?.classList.add("active");
@@ -1345,12 +1385,30 @@ function conPage(p, btn) {
   if(p==="invoices") renderInvoicesPage();
   if(p==="profile") renderConProfile();
 }
+function populateJobTypeDropdown() {
+  const pj = document.getElementById("pjType");
+  if (!pj) return;
+  pj.innerHTML = '<option value="">Select job type...</option>';
+  INDUSTRY_CATEGORIES.forEach(cat => {
+    const og = document.createElement("optgroup");
+    og.label = `${cat.icon} ${cat.label}`;
+    cat.services.forEach(s => {
+      const o = document.createElement("option");
+      o.value = s.id;
+      o.textContent = s.label;
+      og.appendChild(o);
+    });
+    pj.appendChild(og);
+  });
+}
+
 function cliPage(p, btn) {
   document.querySelectorAll("#page-client .sb-item").forEach(b=>b.classList.remove("active"));
   if(btn) btn.classList.add("active");
   document.querySelectorAll("#page-client .dash-page").forEach(d=>d.classList.remove("active"));
   document.getElementById("cli-"+p)?.classList.add("active");
   if(p==="overview") refreshClientDash();
+  if(p==="postjob") populateJobTypeDropdown();
   if(p==="myjobs") renderClientJobs();
   if(p==="invoices") renderClientInvoices();
   if(p==="spending") renderClientSpending();
@@ -1369,9 +1427,6 @@ function adminPage(p, btn) {
   if(p==="transactions") renderAdminTx();
 }
 
-// 
-// AUTH
-// 
 // 
 // AUTH
 // 
@@ -1615,20 +1670,19 @@ function renderIndustriesGrid(cats,q="") {
 function refreshContractorDash() {
   if(!currentUser||currentUser.role!=="contractor") return;
   const u=currentUser;
-  document.getElementById("conWelcome").textContent=`Welcome back, ${u.name.split(" ")[0]} `;
-  document.getElementById("conCredits").textContent=u.credits;
-  document.getElementById("conLeadsCount").textContent=u.unlockedLeads.length;
-  document.getElementById("conInvCount").textContent=u.invoices.length;
-  const rev=u.payments.reduce((a,b)=>a+b.amount,0);
+  document.getElementById("conWelcome").textContent=`Welcome back, ${u.name.split(" ")[0]}`;
+  document.getElementById("conCredits").textContent=u.credits||0;
+  document.getElementById("conLeadsCount").textContent=(u.unlockedLeads||[]).length;
+  document.getElementById("conInvCount").textContent=(u.invoices||[]).length;
+  const rev=(u.payments||[]).reduce((a,b)=>a+(b.amount||0),0);
   document.getElementById("conRevenue").textContent="$"+rev.toLocaleString();
-  document.getElementById("conCredBig").textContent=u.credits;
-  // recent activity
+  document.getElementById("conCredBig").textContent=u.credits||0;
   const ra=document.getElementById("conRecentActivity");
-  if(!u.creditHistory.length){ra.innerHTML='<div class="empty"><div class="empty-txt">No activity yet</div></div>';return;}
-  ra.innerHTML=u.creditHistory.slice(0,5).map(h=>`
+  if(!(u.creditHistory||[]).length){ra.innerHTML='<div class="empty"><div class="empty-txt">No activity yet</div></div>';return;}
+  ra.innerHTML=(u.creditHistory||[]).slice(0,5).map(h=>`
     <div class="act-row">
-      <div><div class="act-name">${h.action}</div><div class="act-date">${h.date}</div></div>
-      <div style="text-align:right"><div class="act-amt" style="color:${h.amount.startsWith('+')?'var(--green)':'var(--red)'}">${h.amount}</div>${h.cost?`<div class="act-cost">${h.cost}</div>`:""}</div>
+      <div><div class="act-name">${h.action}</div><div class="act-date">${h.date||""}</div></div>
+      <div style="text-align:right"><div class="act-amt" style="color:${(h.amount||0)>0?'var(--green)':'var(--red)'}">${(h.amount||0)>0?'+':''}${h.amount||0} credits</div>${h.cost?`<div class="act-cost">$${h.cost}</div>`:""}</div>
     </div>`).join("");
 }
 
@@ -1769,16 +1823,16 @@ function renderConProfile() {
   document.getElementById("conProfRole").innerHTML=`Contractor · ${u.location||"Location not set"} ${svcs}`;
   document.getElementById("conContactInfo").innerHTML=`
     <div style="display:flex;flex-direction:column;gap:.75rem;font-size:.9rem">
-      <div><span style="color:var(--muted);margin-right:.5rem"></span>Email: ${u.email}</div>
+      <div><span style="color:var(--muted);margin-right:.5rem">Email</span>${u.email}</div>
       <div><span style="color:var(--muted);margin-right:.5rem">Phone</span>${u.phone||"Not provided"}</div>
       <div><span style="color:var(--muted);margin-right:.5rem">Location</span>${u.location||"Not set"}</div>
     </div>`;
-  const rev=u.payments.reduce((a,b)=>a+b.amount,0);
+  const rev=(u.payments||[]).reduce((a,b)=>a+(b.amount||0),0);
   document.getElementById("conStats").innerHTML=`
     <div style="display:flex;flex-direction:column;gap:.75rem;font-size:.9rem">
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Credits</span><strong>${u.credits}</strong></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Leads Unlocked</span><strong>${u.unlockedLeads.length}</strong></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Invoices Sent</span><strong>${u.invoices.length}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Credits</span><strong>${u.credits||0}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Leads Unlocked</span><strong>${(u.unlockedLeads||[]).length}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Invoices Sent</span><strong>${(u.invoices||[]).length}</strong></div>
       <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Revenue</span><strong style="color:var(--green)">$${rev.toLocaleString()}</strong></div>
     </div>`;
 }
@@ -1788,27 +1842,27 @@ function renderConProfile() {
 // 
 function refreshClientDash() {
   if(!currentUser||currentUser.role!=="client") return;
+  populateJobTypeDropdown();
   const u=currentUser;
-  const myJobs=jobs.filter(j=>j.clientId===u.id);
-  document.getElementById("cliWelcome").textContent=`Welcome, ${u.name.split(" ")[0]} `;
+  const myJobs=jobs.filter(j=>j.clientId===u.id||j.client_id===u.id);
+  document.getElementById("cliWelcome").textContent=`Welcome, ${u.name.split(" ")[0]}`;
   document.getElementById("cliJobsCount").textContent=myJobs.length;
   document.getElementById("cliActiveJobs").textContent=myJobs.filter(j=>j.status==="open").length;
-  document.getElementById("cliTotalPaid").textContent="$"+(u.payments||[]).reduce((a,b)=>a+b.amount,0).toLocaleString();
+  document.getElementById("cliTotalPaid").textContent="$"+(u.payments||[]).reduce((a,b)=>a+(b.amount||0),0).toLocaleString();
   document.getElementById("cliInvCount").textContent=(u.invoicesReceived||[]).length;
-  // recent jobs
   const rj=document.getElementById("cliRecentJobs");
   if(!myJobs.length){rj.innerHTML='<div class="empty"><div class="empty-txt">No jobs posted yet</div></div>';return;}
   rj.innerHTML=myJobs.slice(0,3).map(job=>{
-    const jt=JOB_TYPES.find(t=>t.id===job.type)||{icon:"",label:job.type};
+    const jt=JOB_TYPES.find(t=>t.id===job.type)||{icon:"",label:job.type||"General"};
     return `<div style="padding:.75rem 0;border-bottom:1px solid var(--border)">
       <div style="font-weight:700;font-size:.9rem">${job.title}</div>
       <div style="display:flex;gap:.75rem;margin-top:.3rem;align-items:center">
         <span class="jtag type">${jt.icon} ${jt.label}</span>
-        <span style="font-size:.72rem;color:var(--muted)">${job.posted}</span>
+        <span style="font-size:.72rem;color:var(--muted)">${job.posted||job.created_at?new Date(job.created_at||Date.now()).toLocaleDateString():""}</span>
       </div>
     </div>`;}).join("");
 }
-function postJob() {
+async function postJob() {
   if(!currentUser) return;
   const type=document.getElementById("pjType").value;
   const title=document.getElementById("pjTitle").value.trim();
@@ -1816,37 +1870,57 @@ function postJob() {
   const location=document.getElementById("pjLocation").value.trim();
   const budget=document.getElementById("pjBudget").value.trim();
   const err=document.getElementById("postJobErr");
-  if(!type||!title||!desc){err.textContent="Please fill all required fields.";err.classList.add("show");return;}
+  const btn=document.querySelector("#cli-postjob .btn-primary");
+  if(!type||!title||!desc){err.textContent="Please fill all required fields (Job Type, Title and Description).";err.classList.add("show");return;}
   err.classList.remove("show");
-  const job={id:Date.now(),type,title,description:desc,location,budget,posted:"Just now",clientId:currentUser.id,unlockedBy:[],status:"open"};
-  jobs.unshift(job);
-  currentUser.jobs=(currentUser.jobs||[]).concat(job.id);
-  users[currentUser.id]=currentUser;
-  document.getElementById("pjType").value="";
-  document.getElementById("pjTitle").value="";
-  document.getElementById("pjDesc").value="";
-  document.getElementById("pjLocation").value="";
-  document.getElementById("pjBudget").value="";
-  const al=document.getElementById("jobPostedAlert");
-  al.style.display="block";
-  setTimeout(()=>al.style.display="none",3000);
-  toast("","Job Posted!","Contractors will reach out to you soon.");
-  refreshClientDash();
+  btn.textContent="Posting...";btn.disabled=true;
+  try {
+    const data = await apiCall("POST", "/jobs", {type, title, description:desc, location, budget});
+    const job = data.job || {id:Date.now(),type,title,description:desc,location,budget,posted:"Just now",clientId:currentUser.id,status:"open"};
+    jobs.unshift(job);
+    document.getElementById("pjType").value="";
+    document.getElementById("pjTitle").value="";
+    document.getElementById("pjDesc").value="";
+    document.getElementById("pjLocation").value="";
+    document.getElementById("pjBudget").value="";
+    const al=document.getElementById("jobPostedAlert");
+    al.style.display="block";
+    setTimeout(()=>al.style.display="none",4000);
+    toast("","Job Posted!","Contractors will reach out to you soon.");
+    refreshClientDash();
+  } catch(e) {
+    // Fallback to local if API fails
+    const job={id:Date.now(),type,title,description:desc,location,budget,posted:"Just now",clientId:currentUser.id,status:"open"};
+    jobs.unshift(job);
+    document.getElementById("pjType").value="";
+    document.getElementById("pjTitle").value="";
+    document.getElementById("pjDesc").value="";
+    document.getElementById("pjLocation").value="";
+    document.getElementById("pjBudget").value="";
+    const al=document.getElementById("jobPostedAlert");
+    al.style.display="block";
+    setTimeout(()=>al.style.display="none",4000);
+    toast("","Job Posted!","Contractors will reach out to you soon.");
+    refreshClientDash();
+  } finally {
+    btn.textContent="Post Job";btn.disabled=false;
+  }
 }
 function renderClientJobs() {
   if(!currentUser) return;
-  const myJobs=jobs.filter(j=>j.clientId===currentUser.id);
+  const myJobs=jobs.filter(j=>j.clientId===currentUser.id||j.client_id===currentUser.id);
   const c=document.getElementById("cliJobsList");
   if(!myJobs.length){
-    c.innerHTML=`<div class="cs-box"><div style="font-size:3rem;margin-bottom:.75rem"></div><div class="cs-title">No Jobs Posted Yet</div><div style="font-size:.875rem;color:var(--muted)">Post your first job and contractors will reach out.</div><button class="btn btn-primary" style="margin-top:1.5rem" onclick="cliPage('postjob',null)"> Post a Job</button></div>`;
+    c.innerHTML=`<div class="cs-box"><div class="cs-title">No Jobs Posted Yet</div><div style="font-size:.875rem;color:var(--muted)">Post your first job and contractors will reach out.</div><button class="btn btn-primary" style="margin-top:1.5rem" onclick="cliPage('postjob',null)">Post a Job</button></div>`;
     return;
   }
   c.innerHTML=myJobs.map(job=>{
-    const jt=JOB_TYPES.find(t=>t.id===job.type)||{icon:"",label:job.type};
+    const jt=JOB_TYPES.find(t=>t.id===job.type)||{icon:"",label:job.type||"General"};
+    const postedDate = job.posted || (job.created_at ? new Date(job.created_at).toLocaleDateString() : "Recently");
     return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1rem">
       <div style="display:flex;justify-content:space-between;margin-bottom:.5rem">
         <div style="font-family:var(--fh);font-weight:700;font-size:1.05rem">${job.title}</div>
-        <span style="font-size:.78rem;color:var(--muted)">${job.posted}</span>
+        <span style="font-size:.78rem;color:var(--muted)">${postedDate}</span>
       </div>
       <div style="display:flex;gap:.5rem;margin-bottom:.75rem">
         <span class="jtag type">${jt.icon} ${jt.label}</span>
@@ -1854,8 +1928,8 @@ function renderClientJobs() {
       </div>
       <div style="font-size:.875rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">${job.description}</div>
       <div style="display:flex;gap:1.25rem;font-size:.78rem;color:var(--muted)">
-        ${job.location?`<span>${job.location}</span>`:""}
-        ${job.budget?`<span> ${job.budget}</span>`:""}
+        ${job.location?`<span>Location: ${job.location}</span>`:""}
+        ${job.budget?`<span>Budget: ${job.budget}</span>`:""}
       </div>
     </div>`;}).join("");
 }
