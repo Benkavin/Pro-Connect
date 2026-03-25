@@ -728,7 +728,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="footer-brand">
         <div class="footer-logo">Pan<span>gig</span></div>
         <div class="footer-tagline">The global contractor marketplace connecting clients with trusted professionals worldwide.</div>
-        <div class="footer-email"><a href="mailto:info@pangig.com">info@pangig.com</a></div>
+        <div class="footer-email"><a href="/cdn-cgi/l/email-protection#442d2a222b0434252a232d236a272b29"><span class="__cf_email__" data-cfemail="ec85828a83ac9c8d828b858bc28f8381">[email&#160;protected]</span></a></div>
       </div>
       <div class="footer-links">
         <div class="footer-col">
@@ -756,7 +756,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
     </div>
     <div class="footer-bottom">
-      <div>&copy; ${new Date().getFullYear()} Pangig. All rights reserved.</div>
+      <div>&copy; February 2010 – <script>document.write(new Date().getFullYear())</script> Pangig. All rights reserved. Powered by CSG</div>
       <div style="display:flex;gap:1.5rem">
         <button class="footer-link" onclick="showPage('faq')">FAQ</button>
         <button class="footer-link" onclick="showPage('contact')">Contact</button>
@@ -887,7 +887,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <span class="faq-arrow">&#8964;</span>
         </button>
         <div class="faq-a">
-          <p>If you purchased credits and have not used them, you may be eligible for a refund within 7 days of purchase. Used credits are non-refundable. To request a refund, contact us at <a href="mailto:info@pangig.com" style="color:var(--accent)">info@pangig.com</a> with your account email and payment details and we'll review your request promptly.</p>
+          <p>If you purchased credits and have not used them, you may be eligible for a refund within 7 days of purchase. Used credits are non-refundable. To request a refund, contact us at <a href="/cdn-cgi/l/email-protection#4821262e27083829262f212f662b2725" style="color:var(--accent)"><span class="__cf_email__" data-cfemail="cba2a5ada48bbbaaa5aca2ace5a8a4a6">[email&#160;protected]</span></a> with your account email and payment details and we'll review your request promptly.</p>
         </div>
       </div>
 
@@ -936,21 +936,21 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="contact-card-icon">✉️</div>
           <div class="contact-card-title">Email Us</div>
           <div class="contact-card-text">For general enquiries, support, or feedback — email us and we'll respond within 24 hours.</div>
-          <a href="mailto:info@pangig.com" class="contact-card-link">info@pangig.com</a>
+          <a href="/cdn-cgi/l/email-protection#21484f474e6151404f4648460f424e4c" class="contact-card-link"><span class="__cf_email__" data-cfemail="deb7b0b8b19eaebfb0b9b7b9f0bdb1b3">[email&#160;protected]</span></a>
         </div>
 
         <div class="contact-card">
           <div class="contact-card-icon">🐛</div>
           <div class="contact-card-title">Report a Bug</div>
           <div class="contact-card-text">Found something that isn't working correctly? Let us know and we'll fix it as quickly as possible.</div>
-          <a href="mailto:info@pangig.com?subject=Bug Report" class="contact-card-link">Report a bug →</a>
+          <a href="/cdn-cgi/l/email-protection#f69f989099b6869798919f91d895999bc98583949c939582cbb48391d6a49386998482" class="contact-card-link">Report a bug →</a>
         </div>
 
         <div class="contact-card">
           <div class="contact-card-icon">💼</div>
           <div class="contact-card-title">Business Enquiries</div>
           <div class="contact-card-text">Interested in partnerships, advertising, or enterprise solutions? We'd love to connect.</div>
-          <a href="mailto:info@pangig.com?subject=Business Enquiry" class="contact-card-link">Get in touch →</a>
+          <a href="/cdn-cgi/l/email-protection#3e575058517e4e5f50595759105d5153014d4b5c545b5d4a037c4b4d57505b4d4d1e7b504f4b574c47" class="contact-card-link">Get in touch →</a>
         </div>
 
       </div>
@@ -1328,7 +1328,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // 
 // DATA
 // 
@@ -2548,19 +2548,4 @@ function filterSvcPage(q) { renderServicesPage(q || null); }
 
 // ══════════════════════════════════════════════════
 // INIT
-// ══════════════════════════════════════════════════
-document.addEventListener("DOMContentLoaded", async () => {
-  // Show landing immediately — don't wait for API
-  showPage("landing");
-  initIndustries();
-  renderInvLines();
-  // Ping backend to wake it up
-  fetch(API + "/health").catch(()=>{});
-  // Restore session — will redirect to dashboard if logged in
-  await restoreSession();
-  // Keep backend alive — ping every 5 minutes
-  setInterval(() => fetch(API + "/health").catch(()=>{}), 5 * 60 * 1000);
-});
-</script>
-</body>
-</html>
+// ═══════════
