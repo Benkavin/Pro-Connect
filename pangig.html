@@ -2461,16 +2461,6 @@ function scrollReviews(dir) {
   const track = document.getElementById("reviewsTrack");
   if(track) track.scrollBy({ left: dir * 360, behavior: "smooth" });
 }
-// Drag to scroll
-document.addEventListener("DOMContentLoaded", () => {
-  const track = document.getElementById("reviewsTrack");
-  if(!track) return;
-  let isDown = false, startX, scrollLeft;
-  track.addEventListener("mousedown", e => { isDown=true; startX=e.pageX-track.offsetLeft; scrollLeft=track.scrollLeft; });
-  track.addEventListener("mouseleave", () => isDown=false);
-  track.addEventListener("mouseup", () => isDown=false);
-  track.addEventListener("mousemove", e => { if(!isDown) return; e.preventDefault(); const x=e.pageX-track.offsetLeft; track.scrollLeft=scrollLeft-(x-startX)*1.5; });
-});
 // ══════════════════════════════════════════════════
 function toggleDrawer() {
   const btn = document.getElementById("hamburgerBtn");
@@ -2548,59 +2538,6 @@ function filterSvcPage(q) { renderServicesPage(q || null); }
 
 // ══════════════════════════════════════════════════
 // INIT
-// ═══════════// ══════════════════════════════════════════════════
-// FAQ
-// ══════════════════════════════════════════════════
-function toggleFaq(btn) {
-  const item = btn.closest(".faq-item");
-  const isOpen = item.classList.contains("open");
-  document.querySelectorAll(".faq-item.open").forEach(i => i.classList.remove("open"));
-  if (!isOpen) item.classList.add("open");
-}
-
-// ══════════════════════════════════════════════════
-// CONTACT FORM
-// ══════════════════════════════════════════════════
-async function sendContactForm() {
-  const name = document.getElementById("ctName").value.trim();
-  const email = document.getElementById("ctEmail").value.trim();
-  const subject = document.getElementById("ctSubject").value;
-  const message = document.getElementById("ctMessage").value.trim();
-  const err = document.getElementById("contactErr");
-  const success = document.getElementById("contactSuccess");
-  const btn = document.querySelector("#page-contact .btn-primary");
-  if (!name || !email || !subject || !message) {
-    err.textContent = "Please fill in all required fields.";
-    err.classList.add("show");
-    return;
-  }
-  err.classList.remove("show");
-  btn.textContent = "Sending..."; btn.disabled = true;
-  try {
-    await apiCall("POST", "/contact", { name, email, subject, message });
-    btn.textContent = "Send Message"; btn.disabled = false;
-    document.getElementById("ctName").value = "";
-    document.getElementById("ctEmail").value = "";
-    document.getElementById("ctSubject").value = "";
-    document.getElementById("ctMessage").value = "";
-    success.style.display = "block";
-    setTimeout(() => success.style.display = "none", 5000);
-  } catch(e) {
-    window.location.href = `mailto:info@pangig.com?subject=${encodeURIComponent(subject + ' - ' + name)}&body=${encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message)}`;
-    btn.textContent = "Send Message"; btn.disabled = false;
-  }
-}
-
-// ══════════════════════════════════════════════════
-// REVIEWS CAROUSEL
-// ══════════════════════════════════════════════════
-function scrollReviews(dir) {
-  const track = document.getElementById("reviewsTrack");
-  if(track) track.scrollBy({ left: dir * 360, behavior: "smooth" });
-}
-
-// ══════════════════════════════════════════════════
-// INIT
 // ══════════════════════════════════════════════════
 document.addEventListener("DOMContentLoaded", async () => {
   showPage("landing");
@@ -2609,7 +2546,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   fetch(API + "/health").catch(()=>{});
   await restoreSession();
   setInterval(() => fetch(API + "/health").catch(()=>{}), 5 * 60 * 1000);
-
   // Drag to scroll reviews
   const track = document.getElementById("reviewsTrack");
   if(track) {
