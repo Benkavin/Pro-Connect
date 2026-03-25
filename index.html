@@ -997,7 +997,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <span class="faq-arrow">&#8964;</span>
         </button>
         <div class="faq-a">
-          <p>If you purchased credits and have not used them, you may be eligible for a refund within 7 days of purchase. Used credits are non-refundable. To request a refund, contact us at <a href="/cdn-cgi/l/email-protection#4821262e27083829262f212f662b2725" style="color:var(--accent)"><span class="__cf_email__" data-cfemail="cba2a5ada48bbbaaa5aca2ace5a8a4a6">[email&#160;protected]</span></a> with your account email and payment details and we'll review your request promptly.</p>
+          <p>If you purchased credits and have not used them, you may be eligible for a refund within 7 days of purchase. Used credits are non-refundable. To request a refund, contact us via our <button onclick="showPage('contact')" style="background:none;border:none;cursor:pointer;padding:0;color:var(--accent);font-weight:600;font-size:.875rem;text-decoration:underline">Contact page</button> with your account email and payment details and we'll review your request promptly.</p>
         </div>
       </div>
 
@@ -1042,25 +1042,25 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="contact-wrap">
       <div class="contact-cards">
 
-        <div class="contact-card">
+        <div class="contact-card" onclick="openContactForm('General Question')" style="cursor:pointer">
           <div class="contact-card-icon">✉️</div>
           <div class="contact-card-title">Email Us</div>
           <div class="contact-card-text">For general enquiries, support, or feedback — email us and we'll respond within 24 hours.</div>
-          <a href="/cdn-cgi/l/email-protection#21484f474e6151404f4648460f424e4c" class="contact-card-link"><span class="__cf_email__" data-cfemail="deb7b0b8b19eaebfb0b9b7b9f0bdb1b3">[email&#160;protected]</span></a>
+          <span class="contact-card-link">Send a message →</span>
         </div>
 
-        <div class="contact-card">
+        <div class="contact-card" onclick="openContactForm('Bug Report')" style="cursor:pointer">
           <div class="contact-card-icon">🐛</div>
           <div class="contact-card-title">Report a Bug</div>
           <div class="contact-card-text">Found something that isn't working correctly? Let us know and we'll fix it as quickly as possible.</div>
-          <a href="/cdn-cgi/l/email-protection#f69f989099b6869798919f91d895999bc98583949c939582cbb48391d6a49386998482" class="contact-card-link">Report a bug →</a>
+          <span class="contact-card-link">Report a bug →</span>
         </div>
 
-        <div class="contact-card">
+        <div class="contact-card" onclick="openContactForm('Business Enquiry')" style="cursor:pointer">
           <div class="contact-card-icon">💼</div>
           <div class="contact-card-title">Business Enquiries</div>
           <div class="contact-card-text">Interested in partnerships, advertising, or enterprise solutions? We'd love to connect.</div>
-          <a href="/cdn-cgi/l/email-protection#3e575058517e4e5f50595759105d5153014d4b5c545b5d4a037c4b4d57505b4d4d1e7b504f4b574c47" class="contact-card-link">Get in touch →</a>
+          <span class="contact-card-link">Get in touch →</span>
         </div>
 
       </div>
@@ -3358,6 +3358,18 @@ function toggleFaq(btn) {
 // ══════════════════════════════════════════════════
 // CONTACT FORM
 // ══════════════════════════════════════════════════
+function openContactForm(subject) {
+  showPage('contact');
+  // Pre-select the subject and scroll to form
+  setTimeout(() => {
+    const sel = document.getElementById("ctSubject");
+    if (sel && subject) sel.value = subject;
+    const form = document.getElementById("ctName");
+    if (form) form.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (form) form.focus();
+  }, 100);
+}
+
 async function sendContactForm() {
   const name = document.getElementById("ctName").value.trim();
   const email = document.getElementById("ctEmail").value.trim();
