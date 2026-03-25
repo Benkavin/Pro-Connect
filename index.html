@@ -3387,21 +3387,24 @@ async function sendContactForm() {
   err.classList.remove("show");
   btn.textContent = "Sending..."; btn.disabled = true;
 
-  // Send via mailto as fallback (real email API integration can be added)
   try {
     await apiCall("POST", "/contact", { name, email, subject, message });
+    // Success
+    btn.textContent = "Send Message"; btn.disabled = false;
+    document.getElementById("ctName").value = "";
+    document.getElementById("ctEmail").value = "";
+    document.getElementById("ctSubject").value = "";
+    document.getElementById("ctMessage").value = "";
+    success.style.display = "block";
+    setTimeout(() => success.style.display = "none", 6000);
+    toast("", "Message Sent! ✅", "We'll get back to you within 24 hours.");
   } catch(e) {
-    // fallback — open mailto
-    window.location.href = `mailto:info@pangig.com?subject=${encodeURIComponent(subject + ' - ' + name)}&body=${encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message)}`;
+    // API failed — show error and offer direct email fallback
+    btn.textContent = "Send Message"; btn.disabled = false;
+    err.textContent = "Could not send message. Please email us directly at info@pangig.com";
+    err.classList.add("show");
+    console.error("Contact form error:", e.message);
   }
-
-  btn.textContent = "Send Message"; btn.disabled = false;
-  document.getElementById("ctName").value = "";
-  document.getElementById("ctEmail").value = "";
-  document.getElementById("ctSubject").value = "";
-  document.getElementById("ctMessage").value = "";
-  success.style.display = "block";
-  setTimeout(() => success.style.display = "none", 5000);
 }
 // ══════════════════════════════════════════════════
 function scrollReviews(dir) {
