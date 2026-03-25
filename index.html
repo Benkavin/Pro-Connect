@@ -756,7 +756,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
     </div>
     <div class="footer-bottom">
-      <div>&copy; February 2010 – <script>document.write(new Date().getFullYear())</script> Pangig. All rights reserved. Powered by CSG</div>
+      <div>&copy; February 2010 &ndash; 2026 Pangig. All rights reserved. Powered by CSG</div>
       <div style="display:flex;gap:1.5rem">
         <button class="footer-link" onclick="showPage('faq')">FAQ</button>
         <button class="footer-link" onclick="showPage('contact')">Contact</button>
@@ -1328,7 +1328,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // 
 // DATA
 // 
@@ -1613,16 +1613,23 @@ const API = "https://pro-connect-production.up.railway.app/api";
 let token = localStorage.getItem("pangig_token") || null;
 
 async function apiCall(method, path, body) {
-  const opts = {
-    method,
-    headers: { "Content-Type": "application/json" },
-  };
+  const opts = { method, headers: { "Content-Type": "application/json" } };
   if (token) opts.headers["Authorization"] = `Bearer ${token}`;
   if (body) opts.body = JSON.stringify(body);
-  const res = await fetch(API + path, opts);
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Request failed");
-  return data;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  opts.signal = controller.signal;
+  try {
+    const res = await fetch(API + path, opts);
+    clearTimeout(timeout);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Request failed");
+    return data;
+  } catch(e) {
+    clearTimeout(timeout);
+    if (e.name === "AbortError") throw new Error("Request timed out. Please try again.");
+    throw e;
+  }
 }
 
 // 
@@ -2461,16 +2468,6 @@ function scrollReviews(dir) {
   const track = document.getElementById("reviewsTrack");
   if(track) track.scrollBy({ left: dir * 360, behavior: "smooth" });
 }
-// Drag to scroll
-document.addEventListener("DOMContentLoaded", () => {
-  const track = document.getElementById("reviewsTrack");
-  if(!track) return;
-  let isDown = false, startX, scrollLeft;
-  track.addEventListener("mousedown", e => { isDown=true; startX=e.pageX-track.offsetLeft; scrollLeft=track.scrollLeft; });
-  track.addEventListener("mouseleave", () => isDown=false);
-  track.addEventListener("mouseup", () => isDown=false);
-  track.addEventListener("mousemove", e => { if(!isDown) return; e.preventDefault(); const x=e.pageX-track.offsetLeft; track.scrollLeft=scrollLeft-(x-startX)*1.5; });
-});
 // ══════════════════════════════════════════════════
 function toggleDrawer() {
   const btn = document.getElementById("hamburgerBtn");
@@ -2548,4 +2545,26 @@ function filterSvcPage(q) { renderServicesPage(q || null); }
 
 // ══════════════════════════════════════════════════
 // INIT
-// ═══════════
+// ══════════════════════════════════════════════════
+document.addEventListener("DOMContentLoaded", () => {
+  showPage("landing");
+  initIndustries();
+  renderInvLines();
+  // Restore session without blocking page render
+  restoreSession().catch(()=>{});
+  // Keep backend alive
+  fetch(API + "/health").catch(()=>{});
+  setInterval(() => fetch(API + "/health").catch(()=>{}), 5 * 60 * 1000);
+  // Drag to scroll reviews
+  const track = document.getElementById("reviewsTrack");
+  if(track) {
+    let isDown = false, startX, scrollLeft;
+    track.addEventListener("mousedown", e => { isDown=true; startX=e.pageX-track.offsetLeft; scrollLeft=track.scrollLeft; });
+    track.addEventListener("mouseleave", () => isDown=false);
+    track.addEventListener("mouseup", () => isDown=false);
+    track.addEventListener("mousemove", e => { if(!isDown) return; e.preventDefault(); const x=e.pageX-track.offsetLeft; track.scrollLeft=scrollLeft-(x-startX)*1.5; });
+  }
+});
+</script>
+</body>
+</html>
