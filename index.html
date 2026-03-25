@@ -376,7 +376,44 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .footer-bottom{max-width:1200px;margin:0 auto;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--muted);flex-wrap:wrap;gap:1rem}
 @media(max-width:768px){.footer-inner{grid-template-columns:1fr;gap:2rem}.footer-links{grid-template-columns:repeat(2,1fr)}}
 
-/* ── INFO PAGES (FAQ + Contact) ── */
+/* ── LEADS SYSTEM ── */
+.leads-filters{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem}
+.leads-filter-row{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
+.lead-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1rem;transition:border-color .2s}
+.lead-card:hover{border-color:rgba(244,166,35,.3)}
+.lead-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem;gap:1rem}
+.lead-card-title{font-family:var(--fh);font-size:1.05rem;font-weight:700;color:var(--text)}
+.lead-card-meta{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem;align-items:center}
+.lead-card-desc{font-size:.875rem;color:var(--muted);line-height:1.7;margin-bottom:1rem}
+.lead-card-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+.lead-card-info{display:flex;gap:1rem;font-size:.78rem;color:var(--muted);flex-wrap:wrap}
+.lead-slots{font-size:.78rem;font-weight:700}
+.lead-slots.open{color:var(--green)}
+.lead-slots.filling{color:var(--accent)}
+.lead-slots.full{color:var(--red)}
+.lead-contact-box{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-top:.75rem;display:flex;flex-direction:column;gap:.5rem}
+.lead-contact-row{display:flex;align-items:center;gap:.5rem;font-size:.875rem}
+.lead-contact-label{color:var(--muted);min-width:60px;font-size:.78rem}
+.lead-contact-val{color:var(--text);font-weight:600}
+
+/* ── VERIFICATION BADGE ── */
+.verified-badge{display:inline-flex;align-items:center;gap:.25rem;background:rgba(34,197,94,.12);color:var(--green);font-size:.68rem;font-weight:700;padding:.2rem .5rem;border-radius:20px;border:1px solid rgba(34,197,94,.3)}
+.unverified-badge{display:inline-flex;align-items:center;gap:.25rem;background:rgba(122,132,153,.1);color:var(--muted);font-size:.68rem;font-weight:700;padding:.2rem .5rem;border-radius:20px;border:1px solid var(--border)}
+
+/* ── RATINGS ── */
+.stars-display{display:flex;align-items:center;gap:.25rem}
+.star-filled{color:#f4a623;font-size:.9rem}
+.star-empty{color:var(--border);font-size:.9rem}
+.rating-count{font-size:.72rem;color:var(--muted);margin-left:.25rem}
+.review-card-con{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;margin-bottom:.75rem}
+.review-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.review-card-author{font-weight:600;font-size:.875rem}
+.review-card-date{font-size:.72rem;color:var(--muted)}
+.review-card-text{font-size:.875rem;color:var(--muted);line-height:1.7;font-style:italic}
+.rating-form{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-top:1rem}
+.star-selector{display:flex;gap:.35rem;font-size:1.5rem;cursor:pointer;margin:.5rem 0}
+.star-selector span{transition:transform .1s}
+.star-selector span:hover{transform:scale(1.2)}
 .info-page{max-width:860px;margin:0 auto;padding:4rem 2rem 6rem}
 .info-hero{text-align:center;margin-bottom:3.5rem}
 .info-hero-tag{display:inline-block;background:rgba(244,166,35,.12);color:var(--accent);font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.35rem .85rem;border-radius:20px;margin-bottom:1rem}
@@ -994,11 +1031,49 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="auth-sub">Sign in to your account</div>
       <div class="ferr" id="loginErr"></div>
       <div class="fg"><label class="fl">Email</label><input class="fi" id="loginEmail" type="email" placeholder="you@email.com" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-      <div class="fg"><label class="fl">Password</label><input class="fi" id="loginPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <div class="fg">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem">
+          <label class="fl" style="margin:0">Password</label>
+          <button class="btn btn-ghost" style="font-size:.72rem;padding:.1rem .3rem" onclick="showPage('forgot-password')">Forgot password?</button>
+        </div>
+        <input class="fi" id="loginPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+      </div>
       <button class="btn btn-primary fi-full" onclick="doLogin()">Sign In</button>
       <div style="text-align:center;margin-top:1rem">
         <button class="btn btn-ghost" style="font-size:.78rem" onclick="showPage('signup-client')">Don't have an account? Sign up</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!--  FORGOT PASSWORD  -->
+<div class="page" id="page-forgot-password">
+  <div class="auth-wrap">
+    <div class="auth-box">
+      <div class="auth-title">Reset Password</div>
+      <div class="auth-sub">Enter your email and we'll send you a reset link</div>
+      <div class="ferr" id="forgotErr"></div>
+      <div class="alert a-success" id="forgotSuccess" style="display:none">✅ Reset link sent! Check your inbox.</div>
+      <div class="fg"><label class="fl">Email Address</label><input class="fi" id="forgotEmail" type="email" placeholder="you@email.com" onkeydown="if(event.key==='Enter')doForgotPassword()"/></div>
+      <button class="btn btn-primary fi-full" onclick="doForgotPassword()">Send Reset Link</button>
+      <div style="text-align:center;margin-top:1rem">
+        <button class="btn btn-ghost" style="font-size:.78rem" onclick="showPage('login')">← Back to Sign In</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  RESET PASSWORD  -->
+<div class="page" id="page-reset-password">
+  <div class="auth-wrap">
+    <div class="auth-box">
+      <div class="auth-title">Set New Password</div>
+      <div class="auth-sub">Enter your new password below</div>
+      <div class="ferr" id="resetErr"></div>
+      <div class="alert a-success" id="resetSuccess" style="display:none">✅ Password updated! You can now sign in.</div>
+      <div class="fg"><label class="fl">New Password</label><input class="fi" id="resetPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doResetPassword()"/></div>
+      <div class="fg"><label class="fl">Confirm Password</label><input class="fi" id="resetPassConfirm" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doResetPassword()"/></div>
+      <button class="btn btn-primary fi-full" onclick="doResetPassword()">Update Password</button>
     </div>
   </div>
 </div>
@@ -1093,14 +1168,34 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <!-- BROWSE LEADS -->
       <div class="dash-page" id="con-leads">
-        <div class="ph"><div class="pt">Browse Leads</div><div class="ps">Find and unlock client job requests in your area</div></div>
-        <div class="cs-box"><div class="cs-title">Leads Coming Soon</div><div style="font-size:.875rem;color:var(--muted);line-height:1.7">Client job postings will appear here once the platform goes live. Purchase credits now so you're ready to unlock leads immediately.</div><button class="btn btn-primary" style="margin-top:1.5rem" onclick="openModal('buyModal')">Buy Credits</button></div>
+        <div class="ph">
+          <div><div class="pt">Browse Leads</div><div class="ps">Find and unlock client job requests</div></div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('buyModal')">Buy Credits</button>
+        </div>
+        <!-- Filters -->
+        <div class="leads-filters">
+          <div class="leads-filter-row">
+            <input class="fi" id="leadsSearch" placeholder="Search by keyword..." oninput="filterLeads()" style="flex:1;min-width:180px"/>
+            <select class="fs" id="leadsCategory" onchange="filterLeads()" style="min-width:160px">
+              <option value="">All Industries</option>
+            </select>
+            <select class="fs" id="leadsSort" onchange="filterLeads()" style="min-width:140px">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="credits_low">Credits: Low to High</option>
+              <option value="credits_high">Credits: High to Low</option>
+            </select>
+            <button class="btn btn-outline btn-sm" onclick="loadLeads()">🔄 Refresh</button>
+          </div>
+          <div id="leadsStats" style="font-size:.78rem;color:var(--muted);margin-top:.5rem"></div>
+        </div>
+        <div id="leadsGrid" style="margin-top:1rem"></div>
       </div>
 
       <!-- MY LEADS -->
       <div class="dash-page" id="con-myleads">
         <div class="ph"><div class="pt">My Unlocked Leads</div><div class="ps">All leads you've purchased access to</div></div>
-        <div class="cs-box"><div class="cs-title">No Leads Yet</div><div style="font-size:.875rem;color:var(--muted)">When you unlock a lead, the client's contact information will appear here.</div></div>
+        <div id="myLeadsGrid"></div>
       </div>
 
       <!-- INVOICES -->
@@ -1644,19 +1739,19 @@ let selectedPkgCredits = "pro";
 
 // Restore session on page load
 async function restoreSession() {
-  if (!token) return;
+  if (!token) { showPage("landing"); return; }
   try {
     const data = await apiCall("GET", "/auth/me");
     currentUser = data.user;
     updateNav();
     updateDrawer();
-    // immediately show the right dashboard — this is the fix for blank page
     if(currentUser.role==="admin") showPage("admin");
     else if(currentUser.role==="contractor") showPage("contractor");
     else showPage("client");
   } catch (e) {
     token = null;
     localStorage.removeItem("pangig_token");
+    showPage("landing");
   }
 }
 
@@ -1689,6 +1784,8 @@ function conPage(p, btn) {
   document.querySelectorAll("#page-contractor .dash-page").forEach(d=>d.classList.remove("active"));
   document.getElementById("con-"+p)?.classList.add("active");
   if(p==="overview") refreshContractorDash();
+  if(p==="leads") loadLeads();
+  if(p==="myleads") renderMyLeads();
   if(p==="credits") renderCreditsPage();
   if(p==="invoices") renderInvoicesPage();
   if(p==="profile") renderConProfile();
@@ -2416,7 +2513,266 @@ async function renderAdminTx() {
 }
 
 // ══════════════════════════════════════════════════
-// FAQ
+// LIVE JOB LEADS SYSTEM
+// ══════════════════════════════════════════════════
+let allLeads = [];
+let myUnlockedIds = [];
+
+async function loadLeads() {
+  const grid = document.getElementById("leadsGrid");
+  if (!grid) return;
+  grid.innerHTML = `<div class="empty"><div class="empty-txt">Loading leads...</div></div>`;
+  try {
+    const data = await apiCall("GET", "/jobs");
+    allLeads = data.jobs || [];
+    myUnlockedIds = allLeads.filter(j => j.is_unlocked).map(j => j.id);
+    // Populate category filter
+    const catSel = document.getElementById("leadsCategory");
+    if (catSel && catSel.options.length === 1) {
+      INDUSTRY_CATEGORIES.forEach(c => {
+        const o = document.createElement("option");
+        o.value = c.id; o.textContent = `${c.icon} ${c.label}`;
+        catSel.appendChild(o);
+      });
+    }
+    filterLeads();
+  } catch(e) {
+    grid.innerHTML = `<div class="cs-box"><div class="cs-title">Could not load leads</div><div style="font-size:.875rem;color:var(--muted)">${e.message}</div><button class="btn btn-primary" style="margin-top:1rem" onclick="loadLeads()">Try Again</button></div>`;
+  }
+}
+
+function filterLeads() {
+  const q = (document.getElementById("leadsSearch")?.value || "").toLowerCase();
+  const cat = document.getElementById("leadsCategory")?.value || "";
+  const sort = document.getElementById("leadsSort")?.value || "newest";
+  let filtered = allLeads.filter(job => {
+    const jt = JOB_TYPES.find(t => t.id === job.type);
+    const matchQ = !q || job.title.toLowerCase().includes(q) || (job.description||"").toLowerCase().includes(q) || (jt?.label||"").toLowerCase().includes(q);
+    const matchCat = !cat || INDUSTRY_CATEGORIES.find(c => c.id === cat)?.services.some(s => s.id === job.type);
+    return matchQ && matchCat && job.status === "open";
+  });
+  // Sort
+  filtered.sort((a, b) => {
+    if (sort === "newest") return new Date(b.created_at) - new Date(a.created_at);
+    if (sort === "oldest") return new Date(a.created_at) - new Date(b.created_at);
+    const costA = JOB_TYPES.find(t => t.id === a.type)?.credits || 5;
+    const costB = JOB_TYPES.find(t => t.id === b.type)?.credits || 5;
+    if (sort === "credits_low") return costA - costB;
+    if (sort === "credits_high") return costB - costA;
+    return 0;
+  });
+  const stats = document.getElementById("leadsStats");
+  if (stats) stats.textContent = `${filtered.length} lead${filtered.length !== 1 ? "s" : ""} available`;
+  renderLeadsGrid(filtered);
+}
+
+function renderLeadsGrid(leads) {
+  const grid = document.getElementById("leadsGrid");
+  if (!grid) return;
+  if (!leads.length) {
+    grid.innerHTML = `<div class="cs-box"><div class="cs-title">No leads found</div><div style="font-size:.875rem;color:var(--muted)">Try adjusting your search or check back soon for new jobs.</div></div>`;
+    return;
+  }
+  grid.innerHTML = leads.map(job => renderLeadCard(job)).join("");
+}
+
+function renderLeadCard(job) {
+  const jt = JOB_TYPES.find(t => t.id === job.type) || { icon: "🔧", label: job.type, credits: 5 };
+  const slots = (job.unlocked_by || []).length;
+  const remaining = 7 - slots;
+  const isUnlocked = job.is_unlocked || myUnlockedIds.includes(job.id);
+  const isFull = slots >= 7;
+  const posted = job.created_at ? new Date(job.created_at).toLocaleDateString() : "Recently";
+  const slotClass = remaining >= 5 ? "open" : remaining >= 2 ? "filling" : "full";
+  const slotText = isFull ? "Full — 7/7 contractors" : `${remaining} spot${remaining !== 1 ? "s" : ""} left (${slots}/7)`;
+
+  return `<div class="lead-card" id="lead-${job.id}">
+    <div class="lead-card-header">
+      <div class="lead-card-title">${job.title}</div>
+      <div style="display:flex;align-items:center;gap:.5rem;flex-shrink:0">
+        <span class="lead-slots ${slotClass}">${slotText}</span>
+      </div>
+    </div>
+    <div class="lead-card-meta">
+      <span class="jtag type">${jt.icon} ${jt.label}</span>
+      ${job.location ? `<span class="jtag">📍 ${job.location}</span>` : ""}
+      ${job.budget ? `<span class="jtag">💰 ${job.budget}</span>` : ""}
+      <span class="jtag">🕒 ${posted}</span>
+    </div>
+    <div class="lead-card-desc">${job.description}</div>
+    ${isUnlocked ? `
+      <div class="lead-contact-box">
+        <div style="font-size:.78rem;font-weight:700;color:var(--green);margin-bottom:.25rem">✅ Lead Unlocked — Client Contact Info:</div>
+        ${job.client_email ? `<div class="lead-contact-row"><span class="lead-contact-label">Email</span><a href="mailto:${job.client_email}" class="lead-contact-val" style="color:var(--accent)">${job.client_email}</a></div>` : ""}
+        ${job.client_phone ? `<div class="lead-contact-row"><span class="lead-contact-label">Phone</span><a href="tel:${job.client_phone}" class="lead-contact-val" style="color:var(--accent)">${job.client_phone}</a></div>` : ""}
+      </div>` : isFull ? `
+      <div style="text-align:right">
+        <button class="btn btn-outline btn-sm" disabled style="opacity:.5;cursor:not-allowed">Lead Full</button>
+      </div>` : `
+      <div class="lead-card-footer">
+        <div class="lead-card-info">
+          <span>Cost: <strong style="color:var(--accent)">${jt.credits} credits</strong></span>
+          <span>Your balance: <strong>${currentUser?.credits || 0} credits</strong></span>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="unlockLead('${job.id}', ${jt.credits})">
+          Unlock Lead — ${jt.credits} Credits
+        </button>
+      </div>`}
+  </div>`;
+}
+
+async function unlockLead(jobId, cost) {
+  if (!currentUser) return;
+  if ((currentUser.credits || 0) < cost) {
+    toast("", "Not Enough Credits", `You need ${cost} credits to unlock this lead. Buy more credits to continue.`);
+    openModal("buyModal");
+    return;
+  }
+  const btn = document.querySelector(`#lead-${jobId} .btn-primary`);
+  if (btn) { btn.textContent = "Unlocking..."; btn.disabled = true; }
+  try {
+    const data = await apiCall("POST", `/jobs/${jobId}/unlock`);
+    currentUser.credits = data.credits_remaining;
+    document.getElementById("conCredits").textContent = currentUser.credits;
+    document.getElementById("conCredBig").textContent = currentUser.credits;
+    myUnlockedIds.push(jobId);
+    // Update the lead in allLeads
+    const lead = allLeads.find(j => j.id === jobId);
+    if (lead) {
+      lead.is_unlocked = true;
+      lead.client_email = data.client_email;
+      lead.client_phone = data.client_phone;
+    }
+    // Re-render just this card
+    const card = document.getElementById(`lead-${jobId}`);
+    if (card && lead) card.outerHTML = renderLeadCard({...lead, is_unlocked: true, client_email: data.client_email, client_phone: data.client_phone});
+    toast("", "Lead Unlocked! 🎉", "Client contact info is now visible. Reach out to them directly.");
+    // Refresh my leads tab
+    renderMyLeads();
+  } catch(e) {
+    toast("", "Error", e.message || "Could not unlock lead. Please try again.");
+    if (btn) { btn.textContent = `Unlock Lead — ${cost} Credits`; btn.disabled = false; }
+  }
+}
+
+async function renderMyLeads() {
+  const grid = document.getElementById("myLeadsGrid");
+  if (!grid) return;
+  try {
+    const data = await apiCall("GET", "/jobs");
+    const unlocked = (data.jobs || []).filter(j => j.is_unlocked);
+    if (!unlocked.length) {
+      grid.innerHTML = `<div class="cs-box"><div class="cs-title">No Unlocked Leads Yet</div><div style="font-size:.875rem;color:var(--muted)">When you unlock a lead, the client's contact info will appear here.</div><button class="btn btn-primary" style="margin-top:1rem" onclick="conPage('leads',null)">Browse Leads</button></div>`;
+      return;
+    }
+    grid.innerHTML = unlocked.map(job => renderLeadCard(job)).join("");
+  } catch(e) {
+    grid.innerHTML = `<div class="cs-box"><div class="cs-title">Could not load</div><div style="font-size:.875rem;color:var(--muted)">${e.message}</div></div>`;
+  }
+}
+
+// ══════════════════════════════════════════════════
+// RATINGS & REVIEWS
+// ══════════════════════════════════════════════════
+let selectedRating = 0;
+
+function renderStarSelector(containerId) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = [1,2,3,4,5].map(i =>
+    `<span onclick="setRating(${i})" style="cursor:pointer;font-size:1.75rem;color:${i <= selectedRating ? '#f4a623' : 'var(--border)'}">★</span>`
+  ).join("");
+}
+
+function setRating(n) {
+  selectedRating = n;
+  renderStarSelector("starSelector");
+}
+
+function renderStars(rating, count) {
+  const stars = [1,2,3,4,5].map(i =>
+    `<span style="color:${i <= Math.round(rating) ? '#f4a623' : 'var(--border)'}">★</span>`
+  ).join("");
+  return `<span style="font-size:.9rem">${stars}</span>${count !== undefined ? `<span style="font-size:.72rem;color:var(--muted);margin-left:.25rem">(${count})</span>` : ""}`;
+}
+
+async function submitReview(contractorId) {
+  if (!selectedRating) { toast("","Select Rating","Please select a star rating."); return; }
+  const comment = document.getElementById("reviewComment")?.value?.trim() || "";
+  const btn = document.getElementById("submitReviewBtn");
+  if (btn) { btn.textContent = "Submitting..."; btn.disabled = true; }
+  try {
+    await apiCall("POST", "/reviews", { contractor_id: contractorId, rating: selectedRating, comment });
+    toast("", "Review Submitted! ⭐", "Thank you for your feedback.");
+    selectedRating = 0;
+    document.getElementById("reviewComment").value = "";
+    renderStarSelector("starSelector");
+  } catch(e) {
+    toast("", "Error", e.message || "Could not submit review.");
+  } finally {
+    if (btn) { btn.textContent = "Submit Review"; btn.disabled = false; }
+  }
+}
+
+// ══════════════════════════════════════════════════
+// FORGOT / RESET PASSWORD
+// ══════════════════════════════════════════════════
+async function doForgotPassword() {
+  const email = document.getElementById("forgotEmail").value.trim();
+  const err = document.getElementById("forgotErr");
+  const success = document.getElementById("forgotSuccess");
+  const btn = document.querySelector("#page-forgot-password .btn-primary");
+  if (!email) { err.textContent="Please enter your email."; err.classList.add("show"); return; }
+  err.classList.remove("show");
+  btn.textContent = "Sending..."; btn.disabled = true;
+  try {
+    await apiCall("POST", "/auth/forgot-password", { email });
+    success.style.display = "block";
+    document.getElementById("forgotEmail").value = "";
+  } catch(e) {
+    // Always show success to prevent email enumeration
+    success.style.display = "block";
+    document.getElementById("forgotEmail").value = "";
+  } finally {
+    btn.textContent = "Send Reset Link"; btn.disabled = false;
+  }
+}
+
+async function doResetPassword() {
+  const pass = document.getElementById("resetPass").value;
+  const confirm = document.getElementById("resetPassConfirm").value;
+  const err = document.getElementById("resetErr");
+  const success = document.getElementById("resetSuccess");
+  const btn = document.querySelector("#page-reset-password .btn-primary");
+  if (!pass || !confirm) { err.textContent="Please fill in both fields."; err.classList.add("show"); return; }
+  if (pass !== confirm) { err.textContent="Passwords do not match."; err.classList.add("show"); return; }
+  if (pass.length < 8) { err.textContent="Password must be at least 8 characters."; err.classList.add("show"); return; }
+  err.classList.remove("show");
+  btn.textContent = "Updating..."; btn.disabled = true;
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const resetToken = params.get("token");
+    if (!resetToken) throw new Error("Invalid reset link. Please request a new one.");
+    await apiCall("POST", "/auth/reset-password", { token: resetToken, password: pass });
+    success.style.display = "block";
+    document.getElementById("resetPass").value = "";
+    document.getElementById("resetPassConfirm").value = "";
+    setTimeout(() => showPage("login"), 3000);
+  } catch(e) {
+    err.textContent = e.message || "Reset failed. Please request a new link.";
+    err.classList.add("show");
+  } finally {
+    btn.textContent = "Update Password"; btn.disabled = false;
+  }
+}
+
+// Check URL for reset token on page load
+function checkResetToken() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("token") && params.get("type") === "reset") {
+    showPage("reset-password");
+  }
+}
 // ══════════════════════════════════════════════════
 function toggleFaq(btn) {
   const item = btn.closest(".faq-item");
@@ -2547,9 +2903,10 @@ function filterSvcPage(q) { renderServicesPage(q || null); }
 // INIT
 // ══════════════════════════════════════════════════
 document.addEventListener("DOMContentLoaded", () => {
-  showPage("landing");
   initIndustries();
   renderInvLines();
+  // Check if URL has a password reset token
+  checkResetToken();
   // Restore session without blocking page render
   restoreSession().catch(()=>{});
   // Keep backend alive
