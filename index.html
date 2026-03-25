@@ -208,7 +208,38 @@ hr.div{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem}
 .card-title{font-family:var(--fh);font-weight:700;font-size:.95rem;margin-bottom:1rem}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
-@media(max-width:700px){.two-col{grid-template-columns:1fr}.sidebar{display:none}}
+@media(max-width:700px){
+  .two-col{grid-template-columns:1fr}
+  .sidebar{display:none}
+  /* Mobile bottom nav for dashboards */
+  .mobile-dash-nav{display:flex !important}
+  /* Stack metrics */
+  .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  /* Full width tables */
+  .tbl-wrap{font-size:.75rem}
+  /* Auth box full width */
+  .auth-box{padding:1.5rem 1rem}
+  /* Hero */
+  .hero-title{font-size:2rem}
+  .hero-btns{flex-direction:column;align-items:stretch}
+  .btn-lg{width:100%;text-align:center}
+  /* Nav */
+  .nav-user{display:none}
+  /* Admin tables */
+  .tbl-wrap th:nth-child(n+4),.tbl-wrap td:nth-child(n+4){display:none}
+  /* Leads */
+  .leads-filter-row{flex-direction:column}
+  .leads-filter-row .fi,.leads-filter-row .fs{width:100%}
+  /* Lead card */
+  .lead-card-footer{flex-direction:column;align-items:stretch}
+  .lead-card-footer .btn{width:100%;text-align:center}
+  /* Footer */
+  .footer-links{grid-template-columns:1fr}
+  /* Profile */
+  .prof-hdr{flex-direction:column;align-items:center;text-align:center}
+  /* Reviews */
+  .reviews-header{flex-direction:column;gap:.75rem}
+}
 
 /*  TABLE  */
 .tbl-wrap{overflow-x:auto}
@@ -360,7 +391,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .svc-jump-btn{font-size:.82rem;color:var(--muted);padding:.4rem .75rem;border-radius:6px;cursor:pointer;transition:all .15s;border:none;background:transparent;text-align:left;width:100%;display:block}
 .svc-jump-btn:hover{color:var(--accent);background:rgba(244,166,35,.06)}
 
-/* ── FOOTER ── */
+/* ── MOBILE BOTTOM NAV ── */
+.mobile-dash-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:180;padding:.5rem 0;padding-bottom:env(safe-area-inset-bottom,.5rem)}
+.mobile-dash-nav-inner{display:flex;justify-content:space-around;align-items:center}
+.mob-nav-btn{display:flex;flex-direction:column;align-items:center;gap:.2rem;background:none;border:none;color:var(--muted);font-size:.6rem;cursor:pointer;padding:.4rem .5rem;border-radius:8px;transition:color .15s;min-width:52px}
+.mob-nav-btn.active{color:var(--accent)}
+.mob-nav-btn .mob-icon{font-size:1.1rem}
+/* Add bottom padding to page content on mobile so nav doesn't cover it */
+@media(max-width:700px){
+  .main{padding-bottom:80px !important}
+  .page{padding-bottom:0}
+}
 .site-footer{background:#0a0c10;border-top:1px solid var(--border);padding:4rem 2rem 2rem}
 .footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.5fr 2fr;gap:4rem;margin-bottom:3rem}
 .footer-logo{font-family:var(--fh);font-size:1.6rem;font-weight:800;color:var(--text);margin-bottom:.75rem}
@@ -471,7 +512,25 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .info-cta-title{font-family:var(--fh);font-size:1.5rem;font-weight:800;color:var(--text);margin-bottom:.5rem}
 .info-cta-sub{font-size:.9rem;color:var(--muted);margin-bottom:1.5rem}
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:480px){
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  .hero-title{font-size:1.75rem}
+  .nav{padding:0 1rem}
+  .auth-wrap{padding:1rem}
+  .dash-page{padding:1rem}
+  .card{padding:1rem}
+  .ph{padding:.75rem 0}
+  .stats-row{grid-template-columns:repeat(2,1fr);gap:.75rem}
+  .pkg-grid{grid-template-columns:1fr}
+  .lead-card{padding:1rem}
+  .info-hero-title{font-size:1.75rem}
+  .contact-form-wrap{padding:1.25rem}
+}
+@media(max-width:380px){
+  .mob-nav-btn{font-size:.55rem;min-width:44px;padding:.3rem .25rem}
+  .mob-nav-btn .mob-icon{font-size:1rem}
+  .metrics-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -1145,6 +1204,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 <!--  CONTRACTOR DASHBOARD  -->
 <div class="page" id="page-contractor">
+  <!-- Mobile bottom navigation -->
+  <div class="mobile-dash-nav" id="conMobileNav">
+    <div class="mobile-dash-nav-inner">
+      <button class="mob-nav-btn active" onclick="conPage('overview',null);setMobNav('conMobileNav',this)"><span class="mob-icon">🏠</span>Home</button>
+      <button class="mob-nav-btn" onclick="conPage('leads',null);setMobNav('conMobileNav',this)"><span class="mob-icon">🔍</span>Leads</button>
+      <button class="mob-nav-btn" onclick="conPage('myleads',null);setMobNav('conMobileNav',this)"><span class="mob-icon">📋</span>My Leads</button>
+      <button class="mob-nav-btn" onclick="conPage('invoices',null);setMobNav('conMobileNav',this)"><span class="mob-icon">🧾</span>Invoices</button>
+      <button class="mob-nav-btn" onclick="conPage('credits',null);setMobNav('conMobileNav',this)"><span class="mob-icon">💳</span>Credits</button>
+      <button class="mob-nav-btn" onclick="conPage('profile',null);setMobNav('conMobileNav',this)"><span class="mob-icon">👤</span>Profile</button>
+    </div>
+  </div>
   <div class="dash">
     <div class="sidebar" id="conSidebar">
       <div class="sb-label">Contractor</div>
@@ -1376,6 +1446,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 <!--  CLIENT DASHBOARD  -->
 <div class="page" id="page-client">
+  <!-- Mobile bottom navigation -->
+  <div class="mobile-dash-nav" id="cliMobileNav">
+    <div class="mobile-dash-nav-inner">
+      <button class="mob-nav-btn active" onclick="cliPage('overview',null);setMobNav('cliMobileNav',this)"><span class="mob-icon">🏠</span>Home</button>
+      <button class="mob-nav-btn" onclick="cliPage('postjob',null);setMobNav('cliMobileNav',this)"><span class="mob-icon">➕</span>Post Job</button>
+      <button class="mob-nav-btn" onclick="cliPage('myjobs',null);setMobNav('cliMobileNav',this)"><span class="mob-icon">📋</span>My Jobs</button>
+      <button class="mob-nav-btn" onclick="cliPage('invoices',null);setMobNav('cliMobileNav',this)"><span class="mob-icon">🧾</span>Invoices</button>
+      <button class="mob-nav-btn" onclick="cliPage('profile',null);setMobNav('cliMobileNav',this)"><span class="mob-icon">👤</span>Profile</button>
+    </div>
+  </div>
   <div class="dash">
     <div class="sidebar">
       <div class="sb-label">Client</div>
@@ -1518,6 +1598,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 <!--  ADMIN DASHBOARD  -->
 <div class="page" id="page-admin">
+  <!-- Mobile bottom navigation -->
+  <div class="mobile-dash-nav" id="adminMobileNav">
+    <div class="mobile-dash-nav-inner">
+      <button class="mob-nav-btn active" onclick="adminPage('overview',null);setMobNav('adminMobileNav',this)"><span class="mob-icon">📊</span>Overview</button>
+      <button class="mob-nav-btn" onclick="adminPage('contractors',null);setMobNav('adminMobileNav',this)"><span class="mob-icon">🔨</span>Contractors</button>
+      <button class="mob-nav-btn" onclick="adminPage('clients',null);setMobNav('adminMobileNav',this)"><span class="mob-icon">👥</span>Clients</button>
+      <button class="mob-nav-btn" onclick="adminPage('jobs',null);setMobNav('adminMobileNav',this)"><span class="mob-icon">📋</span>Jobs</button>
+      <button class="mob-nav-btn" onclick="adminPage('pricing',null);setMobNav('adminMobileNav',this)"><span class="mob-icon">💰</span>Pricing</button>
+    </div>
+  </div>
   <div class="dash">
     <div class="sidebar">
       <div class="sb-label">Admin Panel</div>
@@ -2985,6 +3075,14 @@ async function renderAdminTx() {
       `<tr><td style="font-weight:600">${h.users?.name||"—"}</td><td>${h.action}</td><td style="font-weight:700;color:${h.credits>0?'var(--green)':'var(--red)'}">${h.credits>0?'+':''}${h.credits}</td><td style="color:var(--accent);font-weight:700">${h.amount_paid?'$'+h.amount_paid:"—"}</td><td style="color:var(--muted)">${new Date(h.created_at).toLocaleDateString()}</td></tr>`
     ).join("");
   } catch(e) { console.error(e); }
+}
+
+// ── MOBILE NAV HELPER ─────────────────────────────
+function setMobNav(navId, btn) {
+  const nav = document.getElementById(navId);
+  if (!nav) return;
+  nav.querySelectorAll(".mob-nav-btn").forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
 }
 
 // ══════════════════════════════════════════════════
