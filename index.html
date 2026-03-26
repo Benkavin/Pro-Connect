@@ -1317,6 +1317,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="mc"><div class="mc-lbl">Total Spent on Credits</div><div class="mc-val" id="credSpent">$0.00</div></div>
           <div class="mc"><div class="mc-lbl">Leads Unlocked</div><div class="mc-val blu" id="credLeads">0</div></div>
         </div>
+        <!-- Promo Code Redemption -->
+        <div class="card" style="margin-bottom:1.5rem;border-color:rgba(244,166,35,.3)">
+          <div class="card-title">🎟️ Have a Promo Code?</div>
+          <p style="font-size:.875rem;color:var(--muted);margin-bottom:1rem">Enter your one-time promo code to add free credits to your account. Credits never expire once added.</p>
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+            <input class="fi" id="promoCodeInput" placeholder="Enter code e.g. PANGIG-X7K2M" style="flex:1;min-width:200px;text-transform:uppercase"/>
+            <button class="btn btn-primary" onclick="redeemPromoCode()">Redeem Code</button>
+          </div>
+          <div class="ferr" id="promoRedeemErr" style="margin-top:.5rem"></div>
+          <div class="alert a-success" id="promoRedeemSuccess" style="display:none;margin-top:.5rem"></div>
+        </div>
         <div class="card" style="margin-bottom:1.5rem">
           <div class="card-title">Buy More Credits</div>
           <div class="pkg-grid" id="credPkgs"></div>
@@ -1616,6 +1627,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <button class="sb-item" onclick="adminPage('clients',this)"><span class="sb-icon"></span>Clients</button>
       <button class="sb-item" onclick="adminPage('jobs',this)"><span class="sb-icon"></span>All Jobs</button>
       <button class="sb-item" onclick="adminPage('pricing',this)"><span class="sb-icon"></span>Lead Pricing</button>
+      <button class="sb-item" onclick="adminPage('promocodes',this)"><span class="sb-icon"></span>Promo Codes</button>
       <button class="sb-item" onclick="adminPage('transactions',this)"><span class="sb-icon"></span>Transactions</button>
     </div>
     <div class="main">
@@ -1664,6 +1676,88 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="alert a-info">Credits are purchased by contractors to unlock leads. Set pricing based on the typical value of the job.</div>
         <div id="pricingContent"></div>
         <div style="margin-top:1.5rem;text-align:right"><button class="btn btn-primary" onclick="savePricing()">Save Pricing</button></div>
+      </div>
+
+      <!-- PROMO CODES -->
+      <div class="dash-page" id="admin-promocodes">
+        <div class="ph">
+          <div><div class="pt">Promo Codes 🎟️</div><div class="ps">Generate one-time free credit codes for contractors</div></div>
+        </div>
+        <div class="alert a-info" style="margin-bottom:1.5rem">
+          Each code can only be used <strong>once</strong> by one contractor. Credits never expire once redeemed. The code itself expires on the date you set.
+        </div>
+        <!-- Generate new code -->
+        <div class="card" style="margin-bottom:1.5rem">
+          <div class="card-title">Generate New Promo Code</div>
+          <div class="two-col">
+            <div class="fg">
+              <label class="fl">Code Label (internal name)</label>
+              <input class="fi" id="promoLabel" placeholder="e.g. Welcome Offer, Cold Outreach Jan"/>
+            </div>
+            <div class="fg">
+              <label class="fl">Credits Value</label>
+              <select class="fs" id="promoCredits">
+                <option value="10">10 credits — Starter ($15 value)</option>
+                <option value="33" selected>33 credits — ~$50 value</option>
+                <option value="50">50 credits — Pro ($60 value)</option>
+                <option value="100">100 credits — Elite ($100 value)</option>
+                <option value="custom">Custom amount...</option>
+              </select>
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="fg" id="promoCustomWrap" style="display:none">
+              <label class="fl">Custom Credits Amount</label>
+              <input class="fi" id="promoCustomCredits" type="number" min="1" max="500" placeholder="Enter credits amount"/>
+            </div>
+            <div class="fg">
+              <label class="fl">Code Expiry Date</label>
+              <input class="fi" id="promoExpiry" type="date"/>
+            </div>
+            <div class="fg">
+              <label class="fl">How many codes to generate?</label>
+              <select class="fs" id="promoCount">
+                <option value="1">1 code</option>
+                <option value="5">5 codes</option>
+                <option value="10">10 codes</option>
+                <option value="25">25 codes</option>
+                <option value="50">50 codes</option>
+              </select>
+            </div>
+          </div>
+          <div class="ferr" id="promoErr"></div>
+          <div style="text-align:right;margin-top:.5rem">
+            <button class="btn btn-primary" onclick="generatePromoCodes()">🎟️ Generate Codes</button>
+          </div>
+        </div>
+        <!-- Generated codes display -->
+        <div class="card" id="promoNewCodesCard" style="display:none;margin-bottom:1.5rem;border-color:rgba(34,197,94,.3)">
+          <div class="card-title" style="color:var(--green)">✅ New Codes Generated — Copy & Share These!</div>
+          <div id="promoNewCodesList" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem"></div>
+          <div style="margin-top:1rem;font-size:.78rem;color:var(--muted)">Click any code to copy it. Share via WhatsApp, email or DM.</div>
+        </div>
+        <!-- All codes table -->
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
+            <div class="card-title" style="margin:0">All Promo Codes</div>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <select class="fs" id="promoFilterStatus" onchange="renderPromoCodes()" style="font-size:.78rem;padding:.3rem .6rem">
+                <option value="all">All Codes</option>
+                <option value="active">Active</option>
+                <option value="used">Used</option>
+                <option value="expired">Expired</option>
+              </select>
+              <button class="btn btn-outline btn-sm" onclick="renderPromoCodes()">🔄 Refresh</button>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Code</th><th>Label</th><th>Credits</th><th>Status</th><th>Used By</th><th>Expires</th><th>Created</th></tr></thead>
+              <tbody id="promoCodesTable"></tbody>
+            </table>
+            <div id="promoCodesEmpty" class="empty" style="display:none"><div class="empty-txt">No promo codes yet. Generate your first one above!</div></div>
+          </div>
+        </div>
       </div>
 
       <!-- TRANSACTIONS -->
@@ -2084,7 +2178,17 @@ function adminPage(p, btn) {
   if(p==="clients") renderAdminClients();
   if(p==="jobs") renderAdminJobs();
   if(p==="pricing") renderPricing();
+  if(p==="promocodes") { renderPromoCodes(); setDefaultPromoExpiry(); }
   if(p==="transactions") renderAdminTx();
+}
+
+function setDefaultPromoExpiry() {
+  const input = document.getElementById("promoExpiry");
+  if(input && !input.value) {
+    const d = new Date();
+    d.setDate(d.getDate() + 30);
+    input.value = d.toISOString().split("T")[0];
+  }
 }
 
 // 
@@ -3244,8 +3348,152 @@ async function renderMyLeads() {
 }
 
 // ══════════════════════════════════════════════════
-// RATINGS & REVIEWS
+// PROMO CODES — ADMIN
 // ══════════════════════════════════════════════════
+document.addEventListener("change", function(e) {
+  if(e.target.id === "promoCredits") {
+    const wrap = document.getElementById("promoCustomWrap");
+    if(wrap) wrap.style.display = e.target.value === "custom" ? "block" : "none";
+  }
+});
+
+function generatePromoCode() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code = "PANGIG-";
+  for(let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  return code;
+}
+
+async function generatePromoCodes() {
+  const label = document.getElementById("promoLabel").value.trim();
+  const creditsSel = document.getElementById("promoCredits").value;
+  const credits = creditsSel === "custom"
+    ? parseInt(document.getElementById("promoCustomCredits").value)
+    : parseInt(creditsSel);
+  const expiry = document.getElementById("promoExpiry").value;
+  const count = parseInt(document.getElementById("promoCount").value);
+  const err = document.getElementById("promoErr");
+
+  if(!label) { err.textContent="Please enter a label for this batch."; err.classList.add("show"); return; }
+  if(!credits || credits < 1) { err.textContent="Please select a valid credits amount."; err.classList.add("show"); return; }
+  if(!expiry) { err.textContent="Please set an expiry date for the code."; err.classList.add("show"); return; }
+  if(new Date(expiry) <= new Date()) { err.textContent="Expiry date must be in the future."; err.classList.add("show"); return; }
+  err.classList.remove("show");
+
+  const btn = document.querySelector("#admin-promocodes .btn-primary");
+  btn.textContent = "Generating..."; btn.disabled = true;
+
+  const codes = [];
+  for(let i = 0; i < count; i++) codes.push(generatePromoCode());
+
+  try {
+    await apiCall("POST", "/admin/promocodes", { codes, label, credits, expiry_date: expiry });
+    // Show the generated codes
+    const card = document.getElementById("promoNewCodesCard");
+    const list = document.getElementById("promoNewCodesList");
+    card.style.display = "block";
+    list.innerHTML = codes.map(c => `
+      <div onclick="copyCode('${c}',this)" style="background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:.5rem 1rem;cursor:pointer;font-family:monospace;font-size:.875rem;font-weight:700;color:var(--accent);transition:all .15s" title="Click to copy">
+        ${c} <span style="font-size:.65rem;color:var(--muted)">(${credits} credits)</span>
+      </div>`).join("");
+    document.getElementById("promoLabel").value = "";
+    document.getElementById("promoExpiry").value = "";
+    document.getElementById("promoCount").value = "1";
+    toast("","Codes Generated! 🎟️",`${count} promo code${count>1?"s":""} created successfully.`);
+    renderPromoCodes();
+  } catch(e) {
+    toast("","Error", e.message || "Could not generate codes.");
+  } finally {
+    btn.textContent = "🎟️ Generate Codes"; btn.disabled = false;
+  }
+}
+
+function copyCode(code, el) {
+  navigator.clipboard.writeText(code).then(() => {
+    const orig = el.innerHTML;
+    el.innerHTML = `✅ Copied!`;
+    el.style.borderColor = "var(--green)";
+    setTimeout(() => { el.innerHTML = orig; el.style.borderColor = "var(--border)"; }, 1500);
+  });
+}
+
+async function renderPromoCodes() {
+  const tbody = document.getElementById("promoCodesTable");
+  const empty = document.getElementById("promoCodesEmpty");
+  const filter = document.getElementById("promoFilterStatus")?.value || "all";
+  if(!tbody) return;
+  try {
+    const data = await apiCall("GET", "/admin/promocodes");
+    let codes = data.codes || [];
+    const now = new Date();
+    // Apply filter
+    if(filter === "active") codes = codes.filter(c => !c.used_by && new Date(c.expiry_date) > now);
+    if(filter === "used") codes = codes.filter(c => c.used_by);
+    if(filter === "expired") codes = codes.filter(c => !c.used_by && new Date(c.expiry_date) <= now);
+
+    if(!codes.length) { tbody.innerHTML=""; empty.style.display="block"; return; }
+    empty.style.display = "none";
+    tbody.innerHTML = codes.map(c => {
+      const isUsed = !!c.used_by;
+      const isExpired = !isUsed && new Date(c.expiry_date) <= now;
+      const status = isUsed
+        ? `<span class="badge b-green">Used</span>`
+        : isExpired
+        ? `<span class="badge b-red">Expired</span>`
+        : `<span class="badge b-yellow">Active</span>`;
+      return `<tr>
+        <td style="font-family:monospace;font-weight:700;color:var(--accent);font-size:.8rem">${c.code}</td>
+        <td style="font-size:.8rem">${c.label}</td>
+        <td style="font-weight:700;color:var(--accent)">${c.credits} cr</td>
+        <td>${status}</td>
+        <td style="font-size:.78rem;color:var(--muted)">${c.used_by_name||"—"}</td>
+        <td style="font-size:.78rem;color:var(--muted)">${new Date(c.expiry_date).toLocaleDateString()}</td>
+        <td style="font-size:.78rem;color:var(--muted)">${new Date(c.created_at).toLocaleDateString()}</td>
+      </tr>`;
+    }).join("");
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted)">Could not load codes</td></tr>`;
+  }
+}
+
+// ══════════════════════════════════════════════════
+// PROMO CODES — CONTRACTOR REDEMPTION
+// ══════════════════════════════════════════════════
+async function redeemPromoCode() {
+  const input = document.getElementById("promoCodeInput");
+  const code = input?.value.trim().toUpperCase();
+  const err = document.getElementById("promoRedeemErr");
+  const success = document.getElementById("promoRedeemSuccess");
+  const btn = document.querySelector("#con-credits .btn[onclick='redeemPromoCode()']");
+
+  if(!code) { err.textContent="Please enter a promo code."; err.classList.add("show"); return; }
+  err.classList.remove("show");
+  success.style.display = "none";
+  if(btn) { btn.textContent="Redeeming..."; btn.disabled=true; }
+
+  try {
+    const data = await apiCall("POST", "/promo/redeem", { code });
+    currentUser.credits = data.new_balance;
+    // Update credit displays
+    const credBal = document.getElementById("credBal");
+    const conCredits = document.getElementById("conCredits");
+    const conCredBig = document.getElementById("conCredBig");
+    if(credBal) credBal.textContent = data.new_balance + " credits";
+    if(conCredits) conCredits.textContent = data.new_balance;
+    if(conCredBig) conCredBig.textContent = data.new_balance;
+    input.value = "";
+    success.textContent = `🎉 ${data.credits_added} free credits added! Your new balance is ${data.new_balance} credits.`;
+    success.style.display = "block";
+    setTimeout(() => success.style.display = "none", 8000);
+    toast("","Code Redeemed! 🎉",`${data.credits_added} free credits added to your account!`);
+    renderCreditsPage();
+  } catch(e) {
+    err.textContent = e.message || "Invalid or expired code. Please check and try again.";
+    err.classList.add("show");
+  } finally {
+    if(btn) { btn.textContent="Redeem Code"; btn.disabled=false; }
+  }
+}
 let selectedRating = 0;
 
 function renderStarSelector(containerId) {
