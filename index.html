@@ -3270,17 +3270,28 @@ async function renderAdminContractors() {
     document.getElementById("adConSub").textContent = list.length+" registered";
     document.getElementById("adConTable").innerHTML = list.map(c => {
       const svcs = (c.services||[]).map(s=>{const jt=JOB_TYPES.find(j=>j.id===s);return jt?`<span class="jtag type" style="font-size:.65rem">${jt.label}</span>`:""}).join(" ");
-      const verStatus = c.verified ? `<span class="verified-badge">✅ Verified</span>` :
-        c.verification_status === "pending" ? `<span style="color:var(--accent);font-size:.78rem;font-weight:700">⏳ Pending</span>` :
-        `<span class="unverified-badge">Unverified</span>`;
-      const actions = c.verification_status === "pending" ?
-        `<div style="display:flex;gap:.4rem">
-          <button class="btn btn-sm" style="background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3);font-size:.72rem" onclick="adminVerify('${c.id}','approve')">Approve</button>
-          <button class="btn btn-sm" style="background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.3);font-size:.72rem" onclick="adminVerify('${c.id}','reject')">Reject</button>
-        </div>` : "—";
+      const verStatus = c.verified
+        ? `<span class="verified-badge">✅ Verified</span>`
+        : c.verification_status === "pending"
+        ? `<span style="color:var(--accent);font-size:.78rem;font-weight:700">⏳ Pending</span>`
+        : c.verification_status === "rejected"
+        ? `<span style="color:var(--red);font-size:.78rem;font-weight:700">❌ Rejected</span>`
+        : `<span class="unverified-badge">Unverified</span>`;
+
+      // Always show actions — admin can verify/reject anyone at any time
+      const actions = c.verified
+        ? `<button class="btn btn-sm" style="background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.3);font-size:.72rem" onclick="adminVerify('${c.id}','reject')">Revoke</button>`
+        : `<div style="display:flex;gap:.4rem">
+            <button class="btn btn-sm" style="background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3);font-size:.72rem" onclick="adminVerify('${c.id}','approve')">✅ Verify</button>
+            <button class="btn btn-sm" style="background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.3);font-size:.72rem" onclick="adminVerify('${c.id}','reject')">❌ Reject</button>
+          </div>`;
+
       const rating = c.avg_rating ? `${c.avg_rating} ★ (${c.review_count||0})` : "—";
       return `<tr>
-        <td style="font-weight:600">${c.name}</td>
+        <td>
+          <div style="font-weight:600">${c.name}</div>
+          ${c.company_name ? `<div style="font-size:.72rem;color:var(--muted)">${c.company_name}</div>` : ""}
+        </td>
         <td style="color:var(--muted);font-size:.78rem">${c.email}</td>
         <td>${svcs||"—"}</td>
         <td style="color:var(--accent);font-weight:700">${c.credits||0}</td>
