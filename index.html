@@ -391,7 +391,39 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .svc-jump-btn{font-size:.82rem;color:var(--muted);padding:.4rem .75rem;border-radius:6px;cursor:pointer;transition:all .15s;border:none;background:transparent;text-align:left;width:100%;display:block}
 .svc-jump-btn:hover{color:var(--accent);background:rgba(244,166,35,.06)}
 
-/* ── MOBILE BOTTOM NAV ── */
+/* ── AVAILABILITY BADGE ── */
+.avail-available{display:inline-flex;align-items:center;gap:.3rem;background:rgba(34,197,94,.12);color:var(--green);font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:20px;border:1px solid rgba(34,197,94,.3)}
+.avail-busy{display:inline-flex;align-items:center;gap:.3rem;background:rgba(244,166,35,.12);color:var(--accent);font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:20px;border:1px solid rgba(244,166,35,.3)}
+.avail-unavailable{display:inline-flex;align-items:center;gap:.3rem;background:rgba(239,68,68,.1);color:var(--red);font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:20px;border:1px solid rgba(239,68,68,.3)}
+
+/* ── JOB STATUS ── */
+.job-status-open{background:rgba(59,130,246,.12);color:var(--blue);font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:20px;border:1px solid rgba(59,130,246,.3)}
+.job-status-in_progress{background:rgba(244,166,35,.12);color:var(--accent);font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:20px;border:1px solid rgba(244,166,35,.3)}
+.job-status-completed{background:rgba(34,197,94,.12);color:var(--green);font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:20px;border:1px solid rgba(34,197,94,.3)}
+.job-status-closed{background:rgba(122,132,153,.1);color:var(--muted);font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:20px;border:1px solid var(--border)}
+
+/* ── PORTFOLIO GRID ── */
+.portfolio-img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer;transition:transform .2s}
+.portfolio-img:hover{transform:scale(1.03)}
+.portfolio-item{position:relative}
+.portfolio-remove{position:absolute;top:4px;right:4px;background:rgba(239,68,68,.9);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* ── MESSAGING ── */
+.msg-wrap{display:flex;flex-direction:column;height:420px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.msg-list{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.75rem}
+.msg-bubble{max-width:75%;padding:.6rem 1rem;border-radius:16px;font-size:.875rem;line-height:1.5}
+.msg-bubble.mine{background:var(--accent);color:#000;align-self:flex-end;border-bottom-right-radius:4px}
+.msg-bubble.theirs{background:var(--surface);border:1px solid var(--border);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px}
+.msg-bubble .msg-time{font-size:.65rem;opacity:.6;margin-top:.2rem}
+.msg-input-row{display:flex;gap:.5rem;padding:.75rem;border-top:1px solid var(--border);background:var(--surface)}
+.msg-input-row .fi{flex:1;margin:0}
+
+/* ── DISPUTE ── */
+.dispute-card{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:var(--r);padding:1.25rem}
+
+/* ── REFERRAL ── */
+.referral-code{font-family:monospace;font-size:1.1rem;font-weight:700;color:var(--accent);background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:.6rem 1rem;letter-spacing:2px;cursor:pointer;text-align:center;margin-bottom:.5rem}
+.referral-code:hover{border-color:var(--accent)}
 .mobile-dash-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:180;padding:.5rem 0;padding-bottom:env(safe-area-inset-bottom,.5rem)}
 .mobile-dash-nav-inner{display:flex;justify-content:space-around;align-items:center}
 .mob-nav-btn{display:flex;flex-direction:column;align-items:center;gap:.2rem;background:none;border:none;color:var(--muted);font-size:.6rem;cursor:pointer;padding:.4rem .5rem;border-radius:8px;transition:color .15s;min-width:52px}
@@ -591,6 +623,23 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div id="svcJumpList"></div>
     </div>
     <div id="svcMainContent"></div>
+  </div>
+</div>
+
+<!--  MESSAGING MODAL  -->
+<div class="modal-overlay" id="msgModal">
+  <div class="modal" style="max-width:520px;width:100%">
+    <div class="modal-title" id="msgTitle">Messages</div>
+    <div class="msg-wrap">
+      <div class="msg-list" id="msgList"></div>
+      <div class="msg-input-row">
+        <input class="fi" id="msgInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendMessage()"/>
+        <button class="btn btn-primary btn-sm" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+    <div style="text-align:right;margin-top:1rem">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('msgModal')">Close</button>
+    </div>
   </div>
 </div>
 
@@ -1338,24 +1387,37 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <!-- PROFILE -->
       <div class="dash-page" id="con-profile">
-        <div class="ph"><div class="pt">My Profile & Verification</div><div class="ps">Build trust with clients by completing your profile</div></div>
+        <div class="ph"><div class="pt">Company Profile</div><div class="ps">Your profile is visible to clients you work with and our admin team</div></div>
 
         <!-- Verification Status Banner -->
         <div id="verificationBanner"></div>
 
-        <!-- Profile Header -->
+        <!-- Profile Header with photo -->
         <div class="prof-hdr" style="align-items:flex-start;gap:1.5rem;flex-wrap:wrap">
-          <div style="position:relative">
-            <div class="avatar" id="conAvatarLetter" style="width:80px;height:80px;font-size:2rem">M</div>
-            <div id="conVerifiedBadge" style="position:absolute;bottom:-4px;right:-4px"></div>
+          <div style="position:relative;cursor:pointer" onclick="document.getElementById('profilePhotoInput').click()" title="Click to change photo">
+            <div id="conProfilePhoto" style="width:90px;height:90px;border-radius:50%;background:var(--s2);border:3px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:2rem;color:var(--accent);font-weight:700">
+              <span id="conAvatarLetter">?</span>
+            </div>
+            <div style="position:absolute;bottom:0;right:0;background:var(--accent);color:#000;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;border:2px solid var(--bg)">📷</div>
+            <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="uploadProfilePhoto(this)"/>
+            <div id="conVerifiedBadge" style="position:absolute;top:-4px;right:-4px"></div>
           </div>
           <div style="flex:1">
             <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
               <div class="prof-name" id="conProfName">—</div>
               <div id="conRatingDisplay"></div>
+              <div id="conAvailBadge"></div>
             </div>
             <div class="prof-role" id="conProfRole">Contractor</div>
-            <div id="conBioDisplay" style="font-size:.875rem;color:var(--muted);margin-top:.5rem;line-height:1.6"></div>
+            <div id="conBioDisplay" style="font-size:.875rem;color:var(--muted);margin-top:.5rem;line-height:1.6;max-width:500px"></div>
+          </div>
+          <div>
+            <label class="fl" style="margin-bottom:.4rem">Availability</label>
+            <select class="fs" id="profAvailability" onchange="saveAvailability()" style="font-size:.8rem">
+              <option value="available">🟢 Available for work</option>
+              <option value="busy">🟡 Busy — limited availability</option>
+              <option value="unavailable">🔴 Not available</option>
+            </select>
           </div>
         </div>
 
@@ -1363,18 +1425,52 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <!-- Left column -->
           <div style="display:flex;flex-direction:column;gap:1.25rem">
 
-            <!-- Business Information -->
+            <!-- Company Information -->
             <div class="card">
-              <div class="card-title">Business Information</div>
-              <div class="fg"><label class="fl">Business Name *</label><input class="fi" id="profName" placeholder="Your business name"/></div>
-              <div class="fg"><label class="fl">Bio / About</label><textarea class="fi" id="profBio" rows="3" placeholder="Describe your services, experience and what makes you stand out..."></textarea></div>
+              <div class="card-title">Company Information</div>
               <div class="two-col">
-                <div class="fg"><label class="fl">Phone</label><input class="fi" id="profPhone" placeholder="+1 555-000-0000"/></div>
-                <div class="fg"><label class="fl">Location</label><input class="fi" id="profLocation" placeholder="City, State or Country"/></div>
+                <div class="fg"><label class="fl">Business Name *</label><input class="fi" id="profName" placeholder="Your business name"/></div>
+                <div class="fg"><label class="fl">Years in Business</label>
+                  <select class="fs" id="profYears">
+                    <option value="">Select...</option>
+                    <option value="1">Less than 1 year</option>
+                    <option value="2">1–2 years</option>
+                    <option value="5">3–5 years</option>
+                    <option value="10">6–10 years</option>
+                    <option value="15">10–15 years</option>
+                    <option value="20">20+ years</option>
+                  </select>
+                </div>
               </div>
-              <div class="fg"><label class="fl">Website</label><input class="fi" id="profWebsite" placeholder="https://yourwebsite.com"/></div>
+              <div class="fg"><label class="fl">Bio / Company Overview</label><textarea class="fi" id="profBio" rows="4" placeholder="Tell clients about your company, what you specialize in, your experience and what makes you stand out..."></textarea></div>
+              <div class="two-col">
+                <div class="fg"><label class="fl">Business Phone</label><input class="fi" id="profPhone" placeholder="+1 555-000-0000"/></div>
+                <div class="fg"><label class="fl">Business Email</label><input class="fi" id="profEmail" placeholder="info@yourbusiness.com"/></div>
+              </div>
+              <div class="two-col">
+                <div class="fg"><label class="fl">Street Address</label><input class="fi" id="profAddress" placeholder="123 Main St"/></div>
+                <div class="fg"><label class="fl">City / Province</label><input class="fi" id="profLocation" placeholder="Winnipeg, MB"/></div>
+              </div>
+              <div class="two-col">
+                <div class="fg"><label class="fl">Country</label><input class="fi" id="profCountry" placeholder="Canada"/></div>
+                <div class="fg"><label class="fl">Website</label><input class="fi" id="profWebsite" placeholder="https://yourwebsite.com"/></div>
+              </div>
+              <div class="fg"><label class="fl">Service Areas</label><input class="fi" id="profServiceAreas" placeholder="e.g. Winnipeg, Brandon, Steinbach"/></div>
               <div style="text-align:right;margin-top:.5rem">
                 <button class="btn btn-primary btn-sm" onclick="saveProfile()">Save Changes</button>
+              </div>
+            </div>
+
+            <!-- Portfolio Photos -->
+            <div class="card">
+              <div class="card-title">Portfolio / Past Work</div>
+              <p style="font-size:.875rem;color:var(--muted);margin-bottom:1rem">Upload photos of your completed work to show clients what you can do.</p>
+              <div id="portfolioGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem"></div>
+              <div class="upload-zone" onclick="document.getElementById('portfolioInput').click()">
+                <input type="file" id="portfolioInput" accept="image/*" multiple style="display:none" onchange="uploadPortfolioPhotos(this)"/>
+                <div style="font-size:1.5rem">🖼️</div>
+                <div style="font-size:.875rem;color:var(--muted)">Click to upload photos</div>
+                <div style="font-size:.72rem;color:var(--muted)">JPG or PNG — max 5MB each · up to 10 photos</div>
               </div>
             </div>
 
@@ -1383,9 +1479,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
               <div class="card-title">Services Offered</div>
               <div id="profServicesGrid" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem"></div>
               <div class="fg"><label class="fl">Add a Service</label>
-                <select class="fs" id="profAddService">
-                  <option value="">Select service to add...</option>
-                </select>
+                <select class="fs" id="profAddService"><option value="">Select service to add...</option></select>
               </div>
               <button class="btn btn-outline btn-sm" onclick="addService()">+ Add Service</button>
             </div>
@@ -1407,7 +1501,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
                 🛡️ Get Verified
                 <span style="font-size:.68rem;background:rgba(244,166,35,.15);color:var(--accent);padding:.2rem .5rem;border-radius:20px;font-weight:700">Boosts leads by 3x</span>
               </div>
-              <p style="font-size:.875rem;color:var(--muted);line-height:1.6;margin-bottom:1rem">Verified contractors get a badge on all their leads, appear higher in search, and earn more trust from clients.</p>
+              <p style="font-size:.875rem;color:var(--muted);line-height:1.6;margin-bottom:1rem">Verified contractors get a badge on all their leads and earn more trust from clients. Submit your details for review.</p>
               <div class="fg"><label class="fl">Company/Business Name</label><input class="fi" id="verCompany" placeholder="Registered business name"/></div>
               <div class="fg"><label class="fl">License Number</label><input class="fi" id="verLicense" placeholder="e.g. LIC-12345678"/></div>
               <div class="fg"><label class="fl">Years in Business</label>
@@ -1436,16 +1530,23 @@ tr:hover td{background:rgba(255,255,255,.02)}
               <button class="btn btn-primary" style="width:100%" onclick="submitVerification()">Submit for Verification</button>
             </div>
 
-            <!-- Contact Info -->
+            <!-- Contact Info display -->
             <div class="card">
               <div class="card-title">Contact Information</div>
               <div id="conContactInfo"></div>
             </div>
 
-            <!-- Stats -->
+            <!-- Account Stats -->
             <div class="card">
               <div class="card-title">Account Stats</div>
               <div id="conStats"></div>
+            </div>
+
+            <!-- Referral -->
+            <div class="card" style="border-color:rgba(34,197,94,.3)">
+              <div class="card-title" style="color:var(--green)">🎁 Refer a Contractor</div>
+              <p style="font-size:.875rem;color:var(--muted);line-height:1.6;margin-bottom:1rem">Earn <strong style="color:var(--accent)">10 free credits</strong> for every contractor you refer who signs up and purchases credits.</p>
+              <div id="referralCodeDisplay"></div>
             </div>
 
           </div>
@@ -1522,7 +1623,18 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <!-- MY JOBS -->
       <div class="dash-page" id="cli-myjobs">
-        <div class="ph"><div class="pt">My Jobs</div><div class="ps">Track your posted jobs</div></div>
+        <div class="ph">
+          <div><div class="pt">My Jobs</div><div class="ps">Track and manage your posted jobs</div></div>
+          <div style="display:flex;gap:.5rem">
+            <select class="fs" id="jobStatusFilter" onchange="renderClientJobs()" style="font-size:.78rem">
+              <option value="all">All Jobs</option>
+              <option value="open">Open</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="closed">Closed</option>
+            </select>
+          </div>
+        </div>
         <div id="cliJobsList"></div>
       </div>
 
@@ -2614,8 +2726,16 @@ async function renderConProfile() {
   if(!currentUser) return;
   const u = currentUser;
 
-  // Avatar and name
-  document.getElementById("conAvatarLetter").textContent = u.name[0].toUpperCase();
+  // Profile photo or avatar letter
+  const photoEl = document.getElementById("conProfilePhoto");
+  if (photoEl) {
+    if (u.logo_url) {
+      photoEl.innerHTML = `<img src="${u.logo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+    } else {
+      photoEl.innerHTML = `<span id="conAvatarLetter">${u.name[0].toUpperCase()}</span>`;
+    }
+  }
+
   document.getElementById("conProfName").textContent = u.name;
 
   // Verified badge
@@ -2630,24 +2750,35 @@ async function renderConProfile() {
     ? renderStars(u.avg_rating, u.review_count)
     : `<span style="font-size:.75rem;color:var(--muted)">No reviews yet</span>`;
 
+  // Availability badge
+  renderAvailabilityBadge();
+
   // Bio
   const bioEl = document.getElementById("conBioDisplay");
-  if (bioEl) bioEl.textContent = u.bio || "No bio added yet.";
+  if (bioEl) bioEl.textContent = u.bio || "No company overview added yet.";
 
   // Role line
-  document.getElementById("conProfRole").textContent = `Contractor · ${u.location || "Location not set"}`;
+  document.getElementById("conProfRole").textContent =
+    `${u.company_name||"Contractor"} · ${u.location || "Location not set"}${u.years_experience ? ` · ${u.years_experience}+ years` : ""}`;
 
-  // Pre-fill profile form
-  document.getElementById("profName").value = u.name || "";
-  document.getElementById("profBio").value = u.bio || "";
-  document.getElementById("profPhone").value = u.phone || "";
-  document.getElementById("profLocation").value = u.location || "";
-  document.getElementById("profWebsite").value = u.website || "";
+  // Pre-fill all form fields
+  const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val||""; };
+  setVal("profName", u.name);
+  setVal("profBio", u.bio);
+  setVal("profPhone", u.phone);
+  setVal("profEmail", u.business_email);
+  setVal("profAddress", u.address);
+  setVal("profLocation", u.location);
+  setVal("profCountry", u.country);
+  setVal("profWebsite", u.website);
+  setVal("profServiceAreas", u.service_areas);
+  setVal("profAvailability", u.availability||"available");
+  if (u.years_experience) setVal("profYears", u.years_experience);
 
   // Pre-fill verification form
-  if (u.company_name) document.getElementById("verCompany").value = u.company_name;
-  if (u.license_number) document.getElementById("verLicense").value = u.license_number;
-  if (u.years_experience) document.getElementById("verYears").value = u.years_experience;
+  setVal("verCompany", u.company_name);
+  setVal("verLicense", u.license_number);
+  if (u.years_experience) setVal("verYears", u.years_experience);
 
   // Verification banner
   const banner = document.getElementById("verificationBanner");
@@ -2659,7 +2790,7 @@ async function renderConProfile() {
     } else if (u.verification_status === "rejected") {
       banner.innerHTML = `<div class="ver-banner rejected">❌ Verification was not approved. Please resubmit with correct documents.</div>`;
     } else {
-      banner.innerHTML = "";
+      banner.innerHTML = `<div class="ver-banner" style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:#60a5fa">💡 Complete your company profile and submit for verification to get a trusted badge on your leads.</div>`;
     }
   }
 
@@ -2690,43 +2821,62 @@ async function renderConProfile() {
     });
   }
 
-  // Contact info
+  // Contact info display
   document.getElementById("conContactInfo").innerHTML = `
     <div style="display:flex;flex-direction:column;gap:.75rem;font-size:.875rem">
       <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Email</span><span>${u.email}</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Phone</span><span>${u.phone || "Not provided"}</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Location</span><span>${u.location || "Not set"}</span></div>
-      ${u.website ? `<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Website</span><a href="${u.website}" target="_blank" style="color:var(--accent)">${u.website}</a></div>` : ""}
+      ${u.business_email?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Business Email</span><span>${u.business_email}</span></div>`:""}
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Phone</span><span>${u.phone||"Not provided"}</span></div>
+      ${u.address?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Address</span><span>${u.address}</span></div>`:""}
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Location</span><span>${u.location||"Not set"}</span></div>
+      ${u.country?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Country</span><span>${u.country}</span></div>`:""}
+      ${u.service_areas?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Service Areas</span><span>${u.service_areas}</span></div>`:""}
+      ${u.website?`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Website</span><a href="${u.website}" target="_blank" style="color:var(--accent)">${u.website}</a></div>`:""}
     </div>`;
 
   // Stats
   document.getElementById("conStats").innerHTML = `
     <div style="display:flex;flex-direction:column;gap:.75rem;font-size:.875rem">
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Credits</span><strong>${u.credits || 0}</strong></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Avg Rating</span><strong>${u.avg_rating ? u.avg_rating + " ★" : "—"}</strong></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Reviews</span><strong>${u.review_count || 0}</strong></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Status</span><strong>${u.verified ? '<span style="color:var(--green)">✅ Verified</span>' : '<span style="color:var(--muted)">Unverified</span>'}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Credits</span><strong>${u.credits||0}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Avg Rating</span><strong>${u.avg_rating?u.avg_rating+" ★":"—"}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Reviews</span><strong>${u.review_count||0}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Years in Business</span><strong>${u.years_experience||"—"}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Status</span><strong>${u.verified?'<span style="color:var(--green)">✅ Verified</span>':'<span style="color:var(--muted)">Unverified</span>'}</strong></div>
     </div>`;
 
-  // Load reviews
+  // Portfolio
+  renderPortfolio();
+
+  // Referral code
+  renderReferralCode();
+
+  // Reviews
   loadContractorReviews(u.id);
 }
 
 async function saveProfile() {
-  const name = document.getElementById("profName").value.trim();
-  const bio = document.getElementById("profBio").value.trim();
-  const phone = document.getElementById("profPhone").value.trim();
-  const location = document.getElementById("profLocation").value.trim();
-  const website = document.getElementById("profWebsite").value.trim();
-  const btn = document.querySelector("#con-profile .card .btn-primary");
+  const getVal = (id) => document.getElementById(id)?.value?.trim()||"";
+  const name = getVal("profName");
   if (!name) { toast("","Error","Business name is required."); return; }
+  const btn = document.querySelector("#con-profile .card .btn-primary");
   if (btn) { btn.textContent = "Saving..."; btn.disabled = true; }
   try {
-    const data = await apiCall("PUT", "/profile", { name, bio, phone, location, website });
+    const data = await apiCall("PUT", "/profile", {
+      name,
+      bio: getVal("profBio"),
+      phone: getVal("profPhone"),
+      business_email: getVal("profEmail"),
+      address: getVal("profAddress"),
+      location: getVal("profLocation"),
+      country: getVal("profCountry"),
+      website: getVal("profWebsite"),
+      service_areas: getVal("profServiceAreas"),
+      years_experience: document.getElementById("profYears")?.value || null,
+    });
     currentUser = { ...currentUser, ...data.user };
     renderConProfile();
     updateNav();
-    toast("","Profile Saved ✅","Your profile has been updated.");
+    toast("","Profile Saved ✅","Your company profile has been updated.");
   } catch(e) {
     toast("","Error", e.message || "Could not save profile.");
   } finally {
@@ -2902,32 +3052,62 @@ async function postJob() {
     btn.textContent="Post Job";btn.disabled=false;
   }
 }
-function renderClientJobs() {
+async function renderClientJobs() {
   if(!currentUser) return;
-  const myJobs=jobs.filter(j=>j.clientId===currentUser.id||j.client_id===currentUser.id);
-  const c=document.getElementById("cliJobsList");
-  if(!myJobs.length){
-    c.innerHTML=`<div class="cs-box"><div class="cs-title">No Jobs Posted Yet</div><div style="font-size:.875rem;color:var(--muted)">Post your first job and contractors will reach out.</div><button class="btn btn-primary" style="margin-top:1.5rem" onclick="cliPage('postjob',null)">Post a Job</button></div>`;
-    return;
+  const c = document.getElementById("cliJobsList");
+  const filter = document.getElementById("jobStatusFilter")?.value || "all";
+  try {
+    const data = await apiCall("GET", "/jobs?mine=true");
+    let myJobs = data.jobs || [];
+    if (filter !== "all") myJobs = myJobs.filter(j => (j.status||"open") === filter);
+    if(!myJobs.length){
+      c.innerHTML=`<div class="cs-box"><div class="cs-title">No Jobs Found</div><div style="font-size:.875rem;color:var(--muted)">Post your first job and contractors will reach out.</div><button class="btn btn-primary" style="margin-top:1.5rem" onclick="cliPage('postjob',null)">Post a Job</button></div>`;
+      return;
+    }
+    c.innerHTML = myJobs.map(job => {
+      const jt = JOB_TYPES.find(t=>t.id===job.type)||{icon:"🔧",label:job.type||"General"};
+      const posted = job.created_at ? new Date(job.created_at).toLocaleDateString() : "Recently";
+      const status = job.status || "open";
+      const unlockedCount = (job.unlocked_by||[]).length;
+      return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1rem">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem">
+          <div style="font-family:var(--fh);font-weight:700;font-size:1.05rem">${job.title}</div>
+          <div style="display:flex;gap:.5rem;align-items:center">
+            ${jobStatusBadge(status)}
+            <span style="font-size:.72rem;color:var(--muted)">${posted}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem">
+          <span class="jtag type">${jt.icon} ${jt.label}</span>
+          ${job.location?`<span class="jtag">📍 ${job.location}</span>`:""}
+          ${job.budget?`<span class="jtag">💰 ${job.budget}</span>`:""}
+          <span class="jtag">👷 ${unlockedCount}/7 contractors</span>
+        </div>
+        <div style="font-size:.875rem;color:var(--muted);line-height:1.6;margin-bottom:1rem">${job.description}</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          ${status==="open"?`<button class="btn btn-outline btn-sm" onclick="updateJobStatus('${job.id}','in_progress')">Mark In Progress</button>`:""}
+          ${status==="in_progress"?`<button class="btn btn-outline btn-sm" style="color:var(--green);border-color:var(--green)" onclick="updateJobStatus('${job.id}','completed')">Mark Completed ✅</button>`:""}
+          ${status==="open"||status==="in_progress"?`<button class="btn btn-ghost btn-sm" onclick="updateJobStatus('${job.id}','closed')">Close Job</button>`:""}
+          <button class="btn btn-ghost btn-sm" onclick="toggleDisputeForm('${job.id}')">🚩 Dispute</button>
+        </div>
+        <div id="dispute-form-${job.id}" style="display:none;margin-top:1rem" class="dispute-card">
+          <div style="font-size:.875rem;font-weight:700;color:var(--red);margin-bottom:.5rem">🚩 File a Dispute</div>
+          <textarea class="fi" id="dispute-${job.id}" rows="3" placeholder="Describe the issue with this job or contractor..."></textarea>
+          <div style="display:flex;gap:.5rem;margin-top:.5rem">
+            <button class="btn btn-primary btn-sm" onclick="submitDispute('${job.id}')">Submit Dispute</button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleDisputeForm('${job.id}')">Cancel</button>
+          </div>
+        </div>
+      </div>`;
+    }).join("");
+  } catch(e) {
+    c.innerHTML = `<div class="cs-box"><div class="cs-title">Could not load jobs</div><div style="font-size:.875rem;color:var(--muted)">${e.message}</div></div>`;
   }
-  c.innerHTML=myJobs.map(job=>{
-    const jt=JOB_TYPES.find(t=>t.id===job.type)||{icon:"",label:job.type||"General"};
-    const postedDate = job.posted || (job.created_at ? new Date(job.created_at).toLocaleDateString() : "Recently");
-    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1rem">
-      <div style="display:flex;justify-content:space-between;margin-bottom:.5rem">
-        <div style="font-family:var(--fh);font-weight:700;font-size:1.05rem">${job.title}</div>
-        <span style="font-size:.78rem;color:var(--muted)">${postedDate}</span>
-      </div>
-      <div style="display:flex;gap:.5rem;margin-bottom:.75rem">
-        <span class="jtag type">${jt.icon} ${jt.label}</span>
-        <span class="badge b-green">Open</span>
-      </div>
-      <div style="font-size:.875rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">${job.description}</div>
-      <div style="display:flex;gap:1.25rem;font-size:.78rem;color:var(--muted)">
-        ${job.location?`<span>Location: ${job.location}</span>`:""}
-        ${job.budget?`<span>Budget: ${job.budget}</span>`:""}
-      </div>
-    </div>`;}).join("");
+}
+
+function toggleDisputeForm(jobId) {
+  const form = document.getElementById(`dispute-form-${jobId}`);
+  if(form) form.style.display = form.style.display==="none" ? "block" : "none";
 }
 function renderClientInvoices() {
   if(!currentUser) return;
@@ -3353,6 +3533,205 @@ async function renderMyLeads() {
   } catch(e) {
     grid.innerHTML = `<div class="cs-box"><div class="cs-title">Could not load</div><div style="font-size:.875rem;color:var(--muted)">${e.message}</div></div>`;
   }
+}
+
+// ══════════════════════════════════════════════════
+// COMPANY PROFILE — PHOTO UPLOAD
+// ══════════════════════════════════════════════════
+async function uploadProfilePhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { toast("","File Too Large","Max 5MB."); return; }
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64 = e.target.result;
+    const photoEl = document.getElementById("conProfilePhoto");
+    if (photoEl) photoEl.innerHTML = `<img src="${base64}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+    try {
+      await apiCall("PUT", "/profile", { logo_url: base64 });
+      currentUser.logo_url = base64;
+      toast("","Photo Updated ✅","Profile photo saved.");
+    } catch(e) { toast("","Error","Could not save photo."); }
+  };
+  reader.readAsDataURL(file);
+}
+
+// ══════════════════════════════════════════════════
+// PORTFOLIO PHOTOS
+// ══════════════════════════════════════════════════
+async function uploadPortfolioPhotos(input) {
+  const files = Array.from(input.files).slice(0,10);
+  if (!files.length) return;
+  const existing = currentUser.portfolio || [];
+  if (existing.length >= 10) { toast("","Max Photos","Up to 10 portfolio photos allowed."); return; }
+  const toAdd = files.slice(0, 10 - existing.length);
+  const newPhotos = [];
+  for (const file of toAdd) {
+    if (file.size > 5*1024*1024) continue;
+    await new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = (e) => { newPhotos.push(e.target.result); resolve(); };
+      reader.readAsDataURL(file);
+    });
+  }
+  const updated = [...existing, ...newPhotos];
+  try {
+    await apiCall("PUT", "/profile", { portfolio: updated });
+    currentUser.portfolio = updated;
+    renderPortfolio();
+    toast("","Photos Added ✅",`${newPhotos.length} photo${newPhotos.length>1?"s":""} added.`);
+  } catch(e) { toast("","Error","Could not save photos."); }
+}
+
+function renderPortfolio() {
+  const grid = document.getElementById("portfolioGrid");
+  if (!grid) return;
+  const photos = currentUser?.portfolio || [];
+  if (!photos.length) { grid.innerHTML = `<div style="color:var(--muted);font-size:.875rem">No photos yet. Upload your best work!</div>`; return; }
+  grid.innerHTML = photos.map((src,i) => `
+    <div class="portfolio-item">
+      <img src="${src}" class="portfolio-img" onclick="viewPhoto('${src}')"/>
+      <button class="portfolio-remove" onclick="removePortfolioPhoto(${i})">✕</button>
+    </div>`).join("");
+}
+
+async function removePortfolioPhoto(idx) {
+  const photos = [...(currentUser.portfolio||[])];
+  photos.splice(idx,1);
+  try {
+    await apiCall("PUT","/profile",{portfolio:photos});
+    currentUser.portfolio = photos;
+    renderPortfolio();
+  } catch(e) { toast("","Error","Could not remove photo."); }
+}
+
+function viewPhoto(src) {
+  const o = document.createElement("div");
+  o.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;display:flex;align-items:center;justify-content:center;cursor:pointer";
+  o.innerHTML=`<img src="${src}" style="max-width:90vw;max-height:90vh;object-fit:contain;border-radius:8px"/>`;
+  o.onclick=()=>document.body.removeChild(o);
+  document.body.appendChild(o);
+}
+
+// ══════════════════════════════════════════════════
+// AVAILABILITY
+// ══════════════════════════════════════════════════
+async function saveAvailability() {
+  const val = document.getElementById("profAvailability")?.value||"available";
+  try {
+    await apiCall("PUT","/profile",{availability:val});
+    currentUser.availability = val;
+    renderAvailabilityBadge();
+    toast("","Availability Updated ✅","");
+  } catch(e) { toast("","Error","Could not update."); }
+}
+
+function renderAvailabilityBadge() {
+  const el = document.getElementById("conAvailBadge");
+  if(!el) return;
+  const av = currentUser?.availability||"available";
+  const labels={available:"🟢 Available",busy:"🟡 Busy",unavailable:"🔴 Not Available"};
+  const cls={available:"avail-available",busy:"avail-busy",unavailable:"avail-unavailable"};
+  el.innerHTML=`<span class="${cls[av]}">${labels[av]}</span>`;
+}
+
+// ══════════════════════════════════════════════════
+// REFERRAL SYSTEM
+// ══════════════════════════════════════════════════
+function renderReferralCode() {
+  const el = document.getElementById("referralCodeDisplay");
+  if(!el||!currentUser) return;
+  const code = "REF-"+(currentUser.id||"").substring(0,8).toUpperCase();
+  el.innerHTML=`
+    <div class="referral-code" onclick="copyReferralCode('${code}')" title="Click to copy">${code}</div>
+    <div style="font-size:.75rem;color:var(--muted);text-align:center">Click to copy · Share with other contractors</div>`;
+}
+
+function copyReferralCode(code) {
+  navigator.clipboard.writeText(`Join Pangig and get job leads! Use my code ${code} at pangig.com`).then(()=>{
+    toast("","Copied! 📋","Referral link copied. Share with other contractors!");
+  });
+}
+
+// ══════════════════════════════════════════════════
+// JOB STATUS UPDATES
+// ══════════════════════════════════════════════════
+async function updateJobStatus(jobId, newStatus) {
+  try {
+    await apiCall("PUT",`/jobs/${jobId}/status`,{status:newStatus});
+    toast("","Updated ✅",`Job marked as ${newStatus.replace("_"," ")}.`);
+    renderClientJobs();
+  } catch(e) { toast("","Error",e.message||"Could not update status."); }
+}
+
+function jobStatusBadge(status) {
+  const labels={open:"Open",in_progress:"In Progress",completed:"Completed ✅",closed:"Closed"};
+  return `<span class="job-status-${status||'open'}">${labels[status||'open']||status}</span>`;
+}
+
+// ══════════════════════════════════════════════════
+// DISPUTE RESOLUTION
+// ══════════════════════════════════════════════════
+async function submitDispute(jobId) {
+  const reason = document.getElementById(`dispute-${jobId}`)?.value?.trim();
+  if(!reason){toast("","Missing Info","Please describe the issue.");return;}
+  try {
+    await apiCall("POST","/disputes",{job_id:jobId,reason});
+    toast("","Dispute Filed","Our team will review within 24 hours and contact both parties.");
+    const form = document.getElementById(`dispute-form-${jobId}`);
+    if(form) form.style.display="none";
+  } catch(e){toast("","Error","Could not submit dispute.");}
+}
+
+// ══════════════════════════════════════════════════
+// MESSAGING
+// ══════════════════════════════════════════════════
+let activeConversation = null;
+
+async function openMessages(jobId, otherUserId, otherName) {
+  activeConversation = {jobId, otherUserId, otherName};
+  document.getElementById("msgTitle").textContent = `Messages — ${otherName}`;
+  document.getElementById("msgList").innerHTML = `<div style="text-align:center;color:var(--muted);padding:2rem">Loading...</div>`;
+  document.getElementById("msgModal").classList.add("open");
+  await loadMessages(jobId, otherUserId);
+}
+
+async function loadMessages(jobId, otherUserId) {
+  try {
+    const data = await apiCall("GET",`/messages/${jobId}/${otherUserId}`);
+    renderMessages(data.messages||[]);
+  } catch(e) {
+    document.getElementById("msgList").innerHTML=`<div style="text-align:center;color:var(--muted);padding:2rem">No messages yet. Say hello! 👋</div>`;
+  }
+}
+
+function renderMessages(messages) {
+  const list = document.getElementById("msgList");
+  if(!messages.length){list.innerHTML=`<div style="text-align:center;color:var(--muted);padding:2rem">No messages yet. Say hello! 👋</div>`;return;}
+  list.innerHTML = messages.map(m=>{
+    const mine = m.sender_id===currentUser?.id;
+    return `<div class="msg-bubble ${mine?'mine':'theirs'}">
+      ${m.content}
+      <div class="msg-time">${new Date(m.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
+    </div>`;
+  }).join("");
+  list.scrollTop = list.scrollHeight;
+}
+
+async function sendMessage() {
+  if(!activeConversation) return;
+  const input = document.getElementById("msgInput");
+  const content = input?.value?.trim();
+  if(!content) return;
+  input.value="";
+  try {
+    await apiCall("POST","/messages",{
+      job_id:activeConversation.jobId,
+      recipient_id:activeConversation.otherUserId,
+      content
+    });
+    await loadMessages(activeConversation.jobId, activeConversation.otherUserId);
+  } catch(e){toast("","Error","Could not send message.");input.value=content;}
 }
 
 // ══════════════════════════════════════════════════
