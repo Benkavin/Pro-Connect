@@ -392,23 +392,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .svc-jump-btn{font-size:.82rem;color:var(--muted);padding:.4rem .75rem;border-radius:6px;cursor:pointer;transition:all .15s;border:none;background:transparent;text-align:left;width:100%;display:block}
 .svc-jump-btn:hover{color:var(--accent);background:rgba(244,166,35,.06)}
 
-/* ── LEGAL / INFO PAGES ── */
-.info-page{max-width:860px;margin:0 auto;padding:2rem 1.5rem 4rem}
-.info-hero{text-align:center;padding:3rem 1rem 2.5rem;border-bottom:1px solid var(--border);margin-bottom:2.5rem}
-.info-hero-tag{display:inline-block;background:rgba(244,166,35,.12);color:var(--accent);font-size:.72rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:.3rem .8rem;border-radius:999px;margin-bottom:1rem}
-.info-hero-title{font-family:var(--fh);font-size:clamp(2rem,5vw,3rem);font-weight:800;line-height:1.1;margin-bottom:.75rem}
-.info-hero-sub{color:var(--muted);font-size:.95rem}
-.legal-wrap{display:flex;flex-direction:column;gap:0}
-.legal-section{padding:1.75rem 0;border-bottom:1px solid var(--border)}
-.legal-section:last-child{border-bottom:none}
-.legal-section h2{font-family:var(--fh);font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:.75rem}
-.legal-section p{font-size:.9rem;color:var(--muted);line-height:1.8;margin-bottom:.6rem}
-.legal-section p:last-child{margin-bottom:0}
-.legal-section p strong{color:var(--text)}
-.info-cta{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:2.5rem;text-align:center;margin-top:3rem}
-.info-cta-title{font-family:var(--fh);font-size:1.3rem;font-weight:800;margin-bottom:.5rem}
-.info-cta-sub{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
-.inline-link{background:none;border:none;color:var(--accent);cursor:pointer;padding:0;text-decoration:underline;font-size:inherit;font-family:inherit}
+/* ── ENHANCED PACKAGE GRID ── */
 .pkg-grid-full{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem}
 .pkg-card-v2{background:var(--s2);border:2px solid var(--border);border-radius:var(--r);padding:1.25rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;display:flex;flex-direction:column;gap:.4rem}
 .pkg-card-v2:hover{border-color:var(--accent);transform:translateY(-3px);background:rgba(244,166,35,.05)}
@@ -1061,274 +1045,25 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <button class="footer-link" onclick="showPage('login')">Sign In</button>
         </div>
         <div class="footer-col">
-          <div class="footer-col-title">Legal</div>
-          <button class="footer-link" onclick="showPage('terms')">Terms of Service</button>
-          <button class="footer-link" onclick="showPage('privacy')">Privacy Policy</button>
-          <button class="footer-link" onclick="showPage('cookies')">Cookie Policy</button>
-          <button class="footer-link" onclick="showPage('refund')">Refund Policy</button>
-          <button class="footer-link" onclick="showPage('client-policy')">Client Policy</button>
+          <div class="footer-col-title">Global</div>
+          <div class="footer-text">🇺🇸 United States</div>
+          <div class="footer-text">🇨🇦 Canada</div>
+          <div class="footer-text">🇬🇧 United Kingdom</div>
+          <div class="footer-text">🇳🇬 Nigeria</div>
+          <div class="footer-text">🇬🇭 Ghana</div>
+          <div class="footer-text">+ 45 more countries</div>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
       <div>&copy; February 2010 &ndash; 2026 Pangig. All rights reserved. Powered by CSG</div>
-      <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
-        <button class="footer-link" onclick="showPage('terms')">Terms</button>
-        <button class="footer-link" onclick="showPage('privacy')">Privacy</button>
-        <button class="footer-link" onclick="showPage('cookies')">Cookies</button>
-        <button class="footer-link" onclick="showPage('refund')">Refund</button>
+      <div style="display:flex;gap:1.5rem">
         <button class="footer-link" onclick="showPage('faq')">FAQ</button>
         <button class="footer-link" onclick="showPage('contact')">Contact</button>
       </div>
     </div>
   </div>
 
-</div>
-
-<!--  TERMS OF SERVICE  -->
-<div class="page" id="page-terms">
-  <div class="info-page">
-    <div class="info-hero">
-      <div class="info-hero-tag">Legal</div>
-      <h1 class="info-hero-title">Terms of Service</h1>
-      <p class="info-hero-sub">Last updated: April 2026 · Effective for all users of Pangig</p>
-    </div>
-    <div class="legal-wrap">
-      <div class="legal-section">
-        <h2>1. Acceptance of Terms</h2>
-        <p>By accessing or using Pangig ("the Platform"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Platform. Pangig is operated by CSG (Classify Security Group) and incorporated in Canada.</p>
-      </div>
-      <div class="legal-section">
-        <h2>2. Description of Service</h2>
-        <p>Pangig is an online marketplace that connects clients seeking professional services with independent contractors and skilled tradespeople. We provide the technology platform and infrastructure but are not a party to any agreements between clients and contractors.</p>
-        <p>Pangig does not employ contractors. All contractors are independent service providers. Pangig does not guarantee the quality, safety, or legality of services offered by contractors listed on the platform.</p>
-      </div>
-      <div class="legal-section">
-        <h2>3. Eligibility</h2>
-        <p>You must be at least 18 years of age to use Pangig. By using the Platform you confirm that you are at least 18 years old and have the legal capacity to enter into binding contracts.</p>
-      </div>
-      <div class="legal-section">
-        <h2>4. User Accounts</h2>
-        <p>You are responsible for maintaining the confidentiality of your account credentials. You agree to notify us immediately at info@pangig.com if you suspect unauthorized access to your account. You are responsible for all activity that occurs under your account.</p>
-        <p>We reserve the right to suspend or terminate accounts that violate these Terms, engage in fraudulent activity, or harm other users of the Platform.</p>
-      </div>
-      <div class="legal-section">
-        <h2>5. Contractor Credits and Payments</h2>
-        <p>Contractors purchase credits to unlock client lead information. Credits are non-transferable and may not be shared between accounts. Unused credits do not expire. Credit purchases are final except as described in our Refund Policy.</p>
-        <p>All payments are processed securely through Stripe. Pangig does not store payment card details on its servers.</p>
-      </div>
-      <div class="legal-section">
-        <h2>6. Contractor Verification</h2>
-        <p>Pangig offers a voluntary verification program. Verified status indicates that a contractor has submitted identification and business documents for review. Verification does not constitute an endorsement of a contractor's skills, quality of work, or character. Clients should always conduct their own due diligence before hiring.</p>
-      </div>
-      <div class="legal-section">
-        <h2>7. Prohibited Conduct</h2>
-        <p>You agree not to: post false or misleading information; harass, threaten, or abuse other users; attempt to circumvent the Platform by soliciting direct contact outside of Pangig after unlocking a lead for purposes of avoiding future platform fees; post content that is illegal, defamatory, or infringes intellectual property rights; use automated tools to scrape or extract data from the Platform.</p>
-      </div>
-      <div class="legal-section">
-        <h2>8. Limitation of Liability</h2>
-        <p>To the fullest extent permitted by law, Pangig and CSG shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Platform or any services obtained through the Platform. Our total liability shall not exceed the amount you paid to Pangig in the 12 months preceding the claim.</p>
-      </div>
-      <div class="legal-section">
-        <h2>9. Governing Law</h2>
-        <p>These Terms are governed by the laws of the Province of Manitoba, Canada, without regard to conflict of law principles. Any disputes shall be resolved in the courts of Winnipeg, Manitoba.</p>
-      </div>
-      <div class="legal-section">
-        <h2>10. Changes to Terms</h2>
-        <p>We may update these Terms from time to time. We will notify users of material changes by email or by a prominent notice on the Platform. Continued use of the Platform after changes constitutes acceptance of the new Terms.</p>
-      </div>
-      <div class="legal-section">
-        <h2>11. Contact</h2>
-        <p>Questions about these Terms? Contact us at <button class="inline-link" onclick="showPage('contact')">info@pangig.com</button></p>
-      </div>
-    </div>
-    <div class="info-cta">
-      <div class="info-cta-title">Have questions?</div>
-      <div class="info-cta-sub">Our team is happy to clarify anything about our terms.</div>
-      <button class="btn btn-primary btn-lg" onclick="showPage('contact')">Contact Us</button>
-    </div>
-  </div>
-</div>
-
-<!--  PRIVACY POLICY  -->
-<div class="page" id="page-privacy">
-  <div class="info-page">
-    <div class="info-hero">
-      <div class="info-hero-tag">Legal</div>
-      <h1 class="info-hero-title">Privacy Policy</h1>
-      <p class="info-hero-sub">Last updated: April 2026 · We take your privacy seriously</p>
-    </div>
-    <div class="legal-wrap">
-      <div class="legal-section">
-        <h2>1. Information We Collect</h2>
-        <p><strong>Account Information:</strong> When you register, we collect your name, email address, phone number, and password.</p>
-        <p><strong>Profile Information:</strong> Contractors may optionally provide business name, address, bio, service areas, years in business, license number, profile photo, and portfolio images.</p>
-        <p><strong>Transaction Data:</strong> We collect records of credit purchases, lead unlocks, and invoices. We do not store payment card details — these are processed by Stripe.</p>
-        <p><strong>Usage Data:</strong> We collect information about how you use the Platform including pages visited, searches performed, and features used.</p>
-      </div>
-      <div class="legal-section">
-        <h2>2. How We Use Your Information</h2>
-        <p>We use your information to: provide and improve the Platform; connect clients with contractors; process payments; send transactional emails (account confirmation, lead notifications, receipts); send service updates and important notices; verify contractor identities; respond to support requests; comply with legal obligations.</p>
-      </div>
-      <div class="legal-section">
-        <h2>3. Information Sharing</h2>
-        <p>We do not sell your personal information to third parties. We share information only in these circumstances:</p>
-        <p><strong>Between users:</strong> When a contractor unlocks a lead, the client's contact information (email, phone) is shared with that contractor. Contractor profile information is visible to clients who have unlocked their lead.</p>
-        <p><strong>Service providers:</strong> We share data with Stripe (payments), Resend (email), Supabase (database), and Railway (hosting) as necessary to operate the Platform.</p>
-        <p><strong>Legal requirements:</strong> We may disclose information if required by law or to protect the rights and safety of Pangig and its users.</p>
-      </div>
-      <div class="legal-section">
-        <h2>4. Data Security</h2>
-        <p>We use industry-standard encryption (HTTPS/TLS) for all data transmission. Passwords are hashed and never stored in plain text. Payment processing is handled entirely by Stripe — we never see or store your card details.</p>
-      </div>
-      <div class="legal-section">
-        <h2>5. Data Retention</h2>
-        <p>We retain your account data as long as your account is active. You may request deletion of your account and associated data by contacting us at info@pangig.com. Some data may be retained for legal compliance purposes.</p>
-      </div>
-      <div class="legal-section">
-        <h2>6. Your Rights (PIPEDA — Canada)</h2>
-        <p>Under Canada's Personal Information Protection and Electronic Documents Act (PIPEDA), you have the right to: access your personal information; correct inaccurate information; withdraw consent for non-essential data processing; request deletion of your data. To exercise these rights, contact us at info@pangig.com.</p>
-      </div>
-      <div class="legal-section">
-        <h2>7. Cookies</h2>
-        <p>We use essential cookies to maintain your login session and remember your preferences. See our <button class="inline-link" onclick="showPage('cookies')">Cookie Policy</button> for details.</p>
-      </div>
-      <div class="legal-section">
-        <h2>8. Contact</h2>
-        <p>For privacy concerns, contact our privacy team at info@pangig.com or write to: Pangig / CSG, Winnipeg, Manitoba, Canada.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!--  COOKIE POLICY  -->
-<div class="page" id="page-cookies">
-  <div class="info-page">
-    <div class="info-hero">
-      <div class="info-hero-tag">Legal</div>
-      <h1 class="info-hero-title">Cookie Policy</h1>
-      <p class="info-hero-sub">Last updated: April 2026</p>
-    </div>
-    <div class="legal-wrap">
-      <div class="legal-section">
-        <h2>What Are Cookies?</h2>
-        <p>Cookies are small text files stored on your device when you visit a website. They help websites remember your preferences and keep you logged in between visits.</p>
-      </div>
-      <div class="legal-section">
-        <h2>Cookies We Use</h2>
-        <p><strong>Essential Cookies (Required):</strong> These cookies are necessary for the Platform to function. They store your authentication token (login session) so you stay signed in. Without these cookies the Platform cannot work.</p>
-        <p><strong>Preference Cookies:</strong> We store your selected language and display preferences locally in your browser. No personal data is sent to our servers for these.</p>
-        <p>Pangig does not use advertising cookies, tracking pixels, or third-party analytics that share your data with advertisers.</p>
-      </div>
-      <div class="legal-section">
-        <h2>Third-Party Cookies</h2>
-        <p><strong>Stripe:</strong> When you make a payment, Stripe may set cookies for fraud prevention. See Stripe's privacy policy at stripe.com/privacy.</p>
-      </div>
-      <div class="legal-section">
-        <h2>Managing Cookies</h2>
-        <p>You can control cookies through your browser settings. Note that disabling essential cookies will prevent you from logging in to the Platform. Most browsers allow you to view, delete, and block cookies through the Settings or Preferences menu.</p>
-      </div>
-      <div class="legal-section">
-        <h2>Contact</h2>
-        <p>Questions about our cookie use? Email us at info@pangig.com.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!--  REFUND POLICY  -->
-<div class="page" id="page-refund">
-  <div class="info-page">
-    <div class="info-hero">
-      <div class="info-hero-tag">Legal</div>
-      <h1 class="info-hero-title">Refund Policy</h1>
-      <p class="info-hero-sub">Last updated: April 2026</p>
-    </div>
-    <div class="legal-wrap">
-      <div class="legal-section">
-        <h2>Credit Purchases</h2>
-        <p>Credits purchased on Pangig are generally non-refundable once the transaction is complete. Credits never expire and can be used at any time, so we encourage you to purchase only what you need.</p>
-        <p><strong>Eligible for refund:</strong> Unused credits may be refunded within 7 days of purchase, provided none of the credits in that purchase have been used to unlock leads. Refund requests must be submitted within 7 days of the purchase date.</p>
-        <p><strong>Not eligible for refund:</strong> Credits that have been used to unlock leads are non-refundable. Partial packages (e.g. if you used some credits and want a refund on the rest) are not eligible.</p>
-      </div>
-      <div class="legal-section">
-        <h2>Subscription Plans</h2>
-        <p>Monthly subscription plans can be cancelled at any time. Cancellation takes effect at the end of the current billing period. Credits already delivered for the current month are non-refundable. No partial month refunds are provided.</p>
-      </div>
-      <div class="legal-section">
-        <h2>Technical Issues</h2>
-        <p>If you were charged due to a technical error on the Platform (e.g. duplicate charge, credits not delivered), please contact us immediately at info@pangig.com with your transaction details. We will investigate and issue a full refund if the error is confirmed.</p>
-      </div>
-      <div class="legal-section">
-        <h2>How to Request a Refund</h2>
-        <p>Email info@pangig.com with: your account email, the date of purchase, the amount charged, and the reason for your request. We aim to respond within 2 business days. Approved refunds are processed within 5-10 business days depending on your payment provider.</p>
-      </div>
-      <div class="legal-section">
-        <h2>Contact</h2>
-        <p>Refund questions: info@pangig.com</p>
-      </div>
-    </div>
-    <div class="info-cta">
-      <div class="info-cta-title">Need a refund?</div>
-      <div class="info-cta-sub">Contact us and we'll review your request within 2 business days.</div>
-      <button class="btn btn-primary btn-lg" onclick="showPage('contact')">Contact Us</button>
-    </div>
-  </div>
-</div>
-
-<!--  CLIENT POLICY  -->
-<div class="page" id="page-client-policy">
-  <div class="info-page">
-    <div class="info-hero">
-      <div class="info-hero-tag">Legal</div>
-      <h1 class="info-hero-title">Client Privacy & Policy</h1>
-      <p class="info-hero-sub">Last updated: April 2026 · How we protect clients on Pangig</p>
-    </div>
-    <div class="legal-wrap">
-      <div class="legal-section">
-        <h2>1. Your Contact Information</h2>
-        <p>When you post a job on Pangig, your contact information (email address and phone number) is kept private. It is never shown publicly on the platform. Your details are only revealed to a contractor after they specifically purchase credits to unlock your lead.</p>
-        <p>A maximum of 7 contractors can unlock your contact information per job posting. Once 7 contractors have unlocked your lead, no further contractors can access it.</p>
-      </div>
-      <div class="legal-section">
-        <h2>2. Who Can See Your Information</h2>
-        <p><strong>Before a contractor unlocks your lead:</strong> Contractors can see your job title, description, location (city level), and budget. Your name, email, and phone are hidden.</p>
-        <p><strong>After a contractor unlocks your lead:</strong> That specific contractor can see your email address and phone number to contact you about the job.</p>
-        <p><strong>Pangig admin team:</strong> Our team can view all user information for platform management, dispute resolution, and safety purposes.</p>
-        <p>Your information is never sold to third parties or used for advertising purposes.</p>
-      </div>
-      <div class="legal-section">
-        <h2>3. Contractor Vetting</h2>
-        <p>Pangig offers a verification program for contractors. Verified contractors have submitted identification and business documents that our team has reviewed. However, verification does not guarantee the quality or outcome of any work performed.</p>
-        <p>We strongly recommend that clients: verify a contractor's license independently; ask for references; get quotes in writing; never pay the full amount upfront.</p>
-      </div>
-      <div class="legal-section">
-        <h2>4. Posting Jobs</h2>
-        <p>Job postings are free. You may post as many jobs as you need. Please ensure your job descriptions are accurate and honest. Do not include personal financial information in your job description. Jobs that violate our community standards will be removed.</p>
-      </div>
-      <div class="legal-section">
-        <h2>5. Dispute Resolution</h2>
-        <p>If you have a dispute with a contractor, you can file a report through the dispute button on your job listing. Our team will review the situation and contact both parties within 24 hours. Pangig will act as a neutral mediator but cannot be held responsible for the actions of independent contractors.</p>
-      </div>
-      <div class="legal-section">
-        <h2>6. Reviews</h2>
-        <p>After a job is completed, you may leave a star rating and written review for the contractor. Reviews must be honest and based on your genuine experience. False or malicious reviews may be removed. Contractors cannot pay to remove legitimate reviews.</p>
-      </div>
-      <div class="legal-section">
-        <h2>7. Your Rights</h2>
-        <p>You can close or remove any job posting at any time from your dashboard. You can request deletion of your account and all associated data by emailing info@pangig.com. See our full <button class="inline-link" onclick="showPage('privacy')">Privacy Policy</button> for more details on your data rights.</p>
-      </div>
-      <div class="legal-section">
-        <h2>8. Contact</h2>
-        <p>Client support: info@pangig.com · We respond within 24 hours on business days.</p>
-      </div>
-    </div>
-    <div class="info-cta">
-      <div class="info-cta-title">Questions about your privacy?</div>
-      <div class="info-cta-sub">We're here to help. Contact us anytime.</div>
-      <button class="btn btn-primary btn-lg" onclick="showPage('contact')">Contact Us</button>
-    </div>
-  </div>
 </div>
 
 <!--  FAQ PAGE  -->
@@ -1570,11 +1305,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div style="text-align:center;margin-top:1rem">
         <button class="btn btn-ghost" style="font-size:.78rem" onclick="showPage('signup-client')">Don't have an account? Sign up</button>
       </div>
-      <div style="text-align:center;margin-top:.75rem;font-size:.72rem;color:var(--muted)">
-        <button class="inline-link" style="font-size:.72rem" onclick="showPage('terms')">Terms</button> ·
-        <button class="inline-link" style="font-size:.72rem" onclick="showPage('privacy')">Privacy</button> ·
-        <button class="inline-link" style="font-size:.72rem" onclick="showPage('cookies')">Cookies</button>
-      </div>
     </div>
   </div>
 </div>
@@ -1627,13 +1357,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="fg"><label class="fl">Phone</label><input class="fi" id="scPhone" placeholder="555-000-0000"/></div>
       <div class="fg"><label class="fl">Password *</label><input class="fi" id="scPass" type="password" placeholder="••••••••"/></div>
       <button class="btn btn-primary fi-full" onclick="doSignupClient()">Create Account</button>
-      <div style="text-align:center;margin-top:.75rem;font-size:.72rem;color:var(--muted);line-height:1.6">
-        By creating an account you agree to our
-        <button class="inline-link" style="font-size:.72rem" onclick="showPage('terms')">Terms of Service</button>,
-        <button class="inline-link" style="font-size:.72rem" onclick="showPage('privacy')">Privacy Policy</button> and
-        <button class="inline-link" style="font-size:.72rem" onclick="showPage('client-policy')">Client Policy</button>.
-      </div>
-      <div style="text-align:center;margin-top:.5rem">
+      <div style="text-align:center;margin-top:1rem">
         <button class="btn btn-ghost" style="font-size:.78rem" onclick="showPage('login')">Already have an account? Sign in</button>
         <br/><button class="btn btn-ghost" style="font-size:.78rem" onclick="showPage('signup-contractor')">I'm a contractor →</button>
       </div>
@@ -1661,13 +1385,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="fg"><label class="fl">Location</label><input class="fi" id="conLocation" placeholder="City, State or Country"/></div>
       <div class="fg"><label class="fl">Password *</label><input class="fi" id="conPass" type="password" placeholder="••••••••"/></div>
       <button class="btn btn-primary fi-full" onclick="doSignupContractor()">Create Account</button>
-      <div style="text-align:center;margin-top:.75rem;font-size:.72rem;color:var(--muted);line-height:1.6">
-        By creating an account you agree to our
-        <button class="inline-link" style="font-size:.72rem" onclick="showPage('terms')">Terms of Service</button>,
-        <button class="inline-link" style="font-size:.72rem" onclick="showPage('privacy')">Privacy Policy</button> and
-        <button class="inline-link" style="font-size:.72rem" onclick="showPage('refund')">Refund Policy</button>.
-      </div>
-      <div style="text-align:center;margin-top:.5rem">
+      <div style="text-align:center;margin-top:1rem">
         <button class="btn btn-ghost" style="font-size:.78rem" onclick="showPage('login')">Already have an account? Sign in</button>
       </div>
     </div>
