@@ -392,7 +392,36 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .svc-jump-btn{font-size:.82rem;color:var(--muted);padding:.4rem .75rem;border-radius:6px;cursor:pointer;transition:all .15s;border:none;background:transparent;text-align:left;width:100%;display:block}
 .svc-jump-btn:hover{color:var(--accent);background:rgba(244,166,35,.06)}
 
-/* ── AVAILABILITY BADGE ── */
+/* ── ENHANCED PACKAGE GRID ── */
+.pkg-grid-full{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem}
+.pkg-card-v2{background:var(--s2);border:2px solid var(--border);border-radius:var(--r);padding:1.25rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;display:flex;flex-direction:column;gap:.4rem}
+.pkg-card-v2:hover{border-color:var(--accent);transform:translateY(-3px);background:rgba(244,166,35,.05)}
+.pkg-card-v2.sel{border-color:var(--accent);background:rgba(244,166,35,.08);transform:translateY(-3px)}
+.pkg-card-v2.best{border-color:var(--green)}
+.pkg-card-v2.best:hover,.pkg-card-v2.best.sel{border-color:var(--green);background:rgba(34,197,94,.08)}
+.pkg-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-size:.6rem;font-weight:800;padding:.2rem .75rem;border-radius:999px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.pkg-badge.popular{background:var(--accent);color:#000}
+.pkg-badge.best{background:var(--green);color:#000}
+.pkg-icon{font-size:1.75rem}
+.pkg-name{font-family:var(--fh);font-size:.95rem;font-weight:800;color:var(--text)}
+.pkg-credits-big{font-family:var(--fh);font-size:2rem;font-weight:900;color:var(--accent);line-height:1}
+.pkg-credits-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.pkg-price-big{font-family:var(--fh);font-size:1.4rem;font-weight:800;color:var(--text)}
+.pkg-per-credit{font-size:.68rem;color:var(--muted)}
+.pkg-desc{font-size:.72rem;color:var(--muted);line-height:1.4;margin-top:.25rem}
+.pkg-savings{font-size:.68rem;font-weight:700;color:var(--green)}
+
+/* ── VERIFIED vs UNVERIFIED in leads ── */
+.lead-card.verified-contractor{border-left:3px solid var(--green)}
+.lead-card.unverified-contractor{border-left:3px solid var(--border)}
+.con-trust-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.68rem;font-weight:700;padding:.2rem .55rem;border-radius:20px}
+.con-trust-badge.verified{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.con-trust-badge.unverified{background:rgba(122,132,153,.08);color:var(--muted);border:1px solid var(--border)}
+
+/* ── VERIFIED BONUS BANNER ── */
+.verified-bonus-banner{background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(34,197,94,.06));border:1px solid rgba(34,197,94,.3);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.unverified-bonus-banner{background:rgba(244,166,35,.06);border:1px solid rgba(244,166,35,.25);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+@media(max-width:700px){.pkg-grid-full{grid-template-columns:repeat(2,1fr)}}
 .avail-available{display:inline-flex;align-items:center;gap:.3rem;background:rgba(34,197,94,.12);color:var(--green);font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:20px;border:1px solid rgba(34,197,94,.3)}
 .avail-busy{display:inline-flex;align-items:center;gap:.3rem;background:rgba(244,166,35,.12);color:var(--accent);font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:20px;border:1px solid rgba(244,166,35,.3)}
 .avail-unavailable{display:inline-flex;align-items:center;gap:.3rem;background:rgba(239,68,68,.1);color:var(--red);font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:20px;border:1px solid rgba(239,68,68,.3)}
@@ -1407,16 +1436,21 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <!-- CREDITS -->
       <div class="dash-page" id="con-credits">
-        <div class="ph"><div class="pt">Credits & Spending</div><div class="ps">Track your credit usage and purchase history</div></div>
+        <div class="ph"><div class="pt">Credits & Spending</div><div class="ps">Buy credits to unlock client leads</div></div>
+
+        <!-- Verified bonus banner -->
+        <div id="credVerifiedBanner"></div>
+
         <div class="metrics-grid">
           <div class="mc"><div class="mc-lbl">Current Balance</div><div class="mc-val acc" id="credBal">0 credits</div></div>
-          <div class="mc"><div class="mc-lbl">Total Spent on Credits</div><div class="mc-val" id="credSpent">$0.00</div></div>
+          <div class="mc"><div class="mc-lbl">Total Spent</div><div class="mc-val" id="credSpent">$0.00</div></div>
           <div class="mc"><div class="mc-lbl">Leads Unlocked</div><div class="mc-val blu" id="credLeads">0</div></div>
         </div>
-        <!-- Promo Code Redemption -->
+
+        <!-- Promo Code -->
         <div class="card" style="margin-bottom:1.5rem;border-color:rgba(244,166,35,.3)">
           <div class="card-title">🎟️ Have a Promo Code?</div>
-          <p style="font-size:.875rem;color:var(--muted);margin-bottom:1rem">Enter your one-time promo code to add free credits to your account. Credits never expire once added.</p>
+          <p style="font-size:.875rem;color:var(--muted);margin-bottom:1rem">Enter your one-time promo code to add free credits. Credits never expire once added.</p>
           <div style="display:flex;gap:.75rem;flex-wrap:wrap">
             <input class="fi" id="promoCodeInput" placeholder="Enter code e.g. PANGIG-X7K2M" style="flex:1;min-width:200px;text-transform:uppercase"/>
             <button class="btn btn-primary" onclick="redeemPromoCode()">Redeem Code</button>
@@ -1424,11 +1458,39 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="ferr" id="promoRedeemErr" style="margin-top:.5rem"></div>
           <div class="alert a-success" id="promoRedeemSuccess" style="display:none;margin-top:.5rem"></div>
         </div>
+
+        <!-- Buy Credits — tabs -->
         <div class="card" style="margin-bottom:1.5rem">
-          <div class="card-title">Buy More Credits</div>
-          <div class="pkg-grid" id="credPkgs"></div>
-          <div style="text-align:center;margin-top:1.25rem"><button class="btn btn-primary" onclick="buyFromCreditsPage()">Purchase Credits</button></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem">
+            <div class="card-title" style="margin:0">Buy Credits</div>
+            <div class="auth-tabs" style="margin:0;width:auto">
+              <button class="auth-tab active" id="tabOneTime" onclick="switchCreditTab('onetime')">💳 One-Time</button>
+              <button class="auth-tab" id="tabSub" onclick="switchCreditTab('subscription')">🔄 Monthly</button>
+            </div>
+          </div>
+
+          <!-- One-time packages -->
+          <div id="oneTimePackages">
+            <div style="font-size:.78rem;color:var(--muted);margin-bottom:1rem">Buy credits once — they never expire. More credits = better value per credit.</div>
+            <div class="pkg-grid-full" id="credPkgs"></div>
+            <div style="text-align:center;margin-top:1.25rem">
+              <button class="btn btn-primary" onclick="buyFromCreditsPage()">Purchase Credits</button>
+            </div>
+          </div>
+
+          <!-- Subscription plans -->
+          <div id="subPackages" style="display:none">
+            <div style="font-size:.78rem;color:var(--muted);margin-bottom:1rem">Get credits automatically every month. Cancel anytime. Best value for active contractors.</div>
+            <div class="pkg-grid-full" id="credSubPkgs"></div>
+            <div style="text-align:center;margin-top:1.25rem">
+              <button class="btn btn-primary" onclick="buySubscription()">Subscribe Monthly</button>
+            </div>
+            <div style="text-align:center;margin-top:.75rem;font-size:.75rem;color:var(--muted)">
+              Cancel anytime from your account settings. Credits are added on your billing date each month.
+            </div>
+          </div>
         </div>
+
         <div class="card"><div class="card-title">Credit History</div><div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Action</th><th>Credits</th><th>Cost</th></tr></thead><tbody id="credHistory"></tbody></table><div id="credEmpty" class="empty" style="display:none"><div class="empty-txt">No transactions yet</div></div></div></div>
       </div>
 
@@ -2203,10 +2265,22 @@ const INDUSTRY_CATEGORIES = [
   ]},
 ];
 const JOB_TYPES = INDUSTRY_CATEGORIES.flatMap(c=>c.services);
+// ── ONE-TIME CREDIT PACKAGES ─────────────────────
 const CREDIT_PACKAGES = [
-  {id:"starter",credits:10,price:15,label:"Starter"},
-  {id:"pro",credits:50,price:60,label:"Pro",popular:true},
-  {id:"elite",credits:100,price:100,label:"Elite"},
+  {id:"basic",     credits:10,  price:15,  label:"Basic",     icon:"🔑", desc:"Perfect for getting started",         perCredit:"$1.50/credit"},
+  {id:"starter",   credits:25,  price:30,  label:"Starter",   icon:"⚡", desc:"Great for occasional jobs",           perCredit:"$1.20/credit"},
+  {id:"pro",       credits:60,  price:60,  label:"Pro",       icon:"🚀", desc:"Most popular for active contractors", perCredit:"$1.00/credit", popular:true},
+  {id:"growth",    credits:100, price:85,  label:"Growth",    icon:"📈", desc:"Serious contractors scaling up",      perCredit:"$0.85/credit"},
+  {id:"elite",     credits:150, price:100, label:"Elite",     icon:"💎", desc:"Maximum value for power users",       perCredit:"$0.67/credit", best_value:true},
+  {id:"ultimate",  credits:250, price:150, label:"Ultimate",  icon:"👑", desc:"For high-volume professionals",       perCredit:"$0.60/credit"},
+];
+
+// ── SUBSCRIPTION PLANS ────────────────────────────
+const SUBSCRIPTION_PLANS = [
+  {id:"sub_basic",    credits_monthly:30,  price:25,  label:"Essential",  icon:"🌱", desc:"30 credits every month",          perCredit:"$0.83/credit", billing:"month"},
+  {id:"sub_pro",      credits_monthly:75,  price:55,  label:"Professional",icon:"🔥",desc:"75 credits every month",          perCredit:"$0.73/credit", billing:"month", popular:true},
+  {id:"sub_elite",    credits_monthly:150, price:90,  label:"Elite",      icon:"⭐", desc:"150 credits every month",         perCredit:"$0.60/credit", billing:"month"},
+  {id:"sub_ultimate", credits_monthly:300, price:150, label:"Ultimate",   icon:"🏆", desc:"300 credits every month",         perCredit:"$0.50/credit", billing:"month", best_value:true},
 ];
 
 // 
@@ -2647,11 +2721,15 @@ function renderBuyModal() {
   const g = document.getElementById("modalPkgs");
   if (!g) return;
   g.innerHTML = CREDIT_PACKAGES.map(p => `
-    <div class="pkg-card ${selectedPkg===p.id?"sel":""}" onclick="selectPkg("${p.id}",this)">
-      ${p.popular ? "<div class=\"pkg-popular\">Popular</div>" : ""}
-      <div class="pkg-credits">${p.credits}</div>
-      <div class="pkg-label">${p.label}</div>
-      <div class="pkg-price">$${p.price}</div>
+    <div class="pkg-card-v2 ${selectedPkg===p.id?'sel':''} ${p.best_value?'best':''}" onclick="selectPkg('${p.id}',this)">
+      ${p.popular ? '<div class="pkg-badge popular">Popular</div>' : ''}
+      ${p.best_value ? '<div class="pkg-badge best">Best Value</div>' : ''}
+      <div class="pkg-icon">${p.icon}</div>
+      <div class="pkg-name">${p.label}</div>
+      <div class="pkg-credits-big">${p.credits}</div>
+      <div class="pkg-credits-label">Credits</div>
+      <div class="pkg-price-big">$${p.price}</div>
+      <div class="pkg-per-credit">${p.perCredit}</div>
     </div>`).join("");
   document.getElementById("buyStep1").style.display = "block";
   document.getElementById("buyStep2").style.display = "none";
@@ -2660,7 +2738,7 @@ function renderBuyModal() {
 
 function selectPkg(id, el) {
   selectedPkg = id;
-  document.querySelectorAll("#modalPkgs .pkg-card").forEach(c => c.classList.remove("sel"));
+  document.querySelectorAll("#modalPkgs .pkg-card-v2").forEach(c => c.classList.remove("sel"));
   el.classList.add("sel");
 }
 
@@ -2838,39 +2916,146 @@ function renderInvHistory() {
 //  CREDITS PAGE 
 function renderCreditsPage() {
   if(!currentUser) return;
-  const u=currentUser;
-  const history = u.creditHistory || [];
-  const spent = history.filter(h=>h.cost).reduce((a,b)=>a+(parseFloat((b.cost||"").toString().replace("$",""))||0),0);
-  document.getElementById("credBal").textContent=(u.credits||0)+" credits";
-  document.getElementById("credSpent").textContent="$"+spent.toFixed(2);
-  document.getElementById("credLeads").textContent=(u.unlockedLeads||[]).length;
-  // packages
-  document.getElementById("credPkgs").innerHTML=CREDIT_PACKAGES.map(p=>`
-    <div class="pkg-card ${selectedPkgCredits===p.id?'sel':''}" data-pkg="${p.id}" onclick="selectPkgCredits('${p.id}',this)">
-      ${p.popular?'<div class="pkg-popular">Popular</div>':""}
-      <div class="pkg-credits">${p.credits}</div>
-      <div class="pkg-label">${p.label}</div>
-      <div class="pkg-price">$${p.price}</div>
-    </div>`).join("");
-  // history
-  const tb=document.getElementById("credHistory");
-  const em=document.getElementById("credEmpty");
-  if(!history.length){tb.innerHTML="";em.style.display="block";return;}
-  em.style.display="none";
-  tb.innerHTML=history.map(h=>{
-    const amt = h.amount||0;
-    const isPositive = typeof amt === 'number' ? amt > 0 : (amt||"").toString().startsWith('+');
-    return `<tr>
-      <td style="color:var(--muted)">${h.date||new Date(h.created_at||Date.now()).toLocaleDateString()}</td>
-      <td>${h.action||h.description||"—"}</td>
-      <td style="font-weight:700;color:${isPositive?'var(--green)':'var(--red)'}">${isPositive?'+':''}${amt} credits</td>
-      <td style="color:var(--muted)">${h.cost||h.amount_paid||"—"}</td>
-    </tr>`;}).join("");
+  const u = currentUser;
+
+  // Verified bonus banner
+  const banner = document.getElementById("credVerifiedBanner");
+  if (banner) {
+    if (u.verified) {
+      banner.innerHTML = `<div class="verified-bonus-banner">
+        <span style="font-size:1.5rem">✅</span>
+        <div style="flex:1">
+          <div style="font-weight:700;color:var(--green);font-size:.9rem">Verified Contractor — You get priority on leads!</div>
+          <div style="font-size:.78rem;color:var(--muted)">Your profile shows a verified badge on all leads, giving you 3x more client trust and higher response rates.</div>
+        </div>
+      </div>`;
+    } else {
+      banner.innerHTML = `<div class="unverified-bonus-banner">
+        <span style="font-size:1.5rem">🛡️</span>
+        <div style="flex:1">
+          <div style="font-weight:700;color:var(--accent);font-size:.9rem">Get Verified to unlock priority leads!</div>
+          <div style="font-size:.78rem;color:var(--muted)">Verified contractors appear first in results and earn 3x more client trust. Go to Profile → Get Verified.</div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="conPage('profile',null)" style="border-color:var(--accent);color:var(--accent);white-space:nowrap">Get Verified →</button>
+      </div>`;
+    }
+  }
+
+  document.getElementById("credBal").textContent = (u.credits||0) + " credits";
+  document.getElementById("credSpent").textContent = "$0.00";
+  document.getElementById("credLeads").textContent = (u.unlockedLeads||[]).length;
+
+  // Render one-time packages
+  renderOneTimePackages();
+  renderSubscriptionPackages();
+
+  // Credit history
+  const tb = document.getElementById("credHistory");
+  const em = document.getElementById("credEmpty");
+  tb.innerHTML = "";
+  em.style.display = "block";
 }
-function selectPkgCredits(id,el){
-  selectedPkgCredits=id;selectedPkg=id;
-  document.querySelectorAll("#credPkgs .pkg-card").forEach(c=>c.classList.remove("sel"));
+
+function renderOneTimePackages() {
+  const base = CREDIT_PACKAGES[0].price / CREDIT_PACKAGES[0].credits;
+  document.getElementById("credPkgs").innerHTML = CREDIT_PACKAGES.map(p => {
+    const savings = Math.round((1 - (p.price/p.credits)/base)*100);
+    return `<div class="pkg-card-v2 ${selectedPkgCredits===p.id?'sel':''} ${p.best_value?'best':''}" data-pkg="${p.id}" onclick="selectPkgCredits('${p.id}',this)">
+      ${p.popular ? '<div class="pkg-badge popular">Popular</div>' : ''}
+      ${p.best_value ? '<div class="pkg-badge best">Best Value</div>' : ''}
+      <div class="pkg-icon">${p.icon}</div>
+      <div class="pkg-name">${p.label}</div>
+      <div class="pkg-credits-big">${p.credits}</div>
+      <div class="pkg-credits-label">Credits</div>
+      <div class="pkg-price-big">$${p.price}</div>
+      <div class="pkg-per-credit">${p.perCredit}</div>
+      ${savings > 0 ? `<div class="pkg-savings">Save ${savings}%</div>` : ''}
+      <div class="pkg-desc">${p.desc}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderSubscriptionPackages() {
+  const subGrid = document.getElementById("credSubPkgs");
+  if (!subGrid) return;
+  subGrid.innerHTML = SUBSCRIPTION_PLANS.map(p => `
+    <div class="pkg-card-v2 ${selectedSubPlan===p.id?'sel':''} ${p.best_value?'best':''}" data-sub="${p.id}" onclick="selectSubPlan('${p.id}',this)">
+      ${p.popular ? '<div class="pkg-badge popular">Popular</div>' : ''}
+      ${p.best_value ? '<div class="pkg-badge best">Best Value</div>' : ''}
+      <div class="pkg-icon">${p.icon}</div>
+      <div class="pkg-name">${p.label}</div>
+      <div class="pkg-credits-big">${p.credits_monthly}</div>
+      <div class="pkg-credits-label">Credits / Month</div>
+      <div class="pkg-price-big">$${p.price}<span style="font-size:.75rem;font-weight:400;color:var(--muted)">/mo</span></div>
+      <div class="pkg-per-credit">${p.perCredit}</div>
+      <div class="pkg-savings">Auto-renews monthly</div>
+      <div class="pkg-desc">${p.desc}</div>
+    </div>`).join("");
+}
+
+function switchCreditTab(tab) {
+  const isOnetime = tab === "onetime";
+  document.getElementById("oneTimePackages").style.display = isOnetime ? "block" : "none";
+  document.getElementById("subPackages").style.display = isOnetime ? "none" : "block";
+  document.getElementById("tabOneTime").classList.toggle("active", isOnetime);
+  document.getElementById("tabSub").classList.toggle("active", !isOnetime);
+}
+
+let selectedSubPlan = "sub_pro";
+function selectSubPlan(id, el) {
+  selectedSubPlan = id;
+  document.querySelectorAll("#credSubPkgs .pkg-card-v2").forEach(c => c.classList.remove("sel"));
   el.classList.add("sel");
+}
+
+function selectPkgCredits(id, el) {
+  selectedPkgCredits = id; selectedPkg = id;
+  document.querySelectorAll("#credPkgs .pkg-card-v2").forEach(c => c.classList.remove("sel"));
+  el.classList.add("sel");
+}
+
+async function buySubscription() {
+  const plan = SUBSCRIPTION_PLANS.find(p => p.id === selectedSubPlan);
+  if (!plan) { toast("","Select Plan","Please select a subscription plan."); return; }
+  // Set selectedPkg and open modal in subscription mode
+  selectedPkg = plan.id;
+  openModal("buyModal");
+  // Show subscription details in modal
+  setTimeout(() => {
+    const nameEl = document.getElementById("buyPkgName");
+    const credEl = document.getElementById("buyPkgCredits");
+    const priceEl = document.getElementById("buyPkgPrice");
+    if (nameEl) nameEl.textContent = plan.label + " Monthly";
+    if (credEl) credEl.textContent = plan.credits_monthly + " credits/month";
+    if (priceEl) priceEl.textContent = "$" + plan.price + "/mo";
+    document.getElementById("buyStep1").style.display = "none";
+    document.getElementById("buyStep2").style.display = "block";
+    goToPaymentFormSub(plan);
+  }, 100);
+}
+
+async function goToPaymentFormSub(plan) {
+  const stripe = getStripe();
+  if (!stripe) return;
+  const elements = stripe.elements({
+    appearance: { theme:"night", variables:{ colorPrimary:"#f4a623", colorBackground:"#1c2030", colorText:"#f0f2f7", colorDanger:"#ef4444", fontFamily:"DM Sans,system-ui,sans-serif", borderRadius:"8px" } }
+  });
+  if (stripeCard) { stripeCard.destroy(); stripeCard = null; }
+  document.getElementById("stripeCardElement").innerHTML = "";
+  stripeCard = elements.create("card", {
+    style:{ base:{ fontSize:"15px", color:"#f0f2f7", "::placeholder":{ color:"#7a8499" } }, invalid:{ color:"#ef4444" } }
+  });
+  stripeCard.mount("#stripeCardElement");
+  stripeCard.on("change", (e) => {
+    document.getElementById("stripeCardError").textContent = e.error ? e.error.message : "";
+  });
+  try {
+    const data = await apiCall("POST", "/payments/stripe/payment-intent", { package_id: plan.id, amount: plan.price, is_subscription: true });
+    currentPaymentIntent = data;
+  } catch(e) {
+    document.getElementById("buyPaymentErr").textContent = e.message || "Could not initialize payment.";
+    document.getElementById("buyPaymentErr").classList.add("show");
+  }
 }
 
 //  CONTRACTOR PROFILE 
@@ -3614,7 +3799,18 @@ function renderLeadCard(job) {
   const slotClass = remaining >= 5 ? "open" : remaining >= 2 ? "filling" : "full";
   const slotText = isFull ? "Full — 7/7 contractors" : `${remaining} spot${remaining !== 1 ? "s" : ""} left (${slots}/7)`;
 
-  return `<div class="lead-card" id="lead-${job.id}">
+  // Verified badge for current user
+  const isVerified = currentUser?.verified;
+  const verifiedBadge = isVerified
+    ? `<span class="con-trust-badge verified">✅ Verified Contractor</span>`
+    : `<span class="con-trust-badge unverified">Unverified — <button onclick="conPage('profile',null);closeModal && closeModal('buyModal')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:.68rem;font-weight:700;padding:0">Get Verified →</button></span>`;
+
+  // Verified contractors get a priority notice
+  const priorityNotice = isVerified
+    ? `<div style="font-size:.72rem;color:var(--green);margin-bottom:.5rem">⭐ Your verified badge is shown to clients on this lead</div>`
+    : `<div style="font-size:.72rem;color:var(--muted);margin-bottom:.5rem">💡 <a onclick="conPage('profile',null)" style="color:var(--accent);cursor:pointer">Get verified</a> to show clients your trusted badge</div>`;
+
+  return `<div class="lead-card ${isVerified?'verified-contractor':'unverified-contractor'}" id="lead-${job.id}">
     <div class="lead-card-header">
       <div class="lead-card-title">${job.title}</div>
       <div style="display:flex;align-items:center;gap:.5rem;flex-shrink:0">
@@ -3626,7 +3822,9 @@ function renderLeadCard(job) {
       ${job.location ? `<span class="jtag">📍 ${job.location}</span>` : ""}
       ${job.budget ? `<span class="jtag">💰 ${job.budget}</span>` : ""}
       <span class="jtag">🕒 ${posted}</span>
-    </div>    <div class="lead-card-desc">${job.description}</div>
+      ${verifiedBadge}
+    </div>
+    <div class="lead-card-desc">${job.description}</div>
     ${isUnlocked ? `
       <div class="lead-contact-box">
         <div style="font-size:.78rem;font-weight:700;color:var(--green);margin-bottom:.25rem">✅ Lead Unlocked — Client Contact Info:</div>
@@ -3637,13 +3835,16 @@ function renderLeadCard(job) {
         <button class="btn btn-outline btn-sm" disabled style="opacity:.5;cursor:not-allowed">Lead Full</button>
       </div>` : `
       <div class="lead-card-footer">
-        <div class="lead-card-info">
-          <span>Cost: <strong style="color:var(--accent)">${jt.credits} credits</strong></span>
-          <span>Your balance: <strong>${currentUser?.credits || 0} credits</strong></span>
+        ${priorityNotice}
+        <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:.5rem">
+          <div class="lead-card-info">
+            <span>Cost: <strong style="color:var(--accent)">${jt.credits} credits</strong></span>
+            <span>Balance: <strong>${currentUser?.credits || 0} credits</strong></span>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="unlockLead('${job.id}', ${jt.credits})">
+            Unlock Lead — ${jt.credits} Credits
+          </button>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="unlockLead('${job.id}', ${jt.credits})">
-          Unlock Lead — ${jt.credits} Credits
-        </button>
       </div>`}
   </div>`;
 }
