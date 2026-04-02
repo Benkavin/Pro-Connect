@@ -1926,7 +1926,26 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="mc"><div class="mc-lbl">Total Jobs</div><div class="mc-val" id="adJobCount">0</div></div>
           <div class="mc"><div class="mc-lbl">Platform Revenue</div><div class="mc-val grn" id="adRevenue">$0.00</div></div>
         </div>
-        <div class="two-col">
+        <!-- Contractor verification breakdown -->
+        <div class="metrics-grid" style="margin-top:1rem">
+          <div class="mc" style="cursor:pointer;border-color:rgba(34,197,94,.3)" onclick="adminPage('contractors',null)" title="View verified contractors">
+            <div class="mc-lbl">✅ Verified Contractors</div>
+            <div class="mc-val" style="color:var(--green)" id="adVerifiedCount">0</div>
+          </div>
+          <div class="mc" style="cursor:pointer;border-color:rgba(244,166,35,.3)" onclick="adminPage('contractors',null)" title="View pending contractors">
+            <div class="mc-lbl">⏳ Pending Verification</div>
+            <div class="mc-val" style="color:var(--accent)" id="adPendingCount">0</div>
+          </div>
+          <div class="mc" style="cursor:pointer" onclick="adminPage('contractors',null)" title="View unverified contractors">
+            <div class="mc-lbl">Unverified Contractors</div>
+            <div class="mc-val" style="color:var(--muted)" id="adUnverifiedCount">0</div>
+          </div>
+          <div class="mc">
+            <div class="mc-lbl">Total Lead Unlocks</div>
+            <div class="mc-val blu" id="adUnlockCount">0</div>
+          </div>
+        </div>
+        <div class="two-col" style="margin-top:1rem">
           <div class="card"><div class="card-title">Recent Jobs</div><div id="adRecentJobs"></div></div>
           <div class="card"><div class="card-title">Platform Stats</div><div id="adStats"></div></div>
         </div>
@@ -3649,18 +3668,51 @@ async function submitReviewFromClient() {
 function refreshAdminDash() { refreshAdminOverview(); }
 async function refreshAdminOverview() {
   try {
-    const data = await apiCall("GET", "/admin/overview");
-    document.getElementById("adConCount").textContent = data.total_contractors;
-    document.getElementById("adCliCount").textContent = data.total_clients;
-    document.getElementById("adJobCount").textContent = data.total_jobs;
-    document.getElementById("adRevenue").textContent = "$" + parseFloat(data.total_revenue||0).toFixed(2);
-    document.getElementById("adRecentJobs").innerHTML = `<div class="empty"><div class="empty-txt">View details in the All Jobs tab</div></div>`;
+    // Load overview stats and users in parallel
+    const [overviewData, usersData] = await Promise.all([
+      apiCall("GET", "/admin/overview"),
+      apiCall("GET", "/admin/users")
+    ]);
+
+    document.getElementById("adConCount").textContent = overviewData.total_contractors;
+    document.getElementById("adCliCount").textContent = overviewData.total_clients;
+    document.getElementById("adJobCount").textContent = overviewData.total_jobs;
+    document.getElementById("adRevenue").textContent = "$" + parseFloat(overviewData.total_revenue||0).toFixed(2);
+
+    // Calculate contractor verification breakdown from real user data
+    const contractors = (usersData.users||[]).filter(u => u.role === "contractor");
+    const verified = contractors.filter(c => c.verified).length;
+    const pending = contractors.filter(c => !c.verified && c.verification_status === "pending").length;
+    const unverified = contractors.filter(c => !c.verified && c.verification_status !== "pending").length;
+
+    document.getElementById("adVerifiedCount").textContent = verified;
+    document.getElementById("adPendingCount").textContent = pending;
+    document.getElementById("adUnverifiedCount").textContent = unverified;
+    document.getElementById("adUnlockCount").textContent = overviewData.total_unlocks || 0;
+
+    // Recent jobs
+    const jobs = overviewData.recent_jobs || [];
+    document.getElementById("adRecentJobs").innerHTML = jobs.length
+      ? jobs.slice(0,5).map(j => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.85rem">
+            <div>
+              <div style="font-weight:600">${j.title||"Untitled"}</div>
+              <div style="font-size:.72rem;color:var(--muted)">${j.location||""} · ${new Date(j.created_at).toLocaleDateString()}</div>
+            </div>
+            <span class="job-status-${j.status||'open'}">${(j.status||'open').replace('_',' ')}</span>
+          </div>`).join("")
+      : `<div class="empty"><div class="empty-txt">No jobs yet</div></div>`;
+
+    // Platform stats
     document.getElementById("adStats").innerHTML = `
       <div style="display:flex;flex-direction:column;gap:.85rem;font-size:.875rem">
-        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Total Lead Unlocks</span><strong>${data.total_unlocks||0}</strong></div>
-        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Contractors</span><strong>${data.total_contractors}</strong></div>
-        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Clients</span><strong>${data.total_clients}</strong></div>
-        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Total Jobs</span><strong>${data.total_jobs}</strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Total Contractors</span><strong>${overviewData.total_contractors}</strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">✅ Verified</span><strong style="color:var(--green)">${verified}</strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">⏳ Pending Review</span><strong style="color:var(--accent)">${pending}</strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Total Clients</span><strong>${overviewData.total_clients}</strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Total Jobs</span><strong>${overviewData.total_jobs}</strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Lead Unlocks</span><strong>${overviewData.total_unlocks||0}</strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Platform Revenue</span><strong style="color:var(--green)">$${parseFloat(overviewData.total_revenue||0).toFixed(2)}</strong></div>
       </div>`;
   } catch(e) { console.error("Admin overview error:", e); }
 }
