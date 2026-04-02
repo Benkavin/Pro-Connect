@@ -656,6 +656,71 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
+<!--  ADMIN CONTRACTOR PROFILE MODAL  -->
+<div class="modal-overlay" id="adminConModal">
+  <div class="modal" style="max-width:680px;width:100%;max-height:90vh;overflow-y:auto">
+
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;gap:1rem">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <div id="adminConPhoto" style="width:70px;height:70px;border-radius:50%;background:var(--s2);border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.75rem;font-weight:700;color:var(--accent);overflow:hidden;flex-shrink:0"></div>
+        <div>
+          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+            <div style="font-family:var(--fh);font-size:1.3rem;font-weight:800" id="adminConName">—</div>
+            <div id="adminConVerBadge"></div>
+          </div>
+          <div style="font-size:.875rem;color:var(--muted)" id="adminConCompany"></div>
+          <div style="font-size:.78rem;color:var(--muted);margin-top:.2rem" id="adminConEmail"></div>
+        </div>
+      </div>
+      <button onclick="closeModal('adminConModal')" style="background:none;border:none;color:var(--muted);font-size:1.25rem;cursor:pointer;flex-shrink:0">✕</button>
+    </div>
+
+    <!-- Verification action bar -->
+    <div id="adminConVerBar" style="margin-bottom:1.5rem"></div>
+
+    <!-- Two column info -->
+    <div class="two-col" style="margin-bottom:1.5rem">
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div class="card" style="padding:1rem">
+          <div class="card-title" style="font-size:.8rem;margin-bottom:.75rem">Contact & Business</div>
+          <div id="adminConContact" style="display:flex;flex-direction:column;gap:.5rem;font-size:.85rem"></div>
+        </div>
+        <div class="card" style="padding:1rem">
+          <div class="card-title" style="font-size:.8rem;margin-bottom:.75rem">Services Offered</div>
+          <div id="adminConServices" style="display:flex;flex-wrap:wrap;gap:.4rem"></div>
+        </div>
+        <div class="card" style="padding:1rem">
+          <div class="card-title" style="font-size:.8rem;margin-bottom:.75rem">Account Stats</div>
+          <div id="adminConStats" style="display:flex;flex-direction:column;gap:.5rem;font-size:.85rem"></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div class="card" style="padding:1rem">
+          <div class="card-title" style="font-size:.8rem;margin-bottom:.75rem">Company Overview</div>
+          <div id="adminConBio" style="font-size:.85rem;color:var(--muted);line-height:1.7"></div>
+        </div>
+        <div class="card" style="padding:1rem">
+          <div class="card-title" style="font-size:.8rem;margin-bottom:.75rem">Verification Details</div>
+          <div id="adminConVerDetails" style="display:flex;flex-direction:column;gap:.5rem;font-size:.85rem"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Portfolio -->
+    <div class="card" style="padding:1rem;margin-bottom:1.5rem">
+      <div class="card-title" style="font-size:.8rem;margin-bottom:.75rem">Portfolio / Past Work</div>
+      <div id="adminConPortfolio" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem"></div>
+    </div>
+
+    <!-- Bottom action buttons -->
+    <div style="display:flex;justify-content:flex-end;gap:.75rem;padding-top:1rem;border-top:1px solid var(--border)">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('adminConModal')">Close</button>
+      <div id="adminConActionBtns"></div>
+    </div>
+  </div>
+</div>
+
 <!--  MESSAGING MODAL  -->
 <div class="modal-overlay" id="msgModal">
   <div class="modal" style="max-width:520px;width:100%">
@@ -3606,7 +3671,7 @@ async function renderAdminContractors() {
     const list = (data.users||[]).filter(u=>u.role==="contractor").filter(c=>c.name.toLowerCase().includes(q)||c.email.toLowerCase().includes(q));
     document.getElementById("adConSub").textContent = list.length+" registered";
     document.getElementById("adConTable").innerHTML = list.map(c => {
-      const svcs = (c.services||[]).map(s=>{const jt=JOB_TYPES.find(j=>j.id===s);return jt?`<span class="jtag type" style="font-size:.65rem">${jt.label}</span>`:""}).join(" ");
+      const svcs = (c.services||[]).slice(0,2).map(s=>{const jt=JOB_TYPES.find(j=>j.id===s);return jt?`<span class="jtag type" style="font-size:.65rem">${jt.label}</span>`:""}).join(" ");
       const verStatus = c.verified
         ? `<span class="verified-badge">✅ Verified</span>`
         : c.verification_status === "pending"
@@ -3614,36 +3679,165 @@ async function renderAdminContractors() {
         : c.verification_status === "rejected"
         ? `<span style="color:var(--red);font-size:.78rem;font-weight:700">❌ Rejected</span>`
         : `<span class="unverified-badge">Unverified</span>`;
-
-      // Always show actions — admin can verify/reject anyone at any time
-      const actions = c.verified
-        ? `<button class="btn btn-sm" style="background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.3);font-size:.72rem" onclick="adminVerify('${c.id}','reject')">Revoke</button>`
-        : `<div style="display:flex;gap:.4rem">
-            <button class="btn btn-sm" style="background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3);font-size:.72rem" onclick="adminVerify('${c.id}','approve')">✅ Verify</button>
-            <button class="btn btn-sm" style="background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.3);font-size:.72rem" onclick="adminVerify('${c.id}','reject')">❌ Reject</button>
-          </div>`;
-
-      const rating = c.avg_rating ? `${c.avg_rating} ★ (${c.review_count||0})` : "—";
-      return `<tr>
+      const rating = c.avg_rating ? `${c.avg_rating} ★` : "—";
+      return `<tr style="cursor:pointer" onclick="viewContractorProfile('${c.id}')" title="Click to view full profile">
         <td>
-          <div style="font-weight:600">${c.name}</div>
-          ${c.company_name ? `<div style="font-size:.72rem;color:var(--muted)">${c.company_name}</div>` : ""}
+          <div style="display:flex;align-items:center;gap:.6rem">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--s2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--accent);overflow:hidden;flex-shrink:0">
+              ${c.logo_url ? `<img src="${c.logo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>` : c.name[0].toUpperCase()}
+            </div>
+            <div>
+              <div style="font-weight:600">${c.name}</div>
+              ${c.company_name ? `<div style="font-size:.72rem;color:var(--muted)">${c.company_name}</div>` : ""}
+            </div>
+          </div>
         </td>
         <td style="color:var(--muted);font-size:.78rem">${c.email}</td>
         <td>${svcs||"—"}</td>
         <td style="color:var(--accent);font-weight:700">${c.credits||0}</td>
         <td style="font-size:.78rem">${rating}</td>
         <td>${verStatus}</td>
-        <td>${actions}</td>
+        <td onclick="event.stopPropagation()">
+          ${c.verified
+            ? `<button class="btn btn-sm" style="background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.3);font-size:.72rem" onclick="adminVerify('${c.id}','reject')">Revoke</button>`
+            : `<div style="display:flex;gap:.4rem">
+                <button class="btn btn-sm" style="background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3);font-size:.72rem" onclick="adminVerify('${c.id}','approve')">✅ Verify</button>
+                <button class="btn btn-sm" style="background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.3);font-size:.72rem" onclick="adminVerify('${c.id}','reject')">❌ Reject</button>
+              </div>`}
+        </td>
       </tr>`;
     }).join("");
   } catch(e) { console.error(e); }
 }
 
-async function adminVerify(userId, action) {
+// ── VIEW CONTRACTOR FULL PROFILE ─────────────────
+async function viewContractorProfile(userId) {
+  openModal("adminConModal");
+  // Show loading state
+  document.getElementById("adminConName").textContent = "Loading...";
+  document.getElementById("adminConCompany").textContent = "";
+  document.getElementById("adminConEmail").textContent = "";
+  document.getElementById("adminConPhoto").innerHTML = "⏳";
+  document.getElementById("adminConVerBar").innerHTML = "";
+  document.getElementById("adminConContact").innerHTML = `<div style="color:var(--muted)">Loading...</div>`;
+  document.getElementById("adminConBio").textContent = "Loading...";
+
+  try {
+    const data = await apiCall("GET", "/admin/users");
+    const c = (data.users||[]).find(u => u.id === userId);
+    if (!c) { toast("","Error","Contractor not found."); closeModal("adminConModal"); return; }
+
+    // Photo
+    document.getElementById("adminConPhoto").innerHTML = c.logo_url
+      ? `<img src="${c.logo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`
+      : `<span>${c.name[0].toUpperCase()}</span>`;
+
+    // Name & company
+    document.getElementById("adminConName").textContent = c.name;
+    document.getElementById("adminConCompany").textContent = c.company_name || "No company name";
+    document.getElementById("adminConEmail").textContent = c.email;
+
+    // Verification badge
+    const verBadge = c.verified
+      ? `<span class="verified-badge">✅ Verified</span>`
+      : c.verification_status === "pending"
+      ? `<span style="color:var(--accent);font-size:.78rem;font-weight:700;background:rgba(244,166,35,.1);padding:.2rem .6rem;border-radius:20px;border:1px solid rgba(244,166,35,.3)">⏳ Pending Review</span>`
+      : c.verification_status === "rejected"
+      ? `<span style="color:var(--red);font-size:.78rem;font-weight:700;background:rgba(239,68,68,.1);padding:.2rem .6rem;border-radius:20px;border:1px solid rgba(239,68,68,.3)">❌ Rejected</span>`
+      : `<span class="unverified-badge">Unverified</span>`;
+    document.getElementById("adminConVerBadge").innerHTML = verBadge;
+
+    // Verification action bar
+    if (c.verification_status === "pending") {
+      document.getElementById("adminConVerBar").innerHTML = `
+        <div style="background:rgba(244,166,35,.08);border:1px solid rgba(244,166,35,.3);border-radius:var(--r);padding:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem">
+          <div>
+            <div style="font-weight:700;color:var(--accent)">⏳ Verification Request Pending</div>
+            <div style="font-size:.78rem;color:var(--muted)">This contractor has submitted for verification. Review their details and approve or reject.</div>
+          </div>
+          <div style="display:flex;gap:.5rem">
+            <button class="btn btn-sm" style="background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)" onclick="adminVerifyFromModal('${c.id}','approve')">✅ Approve Verification</button>
+            <button class="btn btn-sm" style="background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.3)" onclick="adminVerifyFromModal('${c.id}','reject')">❌ Reject</button>
+          </div>
+        </div>`;
+    } else {
+      document.getElementById("adminConVerBar").innerHTML = "";
+    }
+
+    // Contact info
+    const contactItems = [
+      { label:"Phone", value: c.phone || "Not provided" },
+      { label:"Business Email", value: c.business_email || "Not provided" },
+      { label:"Address", value: c.address || "Not provided" },
+      { label:"City / Province", value: c.location || "Not set" },
+      { label:"Country", value: c.country || "Not set" },
+      { label:"Service Areas", value: c.service_areas || "Not set" },
+      { label:"Website", value: c.website ? `<a href="${c.website}" target="_blank" style="color:var(--accent)">${c.website}</a>` : "Not set" },
+    ];
+    document.getElementById("adminConContact").innerHTML = contactItems.map(i =>
+      `<div style="display:flex;justify-content:space-between;gap:.5rem"><span style="color:var(--muted);flex-shrink:0">${i.label}</span><span style="text-align:right">${i.value}</span></div>`
+    ).join("");
+
+    // Bio
+    document.getElementById("adminConBio").textContent = c.bio || "No company overview provided.";
+
+    // Verification details
+    const verItems = [
+      { label:"License Number", value: c.license_number || "Not submitted" },
+      { label:"Years in Business", value: c.years_experience ? c.years_experience + "+ years" : "Not provided" },
+      { label:"Availability", value: c.availability === "available" ? "🟢 Available" : c.availability === "busy" ? "🟡 Busy" : "🔴 Not Available" },
+    ];
+    document.getElementById("adminConVerDetails").innerHTML = verItems.map(i =>
+      `<div style="display:flex;justify-content:space-between;gap:.5rem"><span style="color:var(--muted)">${i.label}</span><span style="font-weight:600">${i.value}</span></div>`
+    ).join("");
+
+    // Services
+    const svcs = (c.services||[]).map(s => {
+      const jt = JOB_TYPES.find(j=>j.id===s);
+      return jt ? `<span class="jtag type">${jt.icon} ${jt.label}</span>` : "";
+    }).join("");
+    document.getElementById("adminConServices").innerHTML = svcs || `<span style="color:var(--muted);font-size:.875rem">No services listed</span>`;
+
+    // Stats
+    const statsItems = [
+      { label:"Credits", value: c.credits || 0 },
+      { label:"Avg Rating", value: c.avg_rating ? c.avg_rating + " ★ (" + (c.review_count||0) + " reviews)" : "No reviews yet" },
+      { label:"Member Since", value: c.created_at ? new Date(c.created_at).toLocaleDateString() : "—" },
+    ];
+    document.getElementById("adminConStats").innerHTML = statsItems.map(i =>
+      `<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">${i.label}</span><strong>${i.value}</strong></div>`
+    ).join("");
+
+    // Portfolio
+    const portfolio = c.portfolio || [];
+    const portEl = document.getElementById("adminConPortfolio");
+    if (portfolio.length) {
+      portEl.innerHTML = portfolio.map(src =>
+        `<img src="${src}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="viewPhoto('${src}')"/>`
+      ).join("");
+    } else {
+      portEl.innerHTML = `<div style="color:var(--muted);font-size:.875rem;grid-column:1/-1">No portfolio photos uploaded</div>`;
+    }
+
+    // Bottom action buttons
+    document.getElementById("adminConActionBtns").innerHTML = c.verified
+      ? `<button class="btn btn-sm" style="background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.3)" onclick="adminVerifyFromModal('${c.id}','reject')">Revoke Verification</button>`
+      : `<div style="display:flex;gap:.5rem">
+          <button class="btn btn-sm" style="background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)" onclick="adminVerifyFromModal('${c.id}','approve')">✅ Verify Contractor</button>
+          <button class="btn btn-sm" style="background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.3)" onclick="adminVerifyFromModal('${c.id}','reject')">❌ Reject</button>
+        </div>`;
+
+  } catch(e) {
+    toast("","Error", e.message || "Could not load contractor profile.");
+    closeModal("adminConModal");
+  }
+}
+
+async function adminVerifyFromModal(userId, action) {
   try {
     await apiCall("PATCH", `/profile/verify/${userId}`, { action });
-    toast("", action === "approve" ? "✅ Contractor Verified" : "❌ Verification Rejected", "");
+    toast("", action === "approve" ? "✅ Contractor Verified!" : "❌ Verification Rejected", "");
+    closeModal("adminConModal");
     renderAdminContractors();
   } catch(e) {
     toast("","Error", e.message || "Could not update verification.");
