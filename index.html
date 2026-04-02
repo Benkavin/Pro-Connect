@@ -2087,23 +2087,23 @@ let invLines = [{desc:"",qty:1,price:""}];
 let selectedPkgCredits = "pro";
 
 // Restore session on page load
+// Track if user has manually navigated
+let userNavigated = false;
+
 async function restoreSession() {
-  if (!token) return; // no token, stay on landing
+  if (!token) return;
   try {
     const data = await apiCall("GET", "/auth/me");
     currentUser = data.user;
     updateNav();
     updateDrawer();
-    // Only redirect if user is still on landing page (hasn't navigated away)
-    const activePage = document.querySelector(".page.active");
-    const activeId = activePage ? activePage.id : "";
-    if (activeId === "page-landing" || activeId === "") {
+    // Only auto-redirect if user has NOT clicked anything yet
+    if (!userNavigated) {
       if(currentUser.role==="admin") showPage("admin");
       else if(currentUser.role==="contractor") showPage("contractor");
       else showPage("client");
     }
   } catch (e) {
-    // Invalid token — clear it and stay on landing
     token = null;
     localStorage.removeItem("pangig_token");
   }
@@ -2113,17 +2113,20 @@ async function restoreSession() {
 // NAVIGATION
 // 
 function showPage(id) {
+  userNavigated = true;
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  const p = document.getElementById("page-"+id);
-  if(p) p.classList.add("active");
+  const pg = document.getElementById("page-"+id);
+  if(pg) {
+    pg.classList.add("active");
+  } else {
+    console.error("showPage: page-"+id+" not found");
+    return;
+  }
   window.scrollTo(0,0);
   if(id==="contractor") refreshContractorDash();
   if(id==="client") refreshClientDash();
   if(id==="admin") refreshAdminDash();
   if(id==="signup-contractor") populateContractorServiceDropdown();
-  if(id==="signup-client") {} // nothing extra needed
-  if(id==="faq") {} // static content
-  if(id==="contact") {} // static content
 }
 
 // 
@@ -3747,9 +3750,13 @@ function filterSvcPage(q) { renderServicesPage(q || null); }
 document.addEventListener("DOMContentLoaded", () => {
   initIndustries();
   renderInvLines();
-  // Check if URL has a password reset token — show reset page or landing
-  if (!checkResetToken()) showPage("landing");
-  // Restore session without blocking page render
+  // Show landing first (before session check)
+  if (!checkResetToken()) {
+    userNavigated = false; // reset — this is initial load not user action
+    showPage("landing");
+    userNavigated = false; // reset again after showPage sets it true
+  }
+  // Restore session in background — will redirect if user hasn't clicked yet
   restoreSession().catch(()=>{});
   // Keep backend alive
   fetch(API + "/health").catch(()=>{});
