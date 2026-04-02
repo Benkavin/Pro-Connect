@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap"/></noscript>
+<script src="https://js.stripe.com/v3/"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -652,13 +653,59 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 <!--  BUY CREDITS MODAL  -->
 <div class="modal-overlay" id="buyModal">
-  <div class="modal">
+  <div class="modal" style="max-width:480px;width:100%">
     <div class="modal-title">Buy Credits</div>
-    <div class="modal-sub">Credits are used to unlock client leads. Choose a package:</div>
-    <div class="pkg-grid" id="modalPkgs"></div>
-    <div class="modal-actions">
-      <button class="btn btn-outline" onclick="closeModal('buyModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="confirmBuyCredits()">Purchase Now</button>
+    <div class="modal-sub">Credits are used to unlock client leads. They never expire.</div>
+
+    <!-- Step 1: Package Selection -->
+    <div id="buyStep1">
+      <div class="pkg-grid" id="modalPkgs"></div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal('buyModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="goToPaymentForm()">Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Card Payment Form -->
+    <div id="buyStep2" style="display:none">
+      <div id="buyOrderSummary" style="background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-weight:700" id="buyPkgName">Pro Package</div>
+          <div style="font-size:.78rem;color:var(--muted)" id="buyPkgCredits">50 credits</div>
+        </div>
+        <div style="font-family:var(--fh);font-size:1.5rem;font-weight:800;color:var(--accent)" id="buyPkgPrice">$60</div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Name on Card</label>
+        <input class="fi" id="cardName" placeholder="Jane Smith"/>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Card Details</label>
+        <div id="stripeCardElement" style="background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:.85rem 1rem;font-size:.9rem;min-height:44px"></div>
+        <div id="stripeCardError" style="color:var(--red);font-size:.78rem;margin-top:.4rem"></div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;font-size:.75rem;color:var(--muted)">
+        <span>🔒</span>
+        <span>Secured by Stripe. Your card details are never stored on Pangig.</span>
+      </div>
+
+      <div class="ferr" id="buyPaymentErr"></div>
+
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="backToPackages()">← Back</button>
+        <button class="btn btn-primary" id="buyPayBtn" onclick="processCardPayment()">Pay Now</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Success -->
+    <div id="buyStep3" style="display:none;text-align:center;padding:1.5rem 0">
+      <div style="font-size:3rem;margin-bottom:1rem">🎉</div>
+      <div style="font-family:var(--fh);font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:.5rem">Payment Successful!</div>
+      <div id="buySuccessMsg" style="color:var(--muted);font-size:.9rem;margin-bottom:1.5rem">Credits have been added to your account.</div>
+      <button class="btn btn-primary" onclick="closeModal('buyModal');renderCreditsPage()">View My Credits</button>
     </div>
   </div>
 </div>
@@ -2580,39 +2627,144 @@ function refreshContractorDash() {
 }
 
 //  BUY CREDITS 
+// ══════════════════════════════════════════════════
+// CREDIT PURCHASE — STRIPE ELEMENTS (in-app, no redirect)
+// ══════════════════════════════════════════════════
+// Replace with your real Stripe publishable key from stripe.com/dashboard
+const STRIPE_PK = "pk_live_51TE4E01dmQpdVkrzOqCAJ2ieRA5iWOK2GFOEA8vP1Fvs2xyM5TjOsJtCt5a6j3outWiKln9BNwy9vYBU580VMbpz0080gEHoXo";
+let stripeInstance = null;
+let stripeCard = null;
+let currentPaymentIntent = null;
+
+function getStripe() {
+  if (!stripeInstance && typeof Stripe !== "undefined") {
+    stripeInstance = Stripe(STRIPE_PK);
+  }
+  return stripeInstance;
+}
+
 function renderBuyModal() {
-  const g=document.getElementById("modalPkgs");
-  g.innerHTML=CREDIT_PACKAGES.map(p=>`
-    <div class="pkg-card ${selectedPkg===p.id?'sel':''}" onclick="selectPkg('${p.id}',this)">
-      ${p.popular?'<div class="pkg-popular">Popular</div>':""}
+  const g = document.getElementById("modalPkgs");
+  if (!g) return;
+  g.innerHTML = CREDIT_PACKAGES.map(p => `
+    <div class="pkg-card ${selectedPkg===p.id?"sel":""}" onclick="selectPkg("${p.id}",this)">
+      ${p.popular ? "<div class=\"pkg-popular\">Popular</div>" : ""}
       <div class="pkg-credits">${p.credits}</div>
       <div class="pkg-label">${p.label}</div>
       <div class="pkg-price">$${p.price}</div>
     </div>`).join("");
+  document.getElementById("buyStep1").style.display = "block";
+  document.getElementById("buyStep2").style.display = "none";
+  document.getElementById("buyStep3").style.display = "none";
 }
-function selectPkg(id,el) {
-  selectedPkg=id;
-  document.querySelectorAll("#modalPkgs .pkg-card").forEach(c=>c.classList.remove("sel"));
+
+function selectPkg(id, el) {
+  selectedPkg = id;
+  document.querySelectorAll("#modalPkgs .pkg-card").forEach(c => c.classList.remove("sel"));
   el.classList.add("sel");
 }
-function confirmBuyCredits() {
-  if(!currentUser) return;
-  const pkg=CREDIT_PACKAGES.find(p=>p.id===selectedPkg);
-  currentUser.credits+=pkg.credits;
-  currentUser.creditHistory.unshift({date:"Today",action:`Purchased ${pkg.label} Pack`,amount:`+${pkg.credits} credits`,cost:`$${pkg.price}`});
-  users[currentUser.id]=currentUser;
-  closeModal("buyModal");
-  refreshContractorDash();
-  renderCreditsPage();
-  toast("","Credits Purchased!",`${pkg.credits} credits added to your account.`);
+
+async function goToPaymentForm() {
+  if (!currentUser) return;
+  const pkg = CREDIT_PACKAGES.find(p => p.id === selectedPkg);
+  if (!pkg) { toast("","Select Package","Please select a credit package first."); return; }
+  document.getElementById("buyPkgName").textContent = pkg.label + " Package";
+  document.getElementById("buyPkgCredits").textContent = pkg.credits + " credits";
+  document.getElementById("buyPkgPrice").textContent = "$" + pkg.price;
+  document.getElementById("buyStep1").style.display = "none";
+  document.getElementById("buyStep2").style.display = "block";
+  document.getElementById("buyPaymentErr").classList.remove("show");
+  const stripe = getStripe();
+  if (!stripe) {
+    document.getElementById("buyPaymentErr").textContent = "Payment system not loaded. Please refresh and try again.";
+    document.getElementById("buyPaymentErr").classList.add("show");
+    return;
+  }
+  const elements = stripe.elements({
+    appearance: {
+      theme: "night",
+      variables: { colorPrimary:"#f4a623", colorBackground:"#1c2030", colorText:"#f0f2f7", colorDanger:"#ef4444", fontFamily:"DM Sans,system-ui,sans-serif", borderRadius:"8px" }
+    }
+  });
+  if (stripeCard) { stripeCard.destroy(); stripeCard = null; }
+  document.getElementById("stripeCardElement").innerHTML = "";
+  stripeCard = elements.create("card", {
+    style: { base:{ fontSize:"15px", color:"#f0f2f7", "::placeholder":{ color:"#7a8499" } }, invalid:{ color:"#ef4444" } },
+    hidePostalCode: false
+  });
+  stripeCard.mount("#stripeCardElement");
+  stripeCard.on("change", (e) => {
+    document.getElementById("stripeCardError").textContent = e.error ? e.error.message : "";
+  });
+  try {
+    const data = await apiCall("POST", "/payments/stripe/payment-intent", { package_id: pkg.id });
+    currentPaymentIntent = data;
+  } catch(e) {
+    document.getElementById("buyPaymentErr").textContent = e.message || "Could not initialize payment.";
+    document.getElementById("buyPaymentErr").classList.add("show");
+  }
 }
+
+function backToPackages() {
+  document.getElementById("buyStep1").style.display = "block";
+  document.getElementById("buyStep2").style.display = "none";
+  if (stripeCard) { stripeCard.destroy(); stripeCard = null; }
+  currentPaymentIntent = null;
+}
+
+async function processCardPayment() {
+  if (!currentPaymentIntent || !stripeCard) return;
+  const stripe = getStripe();
+  if (!stripe) return;
+  const cardName = document.getElementById("cardName").value.trim();
+  const btn = document.getElementById("buyPayBtn");
+  const errEl = document.getElementById("buyPaymentErr");
+  errEl.classList.remove("show");
+  if (!cardName) { errEl.textContent = "Please enter the name on your card."; errEl.classList.add("show"); return; }
+  btn.textContent = "Processing..."; btn.disabled = true;
+  try {
+    const result = await stripe.confirmCardPayment(currentPaymentIntent.client_secret, {
+      payment_method: { card: stripeCard, billing_details: { name: cardName } }
+    });
+    if (result.error) {
+      errEl.textContent = result.error.message;
+      errEl.classList.add("show");
+      btn.textContent = "Pay Now"; btn.disabled = false;
+      return;
+    }
+    if (result.paymentIntent.status === "succeeded") {
+      const data = await apiCall("POST", "/payments/stripe/confirm", {
+        payment_intent_id: result.paymentIntent.id,
+        package_id: selectedPkg
+      });
+      currentUser.credits = data.new_balance;
+      const credEls = ["conCredits","conCredBig","credBal"];
+      credEls.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = id === "credBal" ? data.new_balance + " credits" : data.new_balance;
+      });
+      document.getElementById("buyStep2").style.display = "none";
+      document.getElementById("buyStep3").style.display = "block";
+      document.getElementById("buySuccessMsg").textContent =
+        data.credits_added + " credits added! Your new balance is " + data.new_balance + " credits.";
+      if (stripeCard) { stripeCard.destroy(); stripeCard = null; }
+      currentPaymentIntent = null;
+    }
+  } catch(e) {
+    errEl.textContent = e.message || "Payment failed. Please try again.";
+    errEl.classList.add("show");
+    btn.textContent = "Pay Now"; btn.disabled = false;
+  }
+}
+
 function buyFromCreditsPage() {
-  const sel=document.querySelector("#credPkgs .sel");
-  if(!sel){openModal("buyModal");return;}
-  confirmBuyCredits();
+  const sel = document.querySelector("#credPkgs .pkg-card.sel");
+  if (sel) { const pkgId = sel.getAttribute("data-pkg"); if (pkgId) selectedPkg = pkgId; }
+  openModal("buyModal");
 }
 
 //  INVOICES 
+
 function renderInvoicesPage() {
   renderInvLines();
   renderInvHistory();
@@ -2694,7 +2846,7 @@ function renderCreditsPage() {
   document.getElementById("credLeads").textContent=(u.unlockedLeads||[]).length;
   // packages
   document.getElementById("credPkgs").innerHTML=CREDIT_PACKAGES.map(p=>`
-    <div class="pkg-card ${selectedPkgCredits===p.id?'sel':''}" onclick="selectPkgCredits('${p.id}',this)">
+    <div class="pkg-card ${selectedPkgCredits===p.id?'sel':''}" data-pkg="${p.id}" onclick="selectPkgCredits('${p.id}',this)">
       ${p.popular?'<div class="pkg-popular">Popular</div>':""}
       <div class="pkg-credits">${p.credits}</div>
       <div class="pkg-label">${p.label}</div>
@@ -3985,17 +4137,36 @@ async function doResetPassword() {
   }
 }
 
-// Check URL for reset token on page load
+// Check URL for reset token or payment return
 let savedResetToken = null;
 function checkResetToken() {
   const params = new URLSearchParams(window.location.search);
   const token = params.get("token");
   const type = params.get("type");
+
+  // Password reset
   if (token && type === "reset") {
-    savedResetToken = token; // save it before SPA routing clears URL params
+    savedResetToken = token;
     showPage("reset-password");
     return true;
   }
+
+  // Stripe payment success
+  if (params.get("payment") === "success") {
+    const credits = params.get("credits");
+    toast("","Payment Successful! 🎉", credits ? `${credits} credits added to your account.` : "Credits added to your account.");
+    // Clear URL params
+    window.history.replaceState({}, document.title, window.location.pathname);
+    return false;
+  }
+
+  // Stripe payment cancelled
+  if (params.get("payment") === "cancelled") {
+    toast("","Payment Cancelled","Your payment was not completed.");
+    window.history.replaceState({}, document.title, window.location.pathname);
+    return false;
+  }
+
   return false;
 }
 // ══════════════════════════════════════════════════
