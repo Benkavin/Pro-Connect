@@ -2088,19 +2088,24 @@ let selectedPkgCredits = "pro";
 
 // Restore session on page load
 async function restoreSession() {
-  if (!token) { showPage("landing"); return; }
+  if (!token) return; // no token, stay on landing
   try {
     const data = await apiCall("GET", "/auth/me");
     currentUser = data.user;
     updateNav();
     updateDrawer();
-    if(currentUser.role==="admin") showPage("admin");
-    else if(currentUser.role==="contractor") showPage("contractor");
-    else showPage("client");
+    // Only redirect if user is still on landing page (hasn't navigated away)
+    const activePage = document.querySelector(".page.active");
+    const activeId = activePage ? activePage.id : "";
+    if (activeId === "page-landing" || activeId === "") {
+      if(currentUser.role==="admin") showPage("admin");
+      else if(currentUser.role==="contractor") showPage("contractor");
+      else showPage("client");
+    }
   } catch (e) {
+    // Invalid token — clear it and stay on landing
     token = null;
     localStorage.removeItem("pangig_token");
-    showPage("landing");
   }
 }
 
@@ -3591,7 +3596,9 @@ function checkResetToken() {
   const params = new URLSearchParams(window.location.search);
   if (params.get("token") && params.get("type") === "reset") {
     showPage("reset-password");
+    return true;
   }
+  return false;
 }
 // ══════════════════════════════════════════════════
 function toggleFaq(btn) {
@@ -3740,8 +3747,8 @@ function filterSvcPage(q) { renderServicesPage(q || null); }
 document.addEventListener("DOMContentLoaded", () => {
   initIndustries();
   renderInvLines();
-  // Check if URL has a password reset token
-  checkResetToken();
+  // Check if URL has a password reset token — show reset page or landing
+  if (!checkResetToken()) showPage("landing");
   // Restore session without blocking page render
   restoreSession().catch(()=>{});
   // Keep backend alive
