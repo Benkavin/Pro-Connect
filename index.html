@@ -3578,9 +3578,10 @@ async function doResetPassword() {
   err.classList.remove("show");
   btn.textContent = "Updating..."; btn.disabled = true;
   try {
+    // Use saved token (from when page first loaded) or fall back to URL
     const params = new URLSearchParams(window.location.search);
-    const resetToken = params.get("token");
-    if (!resetToken) throw new Error("Invalid reset link. Please request a new one.");
+    const resetToken = savedResetToken || params.get("token");
+    if (!resetToken) throw new Error("Reset link not found. Please click the link from your email again.");
     await apiCall("POST", "/auth/reset-password", { token: resetToken, password: pass });
     success.style.display = "block";
     document.getElementById("resetPass").value = "";
@@ -3595,9 +3596,13 @@ async function doResetPassword() {
 }
 
 // Check URL for reset token on page load
+let savedResetToken = null;
 function checkResetToken() {
   const params = new URLSearchParams(window.location.search);
-  if (params.get("token") && params.get("type") === "reset") {
+  const token = params.get("token");
+  const type = params.get("type");
+  if (token && type === "reset") {
+    savedResetToken = token; // save it before SPA routing clears URL params
     showPage("reset-password");
     return true;
   }
